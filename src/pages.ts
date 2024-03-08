@@ -3,12 +3,16 @@ import { getSearchQuery } from './utils/get-search-query'
 import { jsonStringify } from './utils/json-stringify'
 
 const routeListeners: Set<
-    (pathname: string, query: Record<string, string>) => void
+    (
+        pathname: string,
+        query: Record<string, string>,
+        data: Record<string, unknown>
+    ) => void
 > = new Set()
 
 const broadcast = async () => {
     routeListeners.forEach((cb) => {
-        cb(location.pathname, getSearchQuery())
+        cb(location.pathname, getSearchQuery(), getPageData())
     })
 }
 
@@ -63,6 +67,10 @@ export const previousPage = () => {
 
 export const nextPage = () => {
     window.history.forward()
+}
+
+export const getPageData = <T extends Record<string, unknown>>(): T => {
+    return window.history.state
 }
 
 export const updateSearchQuery = (query: Record<string, unknown> | null) => {

@@ -1,4 +1,5 @@
 import {goToPage, onPageChange, previousPage, replacePage, nextPage, updateSearchQuery} from "./pages";
+import {waitFor} from "./test.utils";
 
 describe('pages', () => {
 	const onPageChangeListener = jest.fn();
@@ -9,18 +10,20 @@ describe('pages', () => {
 		unsub();
 	})
 	
-	it('should go to page', () => {
+	it('should go to page', async () => {
 		expect(history.length).toBe(1);
 		expect(location.pathname).toBe('/');
 
 		goToPage('/sample')
 
-		expect(onPageChangeListener).toHaveBeenCalledWith('/sample', {})
+		expect(onPageChangeListener).toHaveBeenCalledWith('/sample', {}, {})
 		expect(history.length).toBe(2);
 
-		goToPage('/test', {data: 1000}, 'test page')
+		await waitFor(() => {
+			goToPage('/test', {data: 1000}, 'test page')
+		})
 
-		expect(onPageChangeListener).toHaveBeenCalledWith('/test', {})
+		expect(onPageChangeListener).toHaveBeenCalledWith('/test', {}, {data: 1000})
 		expect(history.state).toEqual({data: 1000})
 		expect(document.title).toBe('test page')
 		expect(history.length).toBe(3);

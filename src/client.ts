@@ -1,6 +1,7 @@
 import './components/page-link'
 import './components/with-route'
 import {
+    getPageData,
     goToPage,
     nextPage,
     onPageChange,
@@ -47,6 +48,7 @@ if (window.BFS) {
             onPageChange,
             isOnPage,
             getSearchQuery,
+            getPageData,
         },
     }
 }

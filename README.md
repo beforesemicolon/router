@@ -87,9 +87,9 @@ Replaces the current page pathname. It takes the path name, an optional data and
 replacePage('/new', {data: 3000}, 'new page')
 ```
 ### onPageChange
-A listener for page changes. Takes a callback function that its called with the path name and a query search query object literal.
+A listener for page changes. Takes a callback function that its called with the path name, a search query object literal, and any data set for the page.
 ```ts
-onPageChange((pathName, searchQuert) => {
+onPageChange((pathName, searchQuery, data) => {
 	...
 })
 ```
@@ -115,4 +115,9 @@ updateSearchQuery({
   date: "2020-01-01",
   sample: 30
 })
+```
+### getPageData
+Returns the data set for the page.
+```ts
+getPageData();
 ```
