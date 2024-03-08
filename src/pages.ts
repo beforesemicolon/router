@@ -27,11 +27,11 @@ export const onPageChange = (sub: (pathname: string) => void) => {
 
 export const goToPage = (
     pathname: string,
-    state: Record<string, unknown> = {},
+    data: Record<string, unknown> = {},
     title = document.title
 ) => {
     if (!isOnPage(pathname)) {
-        window.history.pushState(state, title, pathname)
+        window.history.pushState(data, title, pathname)
 
         if (title !== document.title) {
             document.title = title
