@@ -1,0 +1,17 @@
+.idea
+node_module
+src
+tsconfig.json
+coverage
+**.tgz
+docs
+jest.config.js
+scripts
+server
+.prettierignore
+.eslintignore
+.prettierrc
+.eslintrc.js
+jest.config.cjs
+.eslintrc.cjs
+index.html
