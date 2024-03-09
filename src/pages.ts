@@ -2,13 +2,13 @@ import { isOnPage } from './utils/is-on-page'
 import { getSearchQuery } from './utils/get-search-query'
 import { jsonStringify } from './utils/json-stringify'
 
-const routeListeners: Set<
-    (
-        pathname: string,
-        query: Record<string, string>,
-        data: Record<string, unknown>
-    ) => void
-> = new Set()
+type PathChangeListener = (
+    pathname: string,
+    query: Record<string, string>,
+    data: Record<string, unknown>
+) => void
+
+const routeListeners: Set<PathChangeListener> = new Set()
 
 const broadcast = async () => {
     routeListeners.forEach((cb) => {
@@ -20,9 +20,9 @@ window.addEventListener('popstate', () => {
     broadcast()
 })
 
-export const onPageChange = (sub: (pathname: string) => void) => {
+export const onPageChange = (sub: PathChangeListener) => {
     routeListeners.add(sub)
-    sub(location.pathname)
+    sub(location.pathname, getSearchQuery(), getPageData())
 
     return () => {
         routeListeners.delete(sub)

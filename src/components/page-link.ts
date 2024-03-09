@@ -26,9 +26,20 @@ export default ({
             goToPage(this.props.path(), this.props.data(), this.props.title())
         }
 
+        toggleClass = (active: boolean) => {
+            if (active) {
+                this.classList.add('active')
+            } else {
+                this.removeAttribute('class')
+            }
+        }
+
         onMount() {
             return onPageChange(() => {
                 const newActive = isOnPage(this.props.path())
+
+                this.toggleClass(newActive)
+
                 this.setState({
                     part: newActive ? 'anchor active' : 'anchor',
                 })

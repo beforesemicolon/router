@@ -18,6 +18,8 @@ describe('PageLink', () => {
 		
 		const [l1, l2] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
 		
+		expect(l1.outerHTML).toBe('<page-link path="/" class="active"></page-link>')
+		expect(l2.outerHTML).toBe('<page-link path="/test"></page-link>')
 		expect(l1.contentRoot.innerHTML).toBe('<a part="anchor active" href="/">\n' +
 			'                    <slot></slot>\n' +
 			'                </a>')
@@ -29,7 +31,9 @@ describe('PageLink', () => {
 
 		expect(l2ActiveMock).toHaveBeenCalledTimes(2)
 		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
-
+		
+		expect(l1.outerHTML).toBe('<page-link path="/"></page-link>')
+		expect(l2.outerHTML).toBe('<page-link path="/test" class="active"></page-link>')
 		expect(l1.contentRoot.innerHTML).toBe('<a part="anchor" href="/">\n' +
 			'                    <slot></slot>\n' +
 			'                </a>')
