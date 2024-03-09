@@ -64,17 +64,32 @@ The content can be provided as children content or loaded via the `src` attribut
 You can also set content inside with attribute of `loading` to show while
 the content is being loaded or a `fallback` in case the content fails to load.
 ```html
+<!-- static inner content -->
 <with-route path="/">
   Home content
 </with-route>
 
+<!-- fetch html content -->
 <with-route path="/contact" src="/contact.html">
   <div slot="loading">Loading home content</div>
   <div slot="fallback">
     Fallback contact page content
   </div>
 </with-route>
+
+<!-- lazy load a component/code and pass data -->
+<with-route path="/greeting" src="./greeting.page.js" data='{"greeting":"Hello World"}'></with-route>
 ```
+
+```js
+// greeting.page.js
+const { html } = BFS.MARKUP
+
+export default ({ greeting }) => {
+  return html`<p>${greeting}</p>`
+}
+```
+
 ### goToPage
 Takes you to a new page pathname. It takes the path name, an optional data and a page title.
 ```ts

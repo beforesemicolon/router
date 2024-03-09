@@ -5,6 +5,7 @@ import { onPageChange } from '../pages'
 interface WithRouteProps {
     path: string
     src: string
+    data: Record<string, unknown>
 }
 
 enum Status {
@@ -22,36 +23,59 @@ export default ({
     when,
 }: typeof import('@beforesemicolon/web-component')) => {
     class WithRoute extends WebComponent<WithRouteProps, { status: Status }> {
-        static observedAttributes = ['path', 'src']
+        static observedAttributes = ['path', 'src', 'data']
         initialState = {
             status: Status.Idle,
         }
         path = ''
         src = ''
+        data = {}
         slotName = String(Math.floor(Math.random() * 10000000000))
+        #cachedResult: Record<string, unknown> = {}
 
-        loadContent = (src: string) => {
+        loadContent = async (src: string) => {
             this.setState({ status: Status.Loading })
-            fetch(src)
-                .then((res) => {
-                    if (res.status === 200) {
-                        return res.text()
+            let content = this.#cachedResult[src]
+
+            if (!content) {
+                try {
+                    if (src.endsWith('.js')) {
+                        ;({ default: content } = await import(src))
+                    } else {
+                        const res = await fetch(src)
+
+                        if (res.status === 200) {
+                            content = await res.text()
+                        } else {
+                            throw new Error(
+                                `Loading "${this.props.src()}" content failed with status code ${
+                                    res.status
+                                }`
+                            )
+                        }
                     }
 
-                    throw new Error(
-                        `Loading "${this.props.src()}" content failed with status code ${
-                            res.status
-                        }`
-                    )
-                })
-                .then((html) => {
-                    this.innerHTML = html
-                    this.setState({ status: Status.Loaded })
-                })
-                .catch((err) => {
+                    this.#cachedResult[src] = content
+                } catch (err) {
                     this.setState({ status: Status.LoadingFailed })
-                    console.error(err)
-                })
+                    return console.error(err)
+                }
+            }
+
+            if (typeof content === 'function') {
+                content = content(this.props.data())
+            }
+
+            // @ts-expect-error handle HTMLTemplate or anything with a render method
+            if (typeof content?.render === 'function') {
+                this.innerHTML = ''
+                // @ts-expect-error handle HTMLTemplate or anything with a render method
+                content.render(this)
+            } else {
+                this.innerHTML = String(content)
+            }
+
+            this.setState({ status: Status.Loaded })
         }
 
         onMount() {

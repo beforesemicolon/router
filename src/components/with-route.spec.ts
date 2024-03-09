@@ -5,6 +5,8 @@ import {html, when, state} from "@beforesemicolon/web-component";
 import {goToPage} from "../pages";
 import {HTMLComponentElement} from "@beforesemicolon/web-component/dist/types/web-component";
 import {waitFor} from "../test.utils";
+import * as fs from "fs";
+import * as path from "path";
 
 iniWithRoute(WB)
 
@@ -13,7 +15,7 @@ describe('WithRoute', () => {
 		goToPage('/');
 	})
 	
-	it('should render inner content with route', async () => {
+	it('should render inner content with route static and fetched content', async () => {
 		jest.spyOn(window, 'fetch').mockImplementation(() => {
 			return Promise.resolve({
 				status: 200,
@@ -82,5 +84,38 @@ describe('WithRoute', () => {
 		expect(r1.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
 		// show fallback slot
 		expect(r1.contentRoot.querySelector('slot[name="fallback"]')).not.toBeNull();
+	})
+	
+	describe('should import content', () => {
+		afterAll(() => {
+			fs.rmSync(path.resolve(__dirname, './sample.js'))
+		})
+		
+		it('with the js file as src attribute', async () => {
+			fs.writeFileSync(path.resolve(__dirname, './sample.js'), `
+				module.exports = () => ({render: el => {
+					el.innerHTML = 'It works';
+				}});
+			`.trim())
+			html`<with-route path="/sample" src="./sample.js"></with-route>`.render(document.body);
+			
+			const [r1] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
+			
+			// content is not shown initially
+			const slot = r1.contentRoot.querySelector('slot');
+			expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
+			expect(r1.outerHTML).toBe('<with-route path="/sample" src="./sample.js"></with-route>')
+			
+			await waitFor(() => {
+				goToPage('/sample');
+			})
+			
+			expect(console.error).not.toHaveBeenCalled();
+			
+			// r2 slot loses the name to show content
+			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+			// the content is placed inside
+			expect(r1.outerHTML).toBe('<with-route path="/sample" src="./sample.js">It works</with-route>')
+		})
 	})
 })
