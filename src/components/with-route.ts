@@ -130,7 +130,7 @@ export default ({
         }
     }
 
-    class WithRouteQuery<T extends WithRouteQueryProps> extends WithRoute<T> {
+    class WithRouteQuery extends WithRoute<WithRouteQueryProps> {
         static observedAttributes = ['key', 'value', 'src', 'data']
         key = ''
         value = ''
