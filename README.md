@@ -45,7 +45,7 @@ In the browser
 
 ### `page-link`
 A link that lets you navigate to any page. Works similar to [goToPage](#gotopage)
-and takes the same options.
+and takes the same options. The path can contain search query
 ```html
 <page-link 
   path="/"
@@ -54,6 +54,8 @@ and takes the same options.
 >
   Home
 </page-link>
+
+<page-link path="/router/index.html?tab=sample">sample tab</page-link>
 ```
 
 ### `with-route`
@@ -88,6 +90,16 @@ const { html } = BFS.MARKUP
 export default ({ greeting }) => {
   return html`<p>${greeting}</p>`
 }
+```
+
+### `with-route-query`
+The `with-route-query` work just like `with-route` but reacts to the search query of the url. It takes a `key` and `value`
+prop to react to instead of a `path`.
+
+```html
+<with-route-query key="tab" value="sample">
+  sample tab content
+</with-route-query>
 ```
 
 ### goToPage

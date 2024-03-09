@@ -8,15 +8,22 @@
 	<script src="./dist/client.js"></script>
 </head>
 <body>
-	<page-link path="/">home</page-link>
-	<page-link path="/contact">contact</page-link>
+	<page-link path="/router/index.html?_ijt=k1fff16u7fpev3bfqskiarngbq&_ij_reload=RELOAD_ON_SAVE">home</page-link>
+	<page-link path="/router/contact">contact</page-link>
+	<page-link path="/router/example">example</page-link>
 	
-	<with-route path="/">
+	<with-route path="/router/index.html">
 		Home content
 	</with-route>
 	
-	<with-route path="/contact">
+	<with-route path="/router/contact">
 		Contact content
 	</with-route>
+	
+	<with-route path="/router/example" src="../example.js" data='{"greeting":"Hello World"}'></with-route>
+	
+	<with-route-query key="_ijt" value="k1fff16u7fpev3bfqskiarngbq">
+		it works
+	</with-route-query>
 </body>
 </html>

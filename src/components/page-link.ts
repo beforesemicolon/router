@@ -23,7 +23,14 @@ export default ({
         handleClick = (event: Event) => {
             event.preventDefault()
             event.stopPropagation()
-            goToPage(this.props.path(), this.props.data(), this.props.title())
+
+            if (this.props.path() !== location.pathname + location.search) {
+                goToPage(
+                    this.props.path(),
+                    this.props.data(),
+                    this.props.title()
+                )
+            }
         }
 
         toggleClass = (active: boolean) => {

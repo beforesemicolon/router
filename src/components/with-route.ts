@@ -8,6 +8,13 @@ interface WithRouteProps {
     data: Record<string, unknown>
 }
 
+interface WithRouteQueryProps extends WithRouteProps {
+    key: string
+    value: string
+    src: string
+    data: Record<string, unknown>
+}
+
 enum Status {
     Idle,
     Loading,
@@ -22,7 +29,9 @@ export default ({
     WebComponent,
     when,
 }: typeof import('@beforesemicolon/web-component')) => {
-    class WithRoute extends WebComponent<WithRouteProps, { status: Status }> {
+    class WithRoute<
+        T extends WithRouteProps = WithRouteProps,
+    > extends WebComponent<T, { status: Status }> {
         static observedAttributes = ['path', 'src', 'data']
         initialState = {
             status: Status.Idle,
@@ -63,7 +72,7 @@ export default ({
             }
 
             if (typeof content === 'function') {
-                content = content(this.props.data())
+                content = await content(this.props.data())
             }
 
             // @ts-expect-error handle HTMLTemplate or anything with a render method
@@ -121,5 +130,30 @@ export default ({
         }
     }
 
+    class WithRouteQuery<T extends WithRouteQueryProps> extends WithRoute<T> {
+        static observedAttributes = ['key', 'value', 'src', 'data']
+        key = ''
+        value = ''
+
+        onMount() {
+            return onPageChange((_, query) => {
+                if (query && query[this.props.key()] === this.props.value()) {
+                    if (
+                        this.props.src() &&
+                        this.state.status() !== Status.Loading &&
+                        this.state.status() !== Status.Loaded
+                    ) {
+                        this.loadContent(this.props.src())
+                    } else {
+                        this.setState({ status: Status.Loaded })
+                    }
+                } else {
+                    this.setState({ status: Status.Idle })
+                }
+            })
+        }
+    }
+
     customElements.define('with-route', WithRoute)
+    customElements.define('with-route-query', WithRouteQuery)
 }

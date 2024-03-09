@@ -55,6 +55,50 @@ describe('WithRoute', () => {
 		expect(r2.outerHTML).toBe('<with-route path="/test" src="/test"><p>Hello World</p></with-route>')
 	});
 	
+	it('should render inner content with route query static and fetched content', async () => {
+		jest.spyOn(window, 'fetch').mockImplementation(() => {
+			return Promise.resolve({
+				status: 200,
+				text: () => Promise.resolve('<p>Hello World</p>')
+			} as Response)
+		});
+		
+		await waitFor(() => {
+			goToPage('/?tab=one');
+		})
+		
+		html`
+			<with-route-query key="tab" value="one">Tab 1</with-route-query>
+			<with-route-query key="tab" value="two" src="/test"></with-route-query>`.render(document.body);
+		
+		expect(window.fetch).not.toHaveBeenCalled();
+		
+		const [r1, r2] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
+		
+		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+		expect(r1.outerHTML).toBe('<with-route-query key="tab" value="one">Tab 1</with-route-query>')
+		
+		let slot = r2.contentRoot.querySelector('slot');
+		expect(slot?.getAttribute('name')).toMatch(/\d+/)
+		expect(r2.outerHTML).toBe('<with-route-query key="tab" value="two" src="/test"></with-route-query>')
+		
+		expect(r2.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
+		
+		await waitFor(() => {
+			goToPage('/?tab=two');
+		})
+		
+		// r1 slot gets a name to hide content
+		slot = r1.contentRoot.querySelector('slot');
+		expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
+		expect(r1.outerHTML).toBe('<with-route-query key="tab" value="one">Tab 1</with-route-query>')
+		
+		// r2 slot loses the name to show content
+		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+		// the content is placed inside
+		expect(r2.outerHTML).toBe('<with-route-query key="tab" value="two" src="/test"><p>Hello World</p></with-route-query>')
+	});
+	
 	it('should fail to load content and show fallback slot', async () => {
 		jest.spyOn(window, 'fetch').mockImplementation(() => {
 			return Promise.resolve({
