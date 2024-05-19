@@ -16,6 +16,39 @@
         <page-link path="/router/unknown">unknown</page-link>
     </nav>
 
-    <h2>404 - Page Not Found</h2>
+    <page-route path="/router" title="Home">
+        <h2>Markup Router</h2>
+        <p>A powerful and simple router to help you create single and multiple page applications easily.</p>
+        <p>Read the full <a href="https://markup.beforesemicolon.com/documentation" target="_blank">documentation</a></p>
+
+        <div class="tabs" style="display: flex; gap: 10px">
+            <div class="tab">
+                <page-link path="$" title="Home - Motivation" search="tab=motivation">Motivation</page-link>
+            </div>
+            <div class="tab">
+                <page-link path="$" title="Home - Markup" search="tab=markup">Markup</page-link>
+            </div>
+        </div>
+
+        <page-route-query key="tab" value="motivation" default="true">
+            <h3>Motivation</h3>
+        </page-route-query>
+
+        <page-route-query key="tab" value="markup">
+            <h3>Markup</h3>
+        </page-route-query>
+    </page-route>
+
+    <page-route path="/router/github" src="./github.html" title="Github"></page-route>
+
+    <page-route path="/router/feedback" src="./router/feedback.js" title="Feedback"></page-route>
+    <page-route path="/router/404" title="404 - Page Not Found">
+        <h2>404 - Page Not Found</h2>
+    </page-route>
+    <page-route path="/404" title="404 - Page Not Found">
+        <h2>404 - Page Not Found</h2>
+    </page-route>
+
+    <page-redirect to="/router/404"></page-redirect>
 </body>
 </html>
