@@ -5,7 +5,7 @@ describe('pathStringToPattern', () => {
 	it('should create pattern and params', () => {
 		expect(pathStringToPattern('/')).toEqual({
 			"params": [],
-			"pattern": /^\/?$/
+			"pattern": /^\/$/
 		})
 		expect(pathStringToPattern('/sample')).toEqual({
 			"params": [],

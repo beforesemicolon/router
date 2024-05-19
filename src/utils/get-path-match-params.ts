@@ -1,7 +1,10 @@
+import { cleanPathnameOptionalEnding } from './clean-pathname-optional-ending'
+
 export const getPathMatchParams = (
     path: string,
     { pattern, params }: { pattern: RegExp; params: string[] }
 ) => {
+    path = cleanPathnameOptionalEnding(path)
     const match = path.match(pattern)
 
     if (match) {

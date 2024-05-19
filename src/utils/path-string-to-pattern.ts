@@ -1,4 +1,7 @@
+import { cleanPathnameOptionalEnding } from './clean-pathname-optional-ending'
+
 export const pathStringToPattern = (path: string) => {
+    path = cleanPathnameOptionalEnding(path)
     const params: string[] = []
 
     const rep = path.replace(/:([^/]+)/g, (s, p) => {
@@ -6,10 +9,8 @@ export const pathStringToPattern = (path: string) => {
         return '([^/]+)'
     })
 
-    const ending = path.endsWith('/') ? '?' : ''
-
     return {
-        pattern: new RegExp(`^${rep}${ending}$`),
+        pattern: new RegExp(`^${rep}$`),
         params,
     }
 }

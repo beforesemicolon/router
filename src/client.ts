@@ -1,5 +1,5 @@
 import './components/page-link'
-import './components/with-route'
+import './components/page-route'
 import {
     getPageData,
     goToPage,
@@ -11,9 +11,9 @@ import {
 import { isOnPage } from './utils/is-on-page'
 import { getSearchQuery } from './utils/get-search-query'
 
-export * from './components/with-route'
+export * from './components/page-route'
 import initPageLink from './components/page-link'
-import initWithRoute from './components/with-route'
+import initWithRoute from './components/page-route'
 import type { WebComponent } from '@beforesemicolon/web-component'
 
 declare global {

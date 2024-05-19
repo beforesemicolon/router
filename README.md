@@ -8,16 +8,24 @@
 Web Component based router.
 
 ```html
-<page-link path="/">Home</page-link>
-<page-link path="/contact">Contact</page-link>
+<nav>
+    <page-link path="/">Home</page-link>
+    <page-link path="/contact">Contact</page-link>
+</nav>
 
-<with-route path="/">
+<page-route path="/">
     Home content
-</with-route>
+</page-route>
 
-<with-route path="/contact">
+<page-route path="/contact">
     Contact content
-</with-route>
+</page-route>
+
+<page-route path="/404">
+    404 - Page not found!
+</page-route>
+
+<page-redirect to="/404"></page-redirect>
 ```
 
 ## Install
@@ -45,20 +53,34 @@ In the browser
 
 ### `page-link`
 A link that lets you navigate to any page. Works similar to [goToPage](#gotopage)
-and takes the same options. The path can contain search query
+and takes similar options.
 ```html
+<!-- update the title of the page and pass data to the next page as JSON -->
 <page-link 
   path="/"
   title="Welcome"
   data='{"sample": "value"}'
 >
-  Home
+  Home Info
 </page-link>
 
+<!-- specify search query in the path-->
 <page-link path="/router/index.html?tab=sample">sample tab</page-link>
+
+<!-- go to the next page and keep current page search query-->
+<page-link path="/new" keep-search-params="true">new tab</page-link>
+
+<!-- go to the next page, keep current page search query, and override specific query keys -->
+<page-link path="/sample" keep-search-params="true" search="tab=info">new tab</page-link>
+
+<!-- use $ to indicate current path and just update the search params -->
+<page-link path="$" search="tab=info">new tab</page-link>
+
+<!-- concat to current page path. This is useful when rendering page-link inside a page-route tag -->
+<page-link path="$/contact" >contact</page-link>
 ```
 
-### `with-route`
+### `page-route`
 A component to conditionally render content based on the route.
 
 The content can be provided as children content or loaded via the `src` attribute.
@@ -66,21 +88,31 @@ The content can be provided as children content or loaded via the `src` attribut
 You can also set content inside with attribute of `loading` to show while
 the content is being loaded or a `fallback` in case the content fails to load.
 ```html
-<!-- static inner content -->
-<with-route path="/">
+<!-- specify the title and content of the page -->
+<page-route path="/" title="Welcome">
   Home content
-</with-route>
+</page-route>
 
-<!-- fetch html content -->
-<with-route path="/contact" src="/contact.html">
+<!-- fetch html content with fallback content and loading indicator -->
+<page-route path="/contact" src="/contact.html">
   <div slot="loading">Loading home content</div>
   <div slot="fallback">
     Fallback contact page content
   </div>
-</with-route>
+</page-route>
 
-<!-- lazy load a component/code and pass data -->
-<with-route path="/greeting" src="./greeting.page.js" data='{"greeting":"Hello World"}'></with-route>
+<!-- js file must default export a:
+- function expecting arguments
+- Markup template
+- object with a "render" method
+- DOM Nodes
+- anything valid as a "innerHTML" value - it will be turned into a string
+-->
+<page-route 
+    path="/greeting" 
+    src="./greeting.page.js" 
+    data='{"greeting":"Hello World"}'
+></page-route>
 ```
 
 ```js
@@ -92,14 +124,49 @@ export default ({ greeting }) => {
 }
 ```
 
-### `with-route-query`
-The `with-route-query` work just like `with-route` but reacts to the search query of the url. It takes a `key` and `value`
-prop to react to instead of a `path`.
+### `page-route-query`
+The `page-route-query` work exactly like `page-route` but reacts to the search query of the url instead. It takes a `key` and `value`
+attributes instead of a `path`.
 
 ```html
-<with-route-query key="tab" value="sample">
+<page-route-query key="tab" value="sample">
   sample tab content
-</with-route-query>
+</page-route-query>
+
+<!-- use the "default" attribute to tell it 
+to render content even if the key is not present -->
+<page-route-query key="tab" value="sample" default="true">
+    sample tab content
+</page-route-query>
+
+<!-- you may also pass down data -->
+<page-route-query 
+    key="tab"
+    value="sample"
+    src="./greeting.page.js" 
+    data='{"greeting":"Hello World"}'
+></page-route-query>
+```
+
+### `page-redirect`
+The `page-redirect` lets you automatically redirect to a path if not a known one. You should place it 
+after all `page-route` rendered on the page.
+
+
+```html
+<page-route path="/" src="./index.html"></page-route>
+<page-route path="/contact" src="./contact.html"></page-route>
+<page-route path="/about" src="./about.html"></page-route>
+<!-- render it after all page-routes-->
+<page-redirect to="/404"></page-redirect>
+
+
+<page-route path="/project">
+    ...
+    <!--  when placed inside a page-route, it will redirect 
+      whenever any unknown route starting with the parent page-route is detected -->
+    <page-redirect to="/404"></page-redirect>
+</page-route>
 ```
 
 ### goToPage

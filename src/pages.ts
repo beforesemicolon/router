@@ -1,6 +1,7 @@
 import { isOnPage } from './utils/is-on-page'
 import { getSearchQuery } from './utils/get-search-query'
 import { jsonStringify } from './utils/json-stringify'
+import { cleanPathnameOptionalEnding } from './utils/clean-pathname-optional-ending'
 
 type PathChangeListener = (
     pathname: string,
@@ -10,9 +11,13 @@ type PathChangeListener = (
 
 const routeListeners: Set<PathChangeListener> = new Set()
 
-const broadcast = async () => {
+const broadcast = () => {
     routeListeners.forEach((cb) => {
-        cb(location.pathname, getSearchQuery(), getPageData())
+        cb(
+            cleanPathnameOptionalEnding(location.pathname),
+            getSearchQuery(),
+            getPageData()
+        )
     })
 }
 
@@ -22,7 +27,11 @@ window.addEventListener('popstate', () => {
 
 export const onPageChange = (sub: PathChangeListener) => {
     routeListeners.add(sub)
-    sub(location.pathname, getSearchQuery(), getPageData())
+    sub(
+        cleanPathnameOptionalEnding(location.pathname),
+        getSearchQuery(),
+        getPageData()
+    )
 
     return () => {
         routeListeners.delete(sub)

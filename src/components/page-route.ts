@@ -1,17 +1,24 @@
 import { pathStringToPattern } from '../utils/path-string-to-pattern'
 import { getPathMatchParams } from '../utils/get-path-match-params'
-import { onPageChange } from '../pages'
+import { goToPage, onPageChange } from '../pages'
+import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
 
-interface WithRouteProps {
+interface PageRedirectProps {
+    to: string
+}
+
+interface PageRouteProps {
     path: string
     src: string
     data: Record<string, unknown>
+    title: string
 }
 
-interface WithRouteQueryProps extends WithRouteProps {
+interface PageRouteQueryProps extends PageRouteProps {
     key: string
     value: string
     src: string
+    default: boolean
     data: Record<string, unknown>
 }
 
@@ -29,27 +36,38 @@ export default ({
     WebComponent,
     when,
 }: typeof import('@beforesemicolon/web-component')) => {
-    class WithRoute<
-        T extends WithRouteProps = WithRouteProps,
+    const knownRoutes: Set<string> = new Set([])
+
+    class PageRoute<
+        T extends PageRouteProps = PageRouteProps,
     > extends WebComponent<T, { status: Status }> {
-        static observedAttributes = ['path', 'src', 'data']
+        static observedAttributes = ['path', 'src', 'data', 'title']
         initialState = {
             status: Status.Idle,
         }
         path = ''
         src = ''
+        title = ''
         data = {}
         slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
 
         loadContent = async (src: string) => {
+            if (!this.mounted) {
+                return
+            }
+
             this.setState({ status: Status.Loading })
             let content = this.#cachedResult[src]
 
             if (!content) {
                 try {
                     if (src.endsWith('.js')) {
-                        ;({ default: content } = await import(src))
+                        ;({ default: content } = await import(
+                            src.startsWith('file:')
+                                ? src.replace(/^file:/, '')
+                                : new URL(src, location.origin).href
+                        ))
                     } else {
                         const res = await fetch(src)
 
@@ -71,23 +89,33 @@ export default ({
                 }
             }
 
-            if (typeof content === 'function') {
-                content = await content(this.props.data())
-            }
+            if (this.mounted) {
+                if (typeof content === 'function') {
+                    content = await content(this.props.data())
+                }
 
-            // @ts-expect-error handle HTMLTemplate or anything with a render method
-            if (typeof content?.render === 'function') {
-                this.innerHTML = ''
                 // @ts-expect-error handle HTMLTemplate or anything with a render method
-                content.render(this)
-            } else {
-                this.innerHTML = String(content)
-            }
+                if (typeof content?.render === 'function') {
+                    // @ts-expect-error renderTarget is a property unique to Markup, in its absence we can render
+                    if (content.renderTarget !== this) {
+                        this.innerHTML = ''
+                        // @ts-expect-error handle HTMLTemplate or anything with a render method
+                        content.render(this)
+                    }
+                } else if (content instanceof Node) {
+                    this.innerHTML = ''
+                    this.appendChild(content)
+                } else {
+                    this.innerHTML = String(content)
+                }
 
-            this.setState({ status: Status.Loaded })
+                this.setState({ status: Status.Loaded })
+            }
         }
 
         onMount() {
+            knownRoutes.add(cleanPathnameOptionalEnding(this.props.path()))
+
             return onPageChange((pathname: string) => {
                 const params = getPathMatchParams(
                     pathname,
@@ -104,6 +132,8 @@ export default ({
                     } else {
                         this.setState({ status: Status.Loaded })
                     }
+
+                    document.title = this.props.title()
                 } else {
                     this.setState({ status: Status.Idle })
                 }
@@ -130,14 +160,19 @@ export default ({
         }
     }
 
-    class WithRouteQuery extends WithRoute<WithRouteQueryProps> {
-        static observedAttributes = ['key', 'value', 'src', 'data']
+    class PageRouteQuery extends PageRoute<PageRouteQueryProps> {
+        static observedAttributes = ['key', 'value', 'src', 'data', 'default']
         key = ''
         value = ''
+        default = false
 
         onMount() {
             return onPageChange((_, query) => {
-                if (query && query[this.props.key()] === this.props.value()) {
+                if (
+                    (query[this.props.key()] === undefined &&
+                        this.props.default()) ||
+                    query[this.props.key()] === this.props.value()
+                ) {
                     if (
                         this.props.src() &&
                         this.state.status() !== Status.Loading &&
@@ -154,6 +189,27 @@ export default ({
         }
     }
 
-    customElements.define('with-route', WithRoute)
-    customElements.define('with-route-query', WithRouteQuery)
+    class PageRedirect extends WebComponent<PageRedirectProps> {
+        static observedAttributes = ['to']
+        to = ''
+
+        onMount() {
+            const parentPath = cleanPathnameOptionalEnding(
+                this.closest('page-route')?.getAttribute('path') ?? '/'
+            )
+
+            return onPageChange((pathname: string) => {
+                if (
+                    !knownRoutes.has(pathname) &&
+                    location.pathname.startsWith(parentPath)
+                ) {
+                    goToPage(this.props.to())
+                }
+            })
+        }
+    }
+
+    customElements.define('page-route', PageRoute)
+    customElements.define('page-route-query', PageRouteQuery)
+    customElements.define('page-redirect', PageRedirect)
 }

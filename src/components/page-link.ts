@@ -4,20 +4,32 @@ import { goToPage, onPageChange } from '../pages'
 export interface PageLinkProps {
     path: string
     title: string
+    search: string
+    keepSearchParams: boolean
     data: Record<string, unknown>
 }
 
 export default ({
     html,
     WebComponent,
+    when,
+    is,
 }: typeof import('@beforesemicolon/web-component')) => {
     class PageLink extends WebComponent<PageLinkProps, { part: string }> {
-        static observedAttributes = ['path', 'title', 'data']
+        static observedAttributes = [
+            'path',
+            'title',
+            'data',
+            'search',
+            'keep-search-params',
+        ]
         initialState = {
             part: 'anchor',
         }
         path = ''
         title = ''
+        search = ''
+        keepSearchParams = false
         data = {}
 
         handleClick = (event: Event) => {
@@ -25,8 +37,25 @@ export default ({
             event.stopPropagation()
 
             if (this.props.path() !== location.pathname + location.search) {
+                const url = new URL(
+                    this.props.path().replace(/^\$\/?/, location.pathname),
+                    location.origin
+                )
+
+                if (this.props.keepSearchParams()) {
+                    const currentQuery = new URLSearchParams(location.search)
+                    currentQuery.forEach((_, name) => {
+                        url.searchParams.set(name, currentQuery.get(name) ?? '')
+                    })
+                }
+
+                const search = new URLSearchParams(this.props.search())
+                search.forEach((_, name) => {
+                    url.searchParams.set(name, search.get(name) ?? '')
+                })
+
                 goToPage(
-                    this.props.path(),
+                    url.pathname + url.search,
                     this.props.data(),
                     this.props.title()
                 )
@@ -60,7 +89,12 @@ export default ({
             return html`
                 <a
                     part="${this.state.part}"
-                    href="${this.props.path}"
+                    href="${when(
+                        is(this.props.path, (p) => p.startsWith('$')),
+                        () =>
+                            this.props.path().replace(/^\$/, location.pathname),
+                        this.props.path
+                    )}"
                     onclick="${this.handleClick}"
                 >
                     <slot></slot>
