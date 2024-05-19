@@ -137,8 +137,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# files
-index.html
-example.js
-
