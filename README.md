@@ -28,6 +28,14 @@ Web Component based router.
 <page-redirect to="/404"></page-redirect>
 ```
 
+## Motivation
+- web standards alone routing is hard to work with
+- it takes time to implement a custom router
+- most routers out there are framework specific
+- routers out there require JavaScript code to be written and a powerful component tag simplifies that
+- available routers dont handle both JavaScript and HTML files
+- web components work with everything which makes it a perfect candidate for a router
+
 ## Install
 
 ```
