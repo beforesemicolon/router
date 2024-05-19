@@ -1,24 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<base href=".">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
-	<script src="../dist/client.js"></script>
 	<script src="https://unpkg.com/@beforesemicolon/web-component/dist/client.js"></script>
+	<script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
+	<script src="../dist/client.js"></script>
 </head>
 <body>
 	<nav>
-		<page-link path="/router">Home</page-link>
-		<page-link path="/router/github">github</page-link>
-		<page-link path="/router/feedback">Feedback</page-link>
-		<page-link path="/router/unknown">unknown</page-link>
+		<page-link path="/">Home</page-link>
+		<page-link path="/github">github</page-link>
+		<page-link path="/feedback">Feedback</page-link>
+		<page-link path="/unknown">unknown</page-link>
 	</nav>
 
-	<page-route path="/router" title="Home">
+	<page-route path="" title="Home">
 		<h2>Markup Router</h2>
 		<p>A powerful and simple router to help you create single and multiple page applications easily.</p>
-		<p>Read the full <a href="https://markup.beforesemicolon.com/documentation/router" target="_blank">documentation</a></p>
+		<p>Read the full <a href="https://markup.beforesemicolon.com/documentation" target="_blank">documentation</a></p>
 
 		<div class="tabs" style="display: flex; gap: 10px">
 			<div class="tab">
@@ -38,13 +40,13 @@
 		</page-route-query>
 	</page-route>
 	
-	<page-route path="/router/github" src="./github.html" title="Github"></page-route>
+	<page-route path="/github" src="./github.html" title="Github"></page-route>
 	
-	<page-route path="/router/feedback" src="./router/feedback.js" title="Feedback"></page-route>
-	<page-route path="/router/404" title="404 - Page Not Found">
+	<page-route path="/feedback" src="./feedback.js" title="Feedback"></page-route>
+	<page-route path="/404" title="404 - Page Not Found">
 		<h2>404 - Page Not Found</h2>
 	</page-route>
 
-	<page-redirect to="/router/404"></page-redirect>
+	<page-redirect to="/404"></page-redirect>
 </body>
 </html>

@@ -13,7 +13,7 @@ import { getSearchQuery } from './utils/get-search-query'
 
 export * from './components/page-route'
 import initPageLink from './components/page-link'
-import initWithRoute from './components/page-route'
+import initPageRoute from './components/page-route'
 import type { WebComponent } from '@beforesemicolon/web-component'
 
 declare global {
@@ -35,7 +35,7 @@ if (!window.BFS?.MARKUP || !window.BFS.WebComponent) {
 if (window.BFS) {
     const BFS = { ...window.BFS, ...window.BFS?.MARKUP }
 
-    initWithRoute(BFS)
+    initPageRoute(BFS)
     initPageLink(BFS)
 
     window.BFS = {
