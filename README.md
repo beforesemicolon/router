@@ -4,8 +4,19 @@
 [![Test](https://github.com/beforesemicolon/router/actions/workflows/test.yml/badge.svg)](https://github.com/beforesemicolon/router/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/%40beforesemicolon%2Frouter)](https://www.npmjs.com/package/@beforesemicolon/router)
 ![npm](https://img.shields.io/npm/l/%40beforesemicolon%2Frouter)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c34e61bd-3c8f-4c01-a524-dcbcddfa78dd/deploy-status)](https://app.netlify.com/sites/bfs-router/deploys)
 
-Web Component based router.
+Web component router based on [Markup](https://markup.beforesemicolon.com/)
+
+## Motivation
+- web standards alone routing is hard to work with
+- it takes time to implement a custom router
+- most routers out there are framework specific
+- routers out there require JavaScript code to be written and a powerful component tag simplifies that
+- available routers dont handle both JavaScript and HTML files
+- web components work with everything which makes it a perfect candidate for a router
+
+[See Demo](https://bfs-router.netlify.app/)
 
 ```html
 <nav>
@@ -27,14 +38,6 @@ Web Component based router.
 
 <page-redirect to="/404"></page-redirect>
 ```
-
-## Motivation
-- web standards alone routing is hard to work with
-- it takes time to implement a custom router
-- most routers out there are framework specific
-- routers out there require JavaScript code to be written and a powerful component tag simplifies that
-- available routers dont handle both JavaScript and HTML files
-- web components work with everything which makes it a perfect candidate for a router
 
 ## Install
 
