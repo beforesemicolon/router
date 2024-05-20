@@ -10,13 +10,13 @@
 </head>
 <body>
 	<nav>
-		<page-link path="/router">Home</page-link>
-		<page-link path="/router/github">github</page-link>
-		<page-link path="/router/feedback">Feedback</page-link>
-		<page-link path="/router/unknown">unknown</page-link>
+		<page-link path="/">Home</page-link>
+		<page-link path="/github">github</page-link>
+		<page-link path="/feedback">Feedback</page-link>
+		<page-link path="/unknown">unknown</page-link>
 	</nav>
 
-	<page-route path="/router" title="Home">
+	<page-route path="/" title="Home">
 		<h2>Markup Router</h2>
 		<p>A powerful and simple router to help you create single and multiple page applications easily.</p>
 		<p>Read the full <a href="https://markup.beforesemicolon.com/documentation" target="_blank">documentation</a></p>
@@ -39,13 +39,13 @@
 		</page-route-query>
 	</page-route>
 	
-	<page-route path="/router/github" src="./github.html" title="Github"></page-route>
+	<page-route path="/github" src="./github.html" title="Github"></page-route>
 	
-	<page-route path="/router/feedback" src="./router/feedback.js" title="Feedback"></page-route>
-	<page-route path="/router/404" title="404 - Page Not Found">
+	<page-route path="/feedback" src="./feedback.js" title="Feedback"></page-route>
+	<page-route path="/404" title="404 - Page Not Found">
 		<h2>404 - Page Not Found</h2>
 	</page-route>
 
-	<page-redirect to="/router/404"></page-redirect>
+	<page-redirect to="/404"></page-redirect>
 </body>
 </html>
