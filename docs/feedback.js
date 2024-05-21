@@ -1,7 +1,4 @@
 const { html, state, is, when } = BFS.MARKUP;
-import style from './feedback.css' assert { type: 'css' };
-
-document.adoptedStyleSheets = [...document.adoptedStyleSheets, style]
 
 const [type, setType] = state('bug')
 const [title, setTitle] = state('')
@@ -38,4 +35,21 @@ export default html`
         </label>
         <button type="submit">Send</button>
     </form>
+    
+    <style>
+        #feedback {
+            width: 450px;
+            font-family: sans-serif;
+
+            label {
+                display: block;
+                margin: 10px 0;
+
+                span {
+                    display: block;
+                    font-size: 14px;
+                }
+            }
+        }
+    </style>
 `

@@ -108,7 +108,7 @@ the content is being loaded or a `fallback` in case the content fails to load.
 <page-route path="/contact" src="/contact.html">
   <div slot="loading">Loading home content</div>
   <div slot="fallback">
-    Fallback contact page content
+    Oops - Failed to load content
   </div>
 </page-route>
 
