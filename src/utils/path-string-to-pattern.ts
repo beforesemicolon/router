@@ -1,6 +1,6 @@
 import { cleanPathnameOptionalEnding } from './clean-pathname-optional-ending'
 
-export const pathStringToPattern = (path: string) => {
+export const pathStringToPattern = (path: string, exact = true) => {
     path = cleanPathnameOptionalEnding(path)
     const params: string[] = []
 
@@ -10,7 +10,7 @@ export const pathStringToPattern = (path: string) => {
     })
 
     return {
-        pattern: new RegExp(`^${rep}$`),
+        pattern: new RegExp(`^${rep}${exact ? '$' : '*'}`),
         params,
     }
 }

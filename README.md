@@ -1,4 +1,4 @@
-# Router
+# Router (beta)
 
 [![Static Badge](https://img.shields.io/badge/based_on-markup.beforesemicolon.com-blue)](https://markup.beforesemicolon.com)
 [![Test](https://github.com/beforesemicolon/router/actions/workflows/test.yml/badge.svg)](https://github.com/beforesemicolon/router/actions/workflows/test.yml)
@@ -38,6 +38,14 @@ Web component router based on [Markup](https://markup.beforesemicolon.com/)
 
 <page-redirect to="/404"></page-redirect>
 ```
+
+### Beta Warning
+Some features are still experimental for example:
+- nested page-route
+- page-redirect
+- path `$` parent reference
+
+Please report your findings ad feedback for improvements
 
 ## Install
 
@@ -178,6 +186,30 @@ after all `page-route` rendered on the page.
       whenever any unknown route starting with the parent page-route is detected -->
     <page-redirect to="/404"></page-redirect>
 </page-route>
+
+<!-- Nest page-route
+
+Specify the exact="false" so it allows inner page-routes to render
+-->
+<page-route path="/todos" exact="false">
+
+    <!-- you can specify full path including the parent path   -->
+    <page-route path="/todos/pending">
+        ...
+    </page-route>
+
+    <!-- or you can use the "$" to refer to the parent path   -->
+    <page-route path="$/in-progress">
+        ...
+    </page-route>
+
+    <page-route path="$/completed">
+        ...
+    </page-route>
+    
+</page-route>
+    
+
 ```
 
 ### goToPage

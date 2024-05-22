@@ -10,6 +10,7 @@ interface PageRedirectProps {
 interface PageRouteProps {
     path: string
     src: string
+    exact: boolean
     data: Record<string, unknown>
     title: string
 }
@@ -41,16 +42,28 @@ export default ({
     class PageRoute<
         T extends PageRouteProps = PageRouteProps,
     > extends WebComponent<T, { status: Status }> {
-        static observedAttributes = ['path', 'src', 'data', 'title']
+        static observedAttributes = ['path', 'src', 'data', 'title', 'exact']
         initialState = {
             status: Status.Idle,
         }
         path = ''
         src = ''
         title = ''
+        exact = true
         data = {}
         slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
+
+        get fullPath() {
+            const pageRoute = this.closest('page-route') as PageRoute
+            let parentPath = '/'
+
+            if (pageRoute !== this) {
+                parentPath = cleanPathnameOptionalEnding(pageRoute.fullPath)
+            }
+
+            return this.props.path().replace(/^\$\/?/, parentPath)
+        }
 
         loadContent = async (src: string) => {
             if (!this.mounted) {
@@ -114,12 +127,13 @@ export default ({
         }
 
         onMount() {
-            knownRoutes.add(cleanPathnameOptionalEnding(this.props.path()))
+            const path = this.fullPath
+            knownRoutes.add(cleanPathnameOptionalEnding(path))
 
             return onPageChange((pathname: string) => {
                 const params = getPathMatchParams(
                     pathname,
-                    pathStringToPattern(this.props.path())
+                    pathStringToPattern(path, this.props.exact())
                 )
 
                 if (params !== null) {
