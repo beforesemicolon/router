@@ -44,6 +44,7 @@ Some features are still experimental for example:
 - nested page-route
 - page-redirect
 - path `$` parent reference
+- page-link `default` attribute
 
 Please report your findings ad feedback for improvements
 

@@ -92,9 +92,8 @@ export default ({
 
         onMount() {
             return onPageChange(() => {
-                const newActive =
-                    isOnPage(this.fullPath) &&
-                    matchesSearch(this.props.search())
+                const onPage = isOnPage(this.fullPath)
+                const newActive = onPage && matchesSearch(this.props.search())
 
                 this.setState({
                     part: newActive ? 'anchor active' : 'anchor',
@@ -104,7 +103,12 @@ export default ({
                     value: newActive,
                 })
 
-                if (this.props.default() && this.props.search()) {
+                if (
+                    onPage &&
+                    !newActive &&
+                    this.props.default() &&
+                    this.props.search()
+                ) {
                     const loc = new URLSearchParams(location.search)
                     const search = new URLSearchParams(this.props.search())
 
