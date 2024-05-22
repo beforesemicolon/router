@@ -132,6 +132,30 @@ the content is being loaded or a `fallback` in case the content fails to load.
     src="./greeting.page.js" 
     data='{"greeting":"Hello World"}'
 ></page-route>
+
+
+<!-- Nest page-route
+
+Specify the exact="false" so it allows inner page-routes to render
+-->
+<page-route path="/todos" exact="false">
+
+    <!-- you can specify full path including the parent path   -->
+    <page-route path="/todos/pending">
+        ...
+    </page-route>
+
+    <!-- or you can use the "$" to refer to the parent path   -->
+    <page-route path="$/in-progress">
+        ...
+    </page-route>
+
+    <page-route path="$/completed">
+        ...
+    </page-route>
+
+</page-route>
+
 ```
 
 ```js
@@ -185,30 +209,7 @@ after all `page-route` rendered on the page.
     <!--  when placed inside a page-route, it will redirect 
       whenever any unknown route starting with the parent page-route is detected -->
     <page-redirect to="/404"></page-redirect>
-</page-route>
-
-<!-- Nest page-route
-
-Specify the exact="false" so it allows inner page-routes to render
--->
-<page-route path="/todos" exact="false">
-
-    <!-- you can specify full path including the parent path   -->
-    <page-route path="/todos/pending">
-        ...
-    </page-route>
-
-    <!-- or you can use the "$" to refer to the parent path   -->
-    <page-route path="$/in-progress">
-        ...
-    </page-route>
-
-    <page-route path="$/completed">
-        ...
-    </page-route>
-    
-</page-route>
-    
+</page-route> 
 
 ```
 
