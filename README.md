@@ -92,11 +92,34 @@ and takes similar options.
 <!-- go to the next page, keep current page search query, and override specific query keys -->
 <page-link path="/sample" keep-search-params="true" search="tab=info">new tab</page-link>
 
+<!-- make the current search the default on load. Works well with page-route-query default -->
+<page-link path="/sample" search="tab=info" default="true">new tab</page-link>
+
 <!-- use $ to indicate current path and just update the search params -->
 <page-link path="$" search="tab=info">new tab</page-link>
 
 <!-- concat to current page path. This is useful when rendering page-link inside a page-route tag -->
-<page-link path="$/contact" >contact</page-link>
+<page-link path="$/contact">contact</page-link>
+
+<!-- listen to when the link becomes active -->
+<page-link path="$/contact" onactive="...">contact</page-link>
+```
+
+You can style the link by targeting the `anchor` and `active` parts.
+
+```css
+page-link::part(anchor) {
+    text-decoration: none;
+    color: #444;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+}
+
+page-link::part(anchor active) {
+    background: #b4fff8;
+    border-color: #222;
+    color: #000;
+}
 ```
 
 ### `page-route`

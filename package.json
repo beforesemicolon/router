@@ -1,6 +1,6 @@
 {
   "name": "@beforesemicolon/router",
-  "version": "0.8.0-beta",
+  "version": "0.10.0-beta",
   "description": "Web component router based on Markup",
   "type": "module",
   "types": "./dist/types/index.d.ts",
@@ -16,7 +16,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "local": "nodemon --watch src -e ts --exec npm run build:browser",
+    "local": "nodemon --watch src -e ts --exec 'npm run build:browser'",
     "build:cjs-min": "esbuild `find src \\( -name '*.ts' ! -name '*.spec.ts' ! -name 'client.ts' \\)` --minify --outdir=dist/cjs --platform=node --format=cjs --keep-names --target=esnext",
     "build:esm-min": "esbuild `find src \\( -name '*.ts' ! -name '*.spec.ts' ! -name 'client.ts' \\)` --minify --outdir=dist/esm --platform=node --format=esm --keep-names --target=esnext",
     "build:browser": "esbuild src/client.ts --minify --bundle --keep-names --format=esm --external:@beforesemicolon/web-component --sourcemap --target=esnext --outfile=dist/client.js",

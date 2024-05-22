@@ -3,33 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Home</title>
+	<meta name="description" content="A Web Component based router by Before Semicolon">
+	<title>Router by Before Semicolon</title>
 	<script src="https://unpkg.com/@beforesemicolon/web-component/dist/client.js"></script>
-	<script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
+<!--	<script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>-->
+	<script src="./client.js"></script>
+	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-	<nav>
-		<page-link path="/">Home</page-link>
-		<page-link path="/github">github</page-link>
-		<page-link path="/feedback">Feedback</page-link>
-		<page-link path="/unknown">unknown</page-link>
-	</nav>
+	<div class="wrapper">
+		<nav>
+			<page-link path="/">Home</page-link>
+			<page-link path="/feedback">Feedback</page-link>
+		</nav>
 
-	<page-route path="/" title="Home">
-		<h2>Markup Router</h2>
-		<p>A powerful and simple router to help you create single and multiple page applications easily.</p>
-		<p>Read the full <a href="https://markup.beforesemicolon.com/documentation" target="_blank">documentation</a></p>
+		<page-route path="/" title="Home">
+			<h2>Router <em>by Before Semicolon</em></h2>
+			<p>A Web Component router is just the best and easiest way to lazy load content based on the URL.</p>
+			<p>Built using <a href="https://www.npmjs.com/package/@beforesemicolon/web-component" target="_blank">Markup WebComponent</a> ,
+			it redefines how you approach routing all together allowing you to load JavaScript, HTML or text content directly from a file.
+			When paired with <a href="">reactive Markup templates</a>, there is no limit to what you can build.</p>
 
-		<div class="tabs" style="display: flex; gap: 10px">
-			<div class="tab">
-				<page-link path="$" title="Home - Motivation" search="tab=motivation">Motivation</page-link>
-			</div>
-			<div class="tab">
-				<page-link path="$" title="Home - Markup" search="tab=markup">Markup</page-link>
-			</div>
-		</div>
-
-		<page-route-query key="tab" value="motivation" default="true">
 			<h3>Motivation</h3>
 			<ul>
 				<li>web standards alone routing is hard to work with</li>
@@ -39,30 +33,78 @@
 				<li>available routers dont handle both JavaScript and HTML files</li>
 				<li>web components work with everything which makes it a perfect candidate for a router</li>
 			</ul>
-		</page-route-query>
 
-		<page-route-query key="tab" value="markup">
-			<h3>Markup</h3>
-			<p>Markup is reactive templating system that offers a <a href="https://www.npmjs.com/package/@beforesemicolon/web-component" target="_blank">WebComponent</a> solution this route is built upon.</p>
-		</page-route-query>
-	</page-route>
+			<h3>Components</h3>
 
-	<page-route path="/github" src="./github.html" title="Github">
-		<div slot="fallback">
-			Oops! - Failed to load content
-		</div>
-	</page-route>
+			<div class="tabs">
+				<div class="tab">
+					<page-link path="$" search="tab=page-link" default="true">page-link</page-link>
+				</div>
+				<div class="tab">
+					<page-link path="$" search="tab=page-route">page-route</page-link>
+				</div>
+				<div class="tab">
+					<page-link path="$" search="tab=page-route-query">page-route-query</page-link>
+				</div>
+				<div class="tab">
+					<page-link path="$" search="tab=page-redirect">page-redirect</page-link>
+				</div>
+			</div>
 
-	<page-route path="/feedback" src="./feedback.js" title="Feedback">
-		<div slot="fallback">
-			Oops! - Failed to load content
-		</div>
-	</page-route>
+			<div class="tab-content">
+				<page-route-query key="tab" value="page-link" default="true">
+					<p>The <code>page-link</code> tag allows you to set an anchor tag
+					   to take to any local route.</p>
+					<p>You may also use it to set the title for that page on navigation, override all or specific
+					   search query keys, and pass down data.</p>
+					<a href="https://www.npmjs.com/package/@beforesemicolon/router#page-link" target="_blank">see documentation</a>
+				</page-route-query>
+				<page-route-query key="tab" value="page-route">
+					<p>The <code>page-route</code> tag allows you to conditionally render its content based on the route
+					or lazy load a JavaScript, HTML, or text file with the ability of specifying the loading view and fallback
+					   in case something goes wrong.</p>
+					<p>The JavaScript files must default export a Node, a string or a Markup template.
+					   It can also default export function or Object with render method that returns a Node, a string or a Markup template.</p>
+					<p>The component also allows you to specify the title, data, and pathname params and can be nested to create more complex content hiearchy.</p>
+					<a href="https://www.npmjs.com/package/@beforesemicolon/router#page-route" target="_blank">see documentation</a>
+				</page-route-query>
+				<page-route-query key="tab" value="page-route-query">
+					<p>The <code>page-route-query</code> works just like the <code>page-route</code> but it reacts to the search query instead of the path.</p>
+					<a href="https://www.npmjs.com/package/@beforesemicolon/router#page-route-query" target="_blank">see documentation</a>
+				</page-route-query>
+				<page-route-query key="tab" value="page-redirect">
+					<p>The <code>page-redirect</code> will catch any unknown path for you and force a redirect. It is context aware so placing it inside a <code>page-route</code>
+					will work just for the child routes.</p>
+					<a href="https://www.npmjs.com/package/@beforesemicolon/router#page-redirect" target="_blank">see documentation</a>
+				</page-route-query>
+			</div>
 
-	<page-route path="/404" title="404 - Page Not Found">
-		<h2>404 - Page Not Found</h2>
-	</page-route>
+			<h3>API</h3>
+			<p>Additionally, you can access internal APIs to use inside your JavaScript code.</p>
+			<ul>
+				<li><strong>goToPage</strong>: takes you to specified page and can also take data and page title for that page.</li>
+				<li><strong>replacePage</strong>: same as <em>goToPage</em> but does not add to the history. It only overrides the last entry.</li>
+				<li><strong>onPageChange</strong>: a listener so you can react to page changes. The provide callback is called with the pathname, search and data for the page.</li>
+				<li><strong>nextPage</strong>: takes you to the next page in the history</li>
+				<li><strong>previousPage</strong>: takes you to the previous page in the history</li>
+				<li><strong>getSearchQuery</strong>: returns a JSON representation of the search query</li>
+				<li><strong>updateSearchQuery</strong>: lets you update one or all search query keys</li>
+				<li><strong>getPageData</strong>: returns the data the page was loaded with</li>
+			</ul>
+			<a href="https://www.npmjs.com/package/@beforesemicolon/router" target="_blank">see documentation</a>
+		</page-route>
 
-	<page-redirect to="/404"></page-redirect>
+		<page-route path="/feedback" src="./feedback.js" title="Feedback">
+			<div slot="fallback">
+				Oops! - Failed to load content
+			</div>
+		</page-route>
+
+		<page-route path="/404" title="404 - Page Not Found">
+			<h2>404 - Page Not Found</h2>
+		</page-route>
+
+		<page-redirect to="/404"></page-redirect>
+	</div>
 </body>
 </html>

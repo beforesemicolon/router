@@ -19,7 +19,7 @@ export default html`
     <h2>Let us know what you think</h2>
     ${when(error, html`<p>${error()?.message}</p>`)}
     <form onsubmit="${onSubmit}" id="feedback">
-        <select name="type" onchange="${evt => setType(evt.target.value)}">
+        <select name="report-type" onchange="${evt => setType(evt.target.value)}" aria-label="report-type">
             <option value="bug" selected="${is(type, 'bug')}">Report an issue</option>
             <option value="enhancement" selected="${is(type, 'enhancement')}">Request a feature</option>
         </select>
