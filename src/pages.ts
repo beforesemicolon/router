@@ -2,12 +2,7 @@ import { isOnPage } from './utils/is-on-page'
 import { getSearchQuery } from './utils/get-search-query'
 import { jsonStringify } from './utils/json-stringify'
 import { cleanPathnameOptionalEnding } from './utils/clean-pathname-optional-ending'
-
-type PathChangeListener = (
-    pathname: string,
-    query: Record<string, string>,
-    data: Record<string, unknown>
-) => void
+import { PathChangeListener } from './types'
 
 const routeListeners: Set<PathChangeListener> = new Set()
 

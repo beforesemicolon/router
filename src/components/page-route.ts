@@ -2,33 +2,14 @@ import { pathStringToPattern } from '../utils/path-string-to-pattern'
 import { getPathMatchParams } from '../utils/get-path-match-params'
 import { goToPage, onPageChange } from '../pages'
 import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
-
-interface PageRedirectProps {
-    to: string
-}
-
-interface PageRouteProps {
-    path: string
-    src: string
-    exact: boolean
-    data: Record<string, unknown>
-    title: string
-}
-
-interface PageRouteQueryProps extends PageRouteProps {
-    key: string
-    value: string
-    src: string
-    default: boolean
-    data: Record<string, unknown>
-}
-
-enum Status {
-    Idle,
-    Loading,
-    Loaded,
-    LoadingFailed,
-}
+import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
+import {
+    PageRedirectProps,
+    PageRouteProps,
+    PageRouteQueryProps,
+    PathChangeListener,
+    Status,
+} from '../types'
 
 export default ({
     html,
@@ -51,7 +32,7 @@ export default ({
         title = ''
         exact = true
         data = {}
-        slotName = String(Math.floor(Math.random() * 10000000000))
+        #slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
         #parentRoutePath = ''
 
@@ -61,11 +42,7 @@ export default ({
             )
         }
 
-        loadContent = async (src: string) => {
-            if (!this.mounted) {
-                return
-            }
-
+        _loadContent = async (src: string) => {
             this.setState({ status: Status.Loading })
             let content = this.#cachedResult[src]
 
@@ -122,58 +99,47 @@ export default ({
             }
         }
 
-        onMount() {
-            let pageRoute = this.parentNode
+        _handlePageChange: PathChangeListener = (pathname: string) => {
+            const params = getPathMatchParams(
+                pathname,
+                pathStringToPattern(this.fullPath, this.props.exact())
+            )
 
-            while (pageRoute) {
-                if (pageRoute instanceof ShadowRoot) {
-                    pageRoute = pageRoute.host
+            if (params !== null) {
+                if (
+                    this.hasAttribute('src') &&
+                    this.state.status() !== Status.Loading &&
+                    this.state.status() !== Status.Loaded
+                ) {
+                    this._loadContent(this.props.src())
+                } else if (this.state.status() !== Status.Loaded) {
+                    this.setState({ status: Status.Loaded })
                 }
 
-                if (pageRoute instanceof PageRoute) {
-                    break
-                }
-
-                pageRoute = pageRoute.parentNode
+                document.title = this.props.title()
+            } else if (this.state.status() !== Status.Idle) {
+                this.setState({ status: Status.Idle })
             }
+        }
 
-            if (pageRoute && pageRoute !== this) {
+        onMount() {
+            const pageRoute = getAncestorPageRoute(this) as PageRoute
+
+            if (pageRoute) {
                 this.#parentRoutePath = cleanPathnameOptionalEnding(
                     pageRoute.fullPath
                 )
             }
 
-            const path = this.fullPath
-            knownRoutes.add(path)
+            this.fullPath && knownRoutes.add(this.fullPath)
 
-            return onPageChange((pathname: string) => {
-                const params = getPathMatchParams(
-                    pathname,
-                    pathStringToPattern(path, this.props.exact())
-                )
-
-                if (params !== null) {
-                    if (
-                        this.hasAttribute('src') &&
-                        this.state.status() !== Status.Loading &&
-                        this.state.status() !== Status.Loaded
-                    ) {
-                        this.loadContent(this.props.src())
-                    } else if (this.state.status() !== Status.Loaded) {
-                        this.setState({ status: Status.Loaded })
-                    }
-
-                    document.title = this.props.title()
-                } else if (this.state.status() !== Status.Idle) {
-                    this.setState({ status: Status.Idle })
-                }
-            })
+            return onPageChange(this._handlePageChange)
         }
 
         render() {
             return html`
                 <slot
-                    name="${this.slotName} | ${isNot(
+                    name="${this.#slotName} | ${isNot(
                         this.state.status,
                         Status.Loaded
                     )}"
@@ -196,26 +162,33 @@ export default ({
         value = ''
         default = false
 
-        onMount() {
-            return onPageChange((_, query) => {
+        get fullPath() {
+            return ''
+        }
+
+        _handlePageChange: PathChangeListener = (_: string, query) => {
+            const key = this.props.key()
+
+            if (
+                (query[key] === undefined && this.props.default()) ||
+                query[key] === this.props.value()
+            ) {
                 if (
-                    (query[this.props.key()] === undefined &&
-                        this.props.default()) ||
-                    query[this.props.key()] === this.props.value()
+                    this.props.src() &&
+                    this.state.status() !== Status.Loading &&
+                    this.state.status() !== Status.Loaded
                 ) {
-                    if (
-                        this.props.src() &&
-                        this.state.status() !== Status.Loading &&
-                        this.state.status() !== Status.Loaded
-                    ) {
-                        this.loadContent(this.props.src())
-                    } else {
-                        this.setState({ status: Status.Loaded })
-                    }
+                    this._loadContent(this.props.src())
                 } else {
-                    this.setState({ status: Status.Idle })
+                    this.setState({ status: Status.Loaded })
                 }
-            })
+            } else if (this.state.status() !== Status.Idle) {
+                this.setState({ status: Status.Idle })
+            }
+        }
+
+        onMount() {
+            return onPageChange(this._handlePageChange)
         }
     }
 
@@ -224,9 +197,12 @@ export default ({
         to = ''
 
         onMount() {
-            const parentPath = cleanPathnameOptionalEnding(
-                this.closest('page-route')?.getAttribute('path') ?? '/'
-            )
+            let parentPath = ''
+            const pageRoute = getAncestorPageRoute(this) as PageRoute
+
+            if (pageRoute) {
+                parentPath = cleanPathnameOptionalEnding(pageRoute.fullPath)
+            }
 
             return onPageChange((pathname: string) => {
                 if (
