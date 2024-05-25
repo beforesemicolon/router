@@ -133,6 +133,123 @@ describe('PageRoute', () => {
 		expect(r1.contentRoot.querySelector('slot[name="fallback"]')).not.toBeNull();
 	})
 
+	it('should allow to nest routes', async () => {
+		html`
+			<page-route path="/todos" exact="false">
+				Todos:
+				<page-route path="/pending">pending todos</page-route>
+				<page-route path="/in-progress">in progress todos</page-route>
+				<page-route path="/completed">completed todos</page-route>
+			</page-route>
+		`.render(document.body);
+
+		const [r1] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
+		const [r11, r12, r13] = Array.from(r1.children) as HTMLComponentElement<PageLinkProps>[];
+
+		let slot = r1.contentRoot.querySelector('slot');
+		expect(slot?.getAttribute('name')).toMatch(/\d+/)
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos');
+		})
+
+		expect(slot?.getAttribute('name')).toBeNull()
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/pending');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/in-progress');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/completed');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+	})
+
+	it('should allow to nest routes inside a component', async () => {
+		class PageContent extends WebComponent {
+			render() {
+				return html`
+					<page-route path="/pending">pending todos</page-route>
+					<page-route path="/in-progress">in progress todos</page-route>
+					<page-route path="/completed">completed todos</page-route>
+				`
+			}
+		}
+
+		customElements.define('page-content', PageContent)
+
+		html`
+			<page-route path="/todos" exact="false">
+				Todos:
+				<page-content></page-content>
+			</page-route>
+		`.render(document.body);
+
+		const [r1] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
+
+		let slot = r1.contentRoot.querySelector('slot');
+		expect(slot?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos');
+		})
+
+		expect(slot?.getAttribute('name')).toBeNull()
+
+		const cont = r1.children[0] as  HTMLComponentElement<PageLinkProps>;
+		const [r11, r12, r13] = Array.from((cont.contentRoot as HTMLComponentElement<PageLinkProps>).children) as HTMLComponentElement<PageLinkProps>[];
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/pending');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/in-progress');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+
+		await waitFor(() => {
+			goToPage('/todos/completed');
+		})
+
+		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+	})
+
 	describe('should import content', () => {
 		afterAll(() => {
 			fs.rmSync(path.resolve(__dirname, './sample.js'))
@@ -163,6 +280,41 @@ describe('PageRoute', () => {
 			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
 			// the content is placed inside
 			expect(r1.outerHTML).toBe('<page-route path="/sample" src="file:./sample.js">It works</page-route>')
+		})
+
+		it('with nested route', async () => {
+			fs.writeFileSync(path.resolve(__dirname, './sample.js'), `
+				module.exports = () => ({render: el => {
+					el.innerHTML = 'Todos:\\n' +
+						'<page-route path="/pending">pending todos</page-route>\\n' +
+						'<page-route path="/in-progress">in progress todos</page-route>\\n' +
+						'<page-route path="/completed">completed todos</page-route>';
+				}});
+			`.trim())
+
+			html`<page-route path="/todos" exact="false" src="file:./sample.js"></page-route>`.render(document.body);
+
+			const [r1] = Array.from(document.body.children) as HTMLComponentElement<PageLinkProps>[];
+
+			let slot = r1.contentRoot.querySelector('slot');
+
+			expect(slot?.getAttribute('name')).toMatch(/\d+/)
+			expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./sample.js"></page-route>')
+
+			await waitFor(() => {
+				goToPage('/todos/pending');
+			})
+
+			expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./sample.js">Todos:\n' +
+				'<page-route path="/pending">pending todos</page-route>\n' +
+				'<page-route path="/in-progress">in progress todos</page-route>\n' +
+				'<page-route path="/completed">completed todos</page-route></page-route>')
+
+			const [r11, r12, r13] = Array.from(r1.children) as HTMLComponentElement<PageLinkProps>[];
+
+			expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+			expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+			expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
 		})
 	})
 })

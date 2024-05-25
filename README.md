@@ -164,17 +164,18 @@ Specify the exact="false" so it allows inner page-routes to render
 -->
 <page-route path="/todos" exact="false">
 
-    <!-- you can specify full path including the parent path   -->
-    <page-route path="/todos/pending">
+    <!-- child page route already knows its inside a page-route 
+       so its parent path already prefixes its own which means
+       bellow page-route path is actually "/todos/pending" -->
+    <page-route path="/pending">
         ...
     </page-route>
 
-    <!-- or you can use the "$" to refer to the parent path   -->
-    <page-route path="$/in-progress">
+    <page-route path="/in-progress">
         ...
     </page-route>
 
-    <page-route path="$/completed">
+    <page-route path="/completed">
         ...
     </page-route>
 

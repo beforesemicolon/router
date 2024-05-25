@@ -53,16 +53,12 @@ export default ({
         data = {}
         slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
+        #parentRoutePath = ''
 
         get fullPath() {
-            const pageRoute = this.closest('page-route') as PageRoute
-            let parentPath = '/'
-
-            if (pageRoute !== this) {
-                parentPath = cleanPathnameOptionalEnding(pageRoute.fullPath)
-            }
-
-            return this.props.path().replace(/^\$\/?/, parentPath)
+            return cleanPathnameOptionalEnding(
+                this.#parentRoutePath + this.props.path()
+            )
         }
 
         loadContent = async (src: string) => {
@@ -127,8 +123,28 @@ export default ({
         }
 
         onMount() {
+            let pageRoute = this.parentNode
+
+            while (pageRoute) {
+                if (pageRoute instanceof ShadowRoot) {
+                    pageRoute = pageRoute.host
+                }
+
+                if (pageRoute instanceof PageRoute) {
+                    break
+                }
+
+                pageRoute = pageRoute.parentNode
+            }
+
+            if (pageRoute && pageRoute !== this) {
+                this.#parentRoutePath = cleanPathnameOptionalEnding(
+                    pageRoute.fullPath
+                )
+            }
+
             const path = this.fullPath
-            knownRoutes.add(cleanPathnameOptionalEnding(path))
+            knownRoutes.add(path)
 
             return onPageChange((pathname: string) => {
                 const params = getPathMatchParams(
@@ -138,17 +154,17 @@ export default ({
 
                 if (params !== null) {
                     if (
-                        this.props.src() &&
+                        this.hasAttribute('src') &&
                         this.state.status() !== Status.Loading &&
                         this.state.status() !== Status.Loaded
                     ) {
                         this.loadContent(this.props.src())
-                    } else {
+                    } else if (this.state.status() !== Status.Loaded) {
                         this.setState({ status: Status.Loaded })
                     }
 
                     document.title = this.props.title()
-                } else {
+                } else if (this.state.status() !== Status.Idle) {
                     this.setState({ status: Status.Idle })
                 }
             })
