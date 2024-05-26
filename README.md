@@ -16,8 +16,6 @@ Web component router based on [Markup](https://markup.beforesemicolon.com/)
 - available routers dont handle both JavaScript and HTML files
 - web components work with everything which makes it a perfect candidate for a router
 
-[See Demo](https://bfs-router.netlify.app/)
-
 ```html
 <nav>
     <page-link path="/">Home</page-link>
@@ -39,14 +37,10 @@ Web component router based on [Markup](https://markup.beforesemicolon.com/)
 <page-redirect to="/404"></page-redirect>
 ```
 
-### Beta Warning
-Some features are still experimental for example:
-- nested page-route
-- page-redirect
-- path `$` parent reference
-- page-link `default` attribute
+## Examples
 
-Please report your findings ad feedback for improvements
+* [Demo Doc](https://bfs-router.netlify.app/)
+* [Tabs](https://stackblitz.com/edit/stackblitz-starters-jrfnhm?file=index.html)
 
 ## Install
 
@@ -57,6 +51,10 @@ npm install @beforesemicolon/router
 In the browser
 
 ```html
+<!-- required WebComponent Markup to be present -->
+<script src="https://unpkg.com/@beforesemicolon/web-component/dist/client.js"></script>
+
+
 <!-- use the latest version -->
 <script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
 
@@ -67,6 +65,7 @@ In the browser
 <script>
     const { ... } = BFS.ROUTER
 </script>
+
 ```
 
 ## Documentation
