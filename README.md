@@ -123,6 +123,16 @@ and takes similar options.
 You can style the link by targeting the `anchor` and `active` parts.
 
 ```css
+/* the actual page-link tag */
+page-link {
+    ...
+}
+
+page-link.active {
+    ...
+}
+
+/* the anchor tag inside */
 page-link::part(anchor) {
     text-decoration: none;
     color: #444;
@@ -135,6 +145,10 @@ page-link::part(anchor active) {
     border-color: #222;
     color: #000;
 }
+
+page-link::part(anchor):visited { ... }
+page-link::part(anchor):active { ... }
+page-link::part(anchor):hover { ... }
 ```
 
 ### `page-route`
