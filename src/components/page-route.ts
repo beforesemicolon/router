@@ -34,11 +34,11 @@ export default ({
         data = {}
         #slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
-        #parentRoutePath = ''
+        #parentRoute: PageRoute | null = null
 
-        get fullPath() {
+        get fullPath(): string {
             return cleanPathnameOptionalEnding(
-                this.#parentRoutePath + this.props.path()
+                (this.#parentRoute?.fullPath ?? '') + this.props.path()
             )
         }
 
@@ -123,13 +123,7 @@ export default ({
         }
 
         onMount() {
-            const pageRoute = getAncestorPageRoute(this) as PageRoute
-
-            if (pageRoute) {
-                this.#parentRoutePath = cleanPathnameOptionalEnding(
-                    pageRoute.fullPath
-                )
-            }
+            this.#parentRoute = getAncestorPageRoute(this) as PageRoute
 
             this.fullPath && knownRoutes.add(this.fullPath)
 

@@ -1,4 +1,3 @@
-import { isOnPage } from './utils/is-on-page'
 import { getSearchQuery } from './utils/get-search-query'
 import { jsonStringify } from './utils/json-stringify'
 import { cleanPathnameOptionalEnding } from './utils/clean-pathname-optional-ending'
@@ -38,15 +37,13 @@ export const goToPage = (
     data: Record<string, unknown> = {},
     title = document.title
 ) => {
-    if (!isOnPage(pathname)) {
-        window.history.pushState(data, title, pathname)
+    window.history.pushState(data, title, pathname)
 
-        if (title !== document.title) {
-            document.title = title
-        }
-
-        broadcast()
+    if (title !== document.title) {
+        document.title = title
     }
+
+    broadcast()
 }
 
 export const replacePage = (
@@ -54,15 +51,13 @@ export const replacePage = (
     state: Record<string, unknown> = {},
     title = document.title
 ) => {
-    if (typeof pathname === 'string' && !isOnPage(pathname)) {
-        window.history.replaceState(state, title, pathname)
+    window.history.replaceState(state, title, pathname)
 
-        if (title !== document.title) {
-            document.title = title
-        }
-
-        broadcast()
+    if (title !== document.title) {
+        document.title = title
     }
+
+    broadcast()
 }
 
 export const previousPage = () => {

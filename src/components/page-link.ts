@@ -1,128 +1,103 @@
 import { isOnPage } from '../utils/is-on-page'
 import { goToPage, onPageChange } from '../pages'
-
-export interface PageLinkProps {
-    path: string
-    title: string
-    search: string
-    keepSearchParams: boolean
-    default: boolean
-    data: Record<string, unknown>
-}
+import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
+import { PageLinkProps, PageRoute } from '../types'
+import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
 
 export default ({
     html,
     WebComponent,
+    effect,
 }: typeof import('@beforesemicolon/web-component')) => {
-    const matchesSearch = (search: string) => {
-        if (!search.trim()) {
-            return true
-        }
-
-        const curr = new URLSearchParams(location.search)
-
-        return Array.from(new URLSearchParams(search)).every(
-            ([k, v]) => curr.get(k) === v
-        )
-    }
-
     class PageLink extends WebComponent<PageLinkProps, { part: string }> {
         static observedAttributes = [
             'path',
-            'title',
-            'data',
             'search',
             'default',
-            'keep-search-params',
+            'keep-current-search',
+            'title',
+            'data',
         ]
         initialState = {
             part: 'anchor',
         }
         path = ''
-        title = ''
         search = ''
         default = false
-        keepSearchParams = false
+        keepCurrentSearch = false
+        title = ''
         data = {}
+        #parentRoute: PageRoute | null = null
 
         get fullPath() {
-            return this.props.path().startsWith('$')
-                ? this.props.path().replace(/^\$/, location.pathname)
-                : this.props.path()
-        }
+            const search = new URLSearchParams(this.props.search())
+            let path = this.props.path()
 
-        get fullURL() {
-            const url = new URL(
-                this.props.path().replace(/^\$\/?/, location.pathname),
-                location.origin
-            )
+            if (!this.hasAttribute('path')) {
+                path = this.#parentRoute?.fullPath ?? '/'
+            } else if (path.startsWith('$')) {
+                const p = this.#parentRoute?.fullPath ?? '/'
 
-            if (this.props.keepSearchParams()) {
+                path = cleanPathnameOptionalEnding(path.replace(/^\$/, p))
+            }
+
+            const url = new URL(path, location.origin)
+
+            if (this.props.keepCurrentSearch()) {
                 const currentQuery = new URLSearchParams(location.search)
-                currentQuery.forEach((_, name) => {
-                    url.searchParams.set(name, currentQuery.get(name) ?? '')
+                currentQuery.forEach((v, k) => {
+                    url.searchParams.set(k, v)
                 })
             }
 
-            const search = new URLSearchParams(this.props.search())
-            search.forEach((_, name) => {
-                url.searchParams.set(name, search.get(name) ?? '')
+            search.forEach((v, k) => {
+                url.searchParams.set(k, v)
             })
 
-            return url
+            return url.pathname + url.search
         }
 
         handleClick = (event: Event) => {
             event.preventDefault()
             event.stopPropagation()
 
-            const url = this.fullURL
+            goToPage(this.fullPath, this.props.data(), this.props.title())
+        }
 
-            if (
-                url.pathname + url.search !==
-                location.pathname + location.search
-            ) {
-                goToPage(
-                    url.pathname + url.search,
-                    this.props.data(),
-                    this.props.title()
-                )
+        toggleClass = (active: boolean) => {
+            if (active) {
+                this.classList.add('active')
+            } else {
+                this.removeAttribute('class')
             }
         }
 
         onMount() {
-            return onPageChange(() => {
-                const onPage = isOnPage(this.fullPath)
-                const newActive = onPage && matchesSearch(this.props.search())
+            this.#parentRoute = getAncestorPageRoute(this)
 
-                this.setState({
-                    part: newActive ? 'anchor active' : 'anchor',
-                })
+            return onPageChange((pathname, query) => {
+                const newActive = isOnPage(this.fullPath)
+                const part = newActive ? 'anchor active' : 'anchor'
 
-                this.dispatch('active', {
-                    value: newActive,
-                })
+                if (this.state.part() !== part) {
+                    this.toggleClass(newActive)
+                    this.setState({ part })
+                    this.dispatch('active', {
+                        value: newActive,
+                    })
+                }
 
                 if (
-                    onPage &&
-                    !newActive &&
                     this.props.default() &&
-                    this.props.search()
+                    this.props.search() &&
+                    !newActive &&
+                    isOnPage(this.props.path() || '/' + location.search) &&
+                    Array.from(new URLSearchParams(this.props.search())).some(
+                        ([k]) => !query.hasOwnProperty(k)
+                    )
                 ) {
-                    const loc = new URLSearchParams(location.search)
-                    const search = new URLSearchParams(this.props.search())
-
-                    if (Array.from(search).every(([k]) => !loc.has(k))) {
-                        search.forEach((v, k) => {
-                            loc.set(k, v)
-                        })
-
-                        goToPage(
-                            location.pathname + `?${loc.toString()}`,
-                            this.props.data(),
-                            this.props.title()
-                        )
-                    }
+                    this.setState({ part: 'anchor active' })
+                    this.toggleClass(true)
                 }
             })
         }
@@ -131,7 +106,7 @@ export default ({
             return html`
                 <a
                     part="${this.state.part}"
-                    href="${this.fullPath}"
+                    href="${effect(this.props.path, () => this.fullPath)}"
                     onclick="${this.handleClick}"
                 >
                     <slot></slot>

@@ -87,23 +87,37 @@ and takes similar options.
 <!-- specify search query in the path-->
 <page-link path="/router/index.html?tab=sample">sample tab</page-link>
 
-<!-- go to the next page and keep current page search query-->
-<page-link path="/new" keep-search-params="true">new tab</page-link>
+<!-- go to the sample page and override specific query keys -->
+<page-link path="/sample" search="tab=info">new tab</page-link>
 
-<!-- go to the next page, keep current page search query, and override specific query keys -->
-<page-link path="/sample" keep-search-params="true" search="tab=info">new tab</page-link>
+<!-- you can choose to keep current search query
+    and only add your specified search -->
+<page-link path="/sample" search="tab=info" keep-current-search="true">new tab</page-link>
 
-<!-- make the current search the default on load. Works well with page-route-query default -->
-<page-link path="/sample" search="tab=info" default="true">new tab</page-link>
+<!-- similar to page-route-query default, 
+    you can mark the specified search as default to put
+    the link in an active state for styling purpose -->
+<page-link path="/todos" search="tab=pending" default="true">Pending Todos</page-link>
+<page-link path="/todos" search="tab=in-progress">In Progress Todos</page-link>
+<page-link path="/todos" search="tab=completed">Completed Todos</page-link>
 
-<!-- use $ to indicate current path and just update the search params -->
-<page-link path="$" search="tab=info">new tab</page-link>
-
-<!-- concat to current page path. This is useful when rendering page-link inside a page-route tag -->
-<page-link path="$/contact">contact</page-link>
+<page-route path="/todos">
+    <!--  not specifying the "path" attribute will force 
+        the page-link to inherit closest page-route path
+        and if one does not exist, it will be / -->
+    <page-link search="tab=pending" default="true">Pending Todos</page-link>
+    <page-link search="tab=in-progress">In Progress Todos</page-link>
+    <page-link search="tab=completed">Completed Todos</page-link>
+    
+    <!-- use $ to specify you want to inherit the closest
+        page-route path and extend it to something specific.
+         
+        bellow becomes "/todos/create -->
+    <page-link path="$/create">new tab</page-link>
+</page-route>
 
 <!-- listen to when the link becomes active -->
-<page-link path="$/contact" onactive="...">contact</page-link>
+<page-link path="/contact" onactive="...">contact</page-link>
 ```
 
 You can style the link by targeting the `anchor` and `active` parts.

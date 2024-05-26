@@ -1,11 +1,18 @@
 import { cleanPathnameOptionalEnding } from './clean-pathname-optional-ending'
 
 export const isOnPage = (path: string) => {
-    path = path.trim()
+    if (!path.trim().length) {
+        return false
+    }
 
-    return (
-        path.length > 0 &&
+    const url = new URL(path.trim(), location.origin)
+    const matchesPath =
         cleanPathnameOptionalEnding(location.pathname) ===
-            cleanPathnameOptionalEnding(path)
-    )
+        cleanPathnameOptionalEnding(url.pathname)
+
+    if (url.search) {
+        return matchesPath && url.search === location.search
+    }
+
+    return matchesPath
 }

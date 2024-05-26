@@ -1,12 +1,10 @@
-import iniWithRoute from './page-route';
-import {PageLinkProps} from './page-link';
-import * as WB from "@beforesemicolon/web-component";
-import { html, when, state, WebComponent } from '@beforesemicolon/web-component'
-import {goToPage} from "../pages";
-import {HTMLComponentElement} from "@beforesemicolon/web-component/dist/types/web-component";
-import {waitFor} from "../test.utils";
-import * as fs from "fs";
-import * as path from "path";
+import iniWithRoute from './page-route'
+import * as WB from '@beforesemicolon/web-component'
+import { html, WebComponent } from '@beforesemicolon/web-component'
+import { goToPage } from '../pages'
+import { waitFor } from '../test.utils'
+import * as fs from 'fs'
+import * as path from 'path'
 import { PageRoute, PageRouteQuery } from '../types'
 
 iniWithRoute(WB)
@@ -308,9 +306,7 @@ describe('PageRoute', () => {
 
 describe('PageRouteQuery', () => {
 	beforeEach(() => {
-		Array.from(document.body.children, (el) => {
-			el.remove()
-		})
+		document.body.innerHTML = ''
 		goToPage('/');
 	})
 
@@ -358,7 +354,7 @@ describe('PageRouteQuery', () => {
 		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test"><p>Hello World</p></page-route-query>')
 	});
 
-	it('should render with default attribute', () => {
+	it('should render with default attribute', async () => {
 		html`
 			<page-route-query key="tab" value="one" default="true">Tab 1</page-route-query>
 			<page-route-query key="tab" value="two">Tab 2</page-route-query>

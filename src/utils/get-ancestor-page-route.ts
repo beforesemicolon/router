@@ -1,17 +1,19 @@
-export const getAncestorPageRoute = (el: Element) => {
-    let pageRoute = el.parentNode
+import { PageRoute } from '../types'
+
+export const getAncestorPageRoute = (el: Element): PageRoute | null => {
+    let pageRoute = el.parentNode as PageRoute
 
     while (pageRoute) {
         if (pageRoute instanceof ShadowRoot) {
-            pageRoute = pageRoute.host
+            pageRoute = pageRoute.host as PageRoute
         }
 
         if (/PAGE-ROUTE/.test(pageRoute.nodeName)) {
             break
         }
 
-        pageRoute = pageRoute.parentNode
+        pageRoute = pageRoute.parentNode as PageRoute
     }
 
-    return pageRoute
+    return pageRoute ?? null
 }

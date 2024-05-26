@@ -26,6 +26,15 @@ export interface PageRouteQueryProps extends PageRouteProps {
     data: Record<string, unknown>
 }
 
+export interface PageLinkProps {
+    path: string
+    search: string
+    default: boolean
+    keepCurrentSearch: boolean
+    title: string
+    data: Record<string, unknown>
+}
+
 export enum Status {
     Idle,
     Loading,
@@ -39,6 +48,16 @@ export interface PageRoute extends WebComponent<PageRouteProps> {
     title: PageRouteProps['title']
     exact: PageRouteProps['exact']
     data: PageRouteProps['data']
+    fullPath: string
+}
+
+export interface PageLink extends WebComponent<PageLinkProps> {
+    path: PageLinkProps['path']
+    search: PageLinkProps['search']
+    title: PageLinkProps['title']
+    default: PageLinkProps['default']
+    keepCurrentSearch: PageLinkProps['keepCurrentSearch']
+    data: PageLinkProps['data']
     fullPath: string
 }
 
