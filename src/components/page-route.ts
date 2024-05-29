@@ -1,6 +1,6 @@
 import { pathStringToPattern } from '../utils/path-string-to-pattern'
 import { getPathMatchParams } from '../utils/get-path-match-params'
-import { goToPage, onPageChange } from '../pages'
+import { getPageData, goToPage, onPageChange } from '../pages'
 import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
 import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
 import {
@@ -20,10 +20,12 @@ export default ({
 }: typeof import('@beforesemicolon/web-component')) => {
     const knownRoutes: Set<string> = new Set([])
 
+    knownRoutes.add('/') // default route always known
+
     class PageRoute<
         T extends PageRouteProps = PageRouteProps,
     > extends WebComponent<T, { status: Status }> {
-        static observedAttributes = ['path', 'src', 'data', 'title', 'exact']
+        static observedAttributes = ['path', 'src', 'title', 'exact']
         initialState = {
             status: Status.Idle,
         }
@@ -31,7 +33,6 @@ export default ({
         src = ''
         title = ''
         exact = true
-        data = {}
         #slotName = String(Math.floor(Math.random() * 10000000000))
         #cachedResult: Record<string, unknown> = {}
         #parentRoute: PageRoute | null = null
@@ -42,7 +43,11 @@ export default ({
             )
         }
 
-        _loadContent = async (src: string) => {
+        _loadContent = async (
+            src: string,
+            params: Record<string, string>,
+            query: Record<string, unknown>
+        ) => {
             this.setState({ status: Status.Loading })
             let content = this.#cachedResult[src]
 
@@ -77,7 +82,7 @@ export default ({
 
             if (this.mounted) {
                 if (typeof content === 'function') {
-                    content = await content(this.props.data())
+                    content = await content(getPageData(), params, query)
                 }
 
                 // @ts-expect-error handle HTMLTemplate or anything with a render method
@@ -99,7 +104,7 @@ export default ({
             }
         }
 
-        _handlePageChange: PathChangeListener = (pathname: string) => {
+        _handlePageChange: PathChangeListener = (pathname: string, query) => {
             const params = getPathMatchParams(
                 pathname,
                 pathStringToPattern(this.fullPath, this.props.exact())
@@ -111,7 +116,7 @@ export default ({
                     this.state.status() !== Status.Loading &&
                     this.state.status() !== Status.Loaded
                 ) {
-                    this._loadContent(this.props.src())
+                    this._loadContent(this.props.src(), params, query)
                 } else if (this.state.status() !== Status.Loaded) {
                     this.setState({ status: Status.Loaded })
                 }
@@ -125,7 +130,8 @@ export default ({
         onMount() {
             this.#parentRoute = getAncestorPageRoute(this) as PageRoute
 
-            this.fullPath && knownRoutes.add(this.fullPath)
+            const url = new URL(this.fullPath, location.origin)
+            knownRoutes.add(url.pathname)
 
             return onPageChange(this._handlePageChange)
         }
@@ -151,7 +157,7 @@ export default ({
     }
 
     class PageRouteQuery extends PageRoute<PageRouteQueryProps> {
-        static observedAttributes = ['key', 'value', 'src', 'data', 'default']
+        static observedAttributes = ['key', 'value', 'src', 'default']
         key = ''
         value = ''
         default = false
@@ -160,7 +166,7 @@ export default ({
             return ''
         }
 
-        _handlePageChange: PathChangeListener = (_: string, query) => {
+        _handlePageChange: PathChangeListener = (pathname: string, query) => {
             const key = this.props.key()
 
             if (
@@ -172,7 +178,7 @@ export default ({
                     this.state.status() !== Status.Loading &&
                     this.state.status() !== Status.Loaded
                 ) {
-                    this._loadContent(this.props.src())
+                    this._loadContent(this.props.src(), {}, query)
                 } else {
                     this.setState({ status: Status.Loaded })
                 }
@@ -187,23 +193,26 @@ export default ({
     }
 
     class PageRedirect extends WebComponent<PageRedirectProps> {
-        static observedAttributes = ['to']
+        static observedAttributes = ['to', 'type']
         to = ''
+        type = 'unknown'
 
         onMount() {
-            let parentPath = ''
             const pageRoute = getAncestorPageRoute(this) as PageRoute
 
-            if (pageRoute) {
-                parentPath = cleanPathnameOptionalEnding(pageRoute.fullPath)
-            }
-
             return onPageChange((pathname: string) => {
-                if (
-                    !knownRoutes.has(pathname) &&
-                    location.pathname.startsWith(parentPath)
-                ) {
-                    goToPage(this.props.to())
+                const parentPath = cleanPathnameOptionalEnding(
+                    pageRoute?.fullPath ?? '/'
+                )
+
+                if (pathname.startsWith(parentPath)) {
+                    if (this.props.type() === 'always') {
+                        if (pathname === parentPath) {
+                            goToPage(this.props.to())
+                        }
+                    } else if (!knownRoutes.has(pathname)) {
+                        goToPage(this.props.to())
+                    }
                 }
             })
         }

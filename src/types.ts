@@ -8,13 +8,13 @@ export type PathChangeListener = (
 
 export interface PageRedirectProps {
     to: string
+    type: 'unknown' | 'always'
 }
 
 export interface PageRouteProps {
     path: string
     src: string
     exact: boolean
-    data: Record<string, unknown>
     title: string
 }
 
@@ -23,7 +23,6 @@ export interface PageRouteQueryProps extends PageRouteProps {
     value: string
     src: string
     default: boolean
-    data: Record<string, unknown>
 }
 
 export interface PageLinkProps {
@@ -47,7 +46,6 @@ export interface PageRoute extends WebComponent<PageRouteProps> {
     src: PageRouteProps['src']
     title: PageRouteProps['title']
     exact: PageRouteProps['exact']
-    data: PageRouteProps['data']
     fullPath: string
 }
 
@@ -66,7 +64,6 @@ export interface PageRouteQuery extends WebComponent<PageRouteQueryProps> {
     value: PageRouteQueryProps['value']
     src: PageRouteQueryProps['src']
     default: PageRouteQueryProps['default']
-    data: PageRouteQueryProps['data']
 }
 
 export interface PageRedirect extends WebComponent<PageRedirectProps> {

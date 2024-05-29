@@ -301,6 +301,33 @@ describe('PageRoute', () => {
 
 			fs.rmSync(path.resolve(__dirname, './diff.js'))
 		})
+
+		it('with data and params', async () => {
+			fs.writeFileSync(path.resolve(__dirname, './app.page.js'), `
+				module.exports = (data, params, query) => {
+					return params.appId + '|' + data.greeting
+				};
+			`.trim())
+			html`<page-route path="/app/:appId" src="file:./app.page.js"></page-route>`.render(document.body);
+
+			const [r1] = Array.from(document.body.children) as PageRoute[];
+
+			// content is not shown initially
+			const slot = r1.contentRoot.querySelector('slot');
+			expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
+			expect(r1.outerHTML).toBe('<page-route path="/app/:appId" src="file:./app.page.js"></page-route>')
+
+			await waitFor(() => {
+				goToPage('/app/my-app', {greeting: "Hello"});
+			})
+
+			// r2 slot loses the name to show content
+			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+			// the content is placed inside
+			expect(r1.outerHTML).toBe('<page-route path="/app/:appId" src="file:./app.page.js">my-app|Hello</page-route>')
+
+			fs.rmSync(path.resolve(__dirname, './app.page.js'))
+		})
 	})
 })
 
@@ -379,7 +406,7 @@ describe('PageRedirect', () => {
 		goToPage('/');
 	})
 
-	it('should redirect correctly', async () => {
+	it('should unknown redirect', async () => {
 		html`
 			<page-route path="/">Home</page-route>
 			<page-route path="/todos" exact="false">
@@ -417,5 +444,31 @@ describe('PageRedirect', () => {
 		})
 
 		expect(location.pathname).toBe('/todos/in-progress')
+	})
+
+	it('should always redirect', async () => {
+		expect(location.pathname).toBe('/')
+
+		html`
+			<page-route path="/todos" exact="false">
+				Todos:
+				<page-route path="/pending">pending todos</page-route>
+				<page-route path="/in-progress">in progress todos</page-route>
+				<page-route path="/completed">completed todos</page-route>
+				<page-redirect to="/todos/pending" type="always"></page-redirect>
+			</page-route>
+			<page-route path="/404"></page-route>
+			
+			<page-redirect to="/todos" type="always"></page-redirect>
+			<page-redirect to="/404"></page-redirect>
+		`.render(document.body);
+
+		expect(location.pathname).toBe('/todos/pending')
+
+		await waitFor(() => {
+			goToPage('/unknown');
+		})
+
+		expect(location.pathname).toBe('/404')
 	})
 })

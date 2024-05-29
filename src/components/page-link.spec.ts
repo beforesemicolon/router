@@ -2,7 +2,7 @@ import initPageLink from './page-link';
 import * as WB from "@beforesemicolon/web-component";
 import {html} from "@beforesemicolon/web-component";
 import { PageLink } from '../types'
-import { goToPage } from '../pages'
+import { getPageData, goToPage } from '../pages'
 import { waitFor } from '../test.utils'
 
 initPageLink(WB)
@@ -97,5 +97,16 @@ describe('PageLink', () => {
 			'                </a>')
 
 		expect(location.search).toBe('?sample=true&tab=two')
+	})
+
+	it('should pass data', () => {
+		html`<page-link path="/" data='{"greeting":"Hello World"}'></page-link>`
+			.render(document.body)
+
+		const [l1] = Array.from(document.body.children) as PageLink[];
+
+		l1.contentRoot.querySelector('a')?.click()
+
+		expect(getPageData()).toEqual({})
 	})
 })
