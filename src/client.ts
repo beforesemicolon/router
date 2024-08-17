@@ -33,7 +33,7 @@ if (!window.BFS?.MARKUP || !window.BFS.WebComponent) {
 }
 
 if (window.BFS) {
-    const BFS = { ...window.BFS, ...window.BFS?.MARKUP }
+    const BFS = { ...(window.BFS ?? {}), ...window.BFS?.MARKUP }
 
     initPageRoute(BFS)
     initPageLink(BFS)

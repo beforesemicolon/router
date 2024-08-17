@@ -7,7 +7,6 @@ import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-en
 export default ({
     html,
     WebComponent,
-    effect,
 }: typeof import('@beforesemicolon/web-component')) => {
     class PageLink extends WebComponent<PageLinkProps, { part: string }> {
         static observedAttributes = [
@@ -29,7 +28,7 @@ export default ({
         data = {}
         #parentRoute: PageRoute | null = null
 
-        get fullPath() {
+        fullPath = () => {
             const search = new URLSearchParams(this.props.search())
             let path = this.props.path()
 
@@ -61,7 +60,7 @@ export default ({
             event.preventDefault()
             event.stopPropagation()
 
-            goToPage(this.fullPath, this.props.data(), this.props.title())
+            goToPage(this.fullPath(), this.props.data(), this.props.title())
         }
 
         toggleClass = (active: boolean) => {
@@ -76,7 +75,7 @@ export default ({
             this.#parentRoute = getAncestorPageRoute(this)
 
             return onPageChange((pathname, query) => {
-                const newActive = isOnPage(this.fullPath)
+                const newActive = isOnPage(this.fullPath())
                 const part = newActive ? 'anchor active' : 'anchor'
 
                 if (this.state.part() !== part) {
@@ -106,7 +105,7 @@ export default ({
             return html`
                 <a
                     part="${this.state.part}"
-                    href="${effect(this.props.path, () => this.fullPath)}"
+                    href="${this.fullPath}"
                     onclick="${this.handleClick}"
                 >
                     <slot></slot>

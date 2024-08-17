@@ -14,13 +14,25 @@ import {
 export default ({
     html,
     is,
-    isNot,
     WebComponent,
     when,
+    HtmlTemplate,
 }: typeof import('@beforesemicolon/web-component')) => {
     const knownRoutes: Set<string> = new Set([])
 
     knownRoutes.add('/') // default route always known
+
+    type PageContent =
+        | Node
+        | typeof HtmlTemplate
+        | string
+        | { render: (el: HTMLElement) => void }
+        | PageContentCallback
+    type PageContentCallback = (
+        data: ReturnType<typeof getPageData>,
+        params: Record<string, string>,
+        query: Record<string, unknown>
+    ) => Promise<PageContent>
 
     class PageRoute<
         T extends PageRouteProps = PageRouteProps,
@@ -33,8 +45,8 @@ export default ({
         src = ''
         title = ''
         exact = true
-        #slotName = String(Math.floor(Math.random() * 10000000000))
-        #cachedResult: Record<string, unknown> = {}
+        #slotName = String(Math.floor(Math.random() * 1000))
+        #cachedResult: Record<string, PageContent> = {}
         #parentRoute: PageRoute | null = null
 
         get fullPath(): string {
@@ -73,7 +85,7 @@ export default ({
                         }
                     }
 
-                    this.#cachedResult[src] = content
+                    this.#cachedResult[src] = content as PageContent
                 } catch (err) {
                     this.setState({ status: Status.LoadingFailed })
                     return console.error(err)
@@ -81,26 +93,49 @@ export default ({
             }
 
             if (this.mounted) {
-                if (typeof content === 'function') {
-                    content = await content(getPageData(), params, query)
-                }
+                try {
+                    const prevContent = content
 
-                // @ts-expect-error handle HTMLTemplate or anything with a render method
-                if (typeof content?.render === 'function') {
-                    // @ts-expect-error renderTarget is a property unique to Markup, in its absence we can render
-                    if (content.renderTarget !== this) {
-                        this.innerHTML = ''
-                        // @ts-expect-error handle HTMLTemplate or anything with a render method
-                        content.render(this)
+                    if (typeof content === 'function') {
+                        content = await (content as PageContentCallback)(
+                            getPageData(),
+                            params,
+                            query
+                        )
                     }
-                } else if (content instanceof Node) {
-                    this.innerHTML = ''
-                    this.appendChild(content)
-                } else {
-                    this.innerHTML = String(content)
-                }
 
-                this.setState({ status: Status.Loaded })
+                    if (
+                        (typeof prevContent === 'object' &&
+                            content instanceof HtmlTemplate) ||
+                        // @ts-expect-error handle HTMLTemplate or anything with a render method
+                        typeof content?.render === 'function'
+                    ) {
+                        // @ts-expect-error renderTarget is a property unique to Markup, in its absence we can render
+                        if (content.parentNode !== this) {
+                            if (
+                                typeof prevContent === 'object' &&
+                                prevContent instanceof HtmlTemplate &&
+                                prevContent !== content
+                            ) {
+                                prevContent.unmount()
+                            }
+
+                            this.innerHTML = ''
+                            // @ts-expect-error handle HTMLTemplate or anything with a render method
+                            content.render(this)
+                        }
+                    } else if (content instanceof Node) {
+                        this.innerHTML = ''
+                        this.appendChild(content)
+                    } else {
+                        this.innerHTML = String(content)
+                    }
+
+                    this.setState({ status: Status.Loaded })
+                } catch (err) {
+                    this.setState({ status: Status.LoadingFailed })
+                    return console.error(err)
+                }
             }
         }
 
@@ -139,18 +174,20 @@ export default ({
         render() {
             return html`
                 <slot
-                    name="${this.#slotName} | ${isNot(
-                        this.state.status,
-                        Status.Loaded
-                    )}"
+                    name="${() =>
+                        this.state.status() === Status.Loaded
+                            ? ''
+                            : this.#slotName}"
                 ></slot>
                 ${when(
                     is(this.state.status, Status.Loading),
-                    html` <slot name="loading"><p>Loading...</p></slot>`
+                    html`<slot name="loading"><p>Loading...</p></slot>`
                 )}
                 ${when(
                     is(this.state.status, Status.LoadingFailed),
-                    html` <slot name="fallback"></slot>`
+                    html` <slot name="fallback"
+                        ><p>Failed to load content</p></slot
+                    >`
                 )}
             `
         }
