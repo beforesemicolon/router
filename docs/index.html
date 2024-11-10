@@ -7,8 +7,8 @@
 	<title>Router by Before Semicolon</title>
 	<script src="https://unpkg.com/@beforesemicolon/web-component@next/dist/client.js"></script>
 <!--	<script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>-->
-	<script src="./client.js"></script>
-	<link rel="stylesheet" href="_stylesheets/common.css">
+	<script src="/client.js"></script>
+	<link rel="stylesheet" href="/_stylesheets/common.css">
 </head>
 <body>
 	<div class="wrapper">
@@ -21,11 +21,28 @@
 		</nav>
 		
 		<page-route path="/">
-			Welcome
+			<div class="tabs">
+				<page-link search="tab=one">One</page-link>
+				<page-link search="tab=two">Two</page-link>
+				<page-link search="tab=three">Three</page-link>
+			</div>
+			<div class="tabs-content">
+				<page-route-query key="tab" value="one">
+                    <page-data search-param="tab" style="text-transform: capitalize"></page-data>
+				</page-route-query>
+				<page-route-query key="tab" value="two">
+                    <page-data search-param="tab" style="text-transform: capitalize"></page-data>
+				</page-route-query>
+				<page-route-query key="tab" value="three">
+                    <page-data search-param="tab" style="text-transform: capitalize"></page-data>
+				</page-route-query>
+			</div>
+			
+			<page-redirect to="/?tab=one" type="always"></page-redirect>
 		</page-route>
-		<page-route path="/todos" src="./_pages/todos.page.js"></page-route>
-		<page-route path="/contact" src="./_pages/contact.page.js"></page-route>
-		<page-route path="/404" src="./_pages/not-found.page.html"></page-route>
+		<page-route path="/todos" src="_pages/todos.page.js" exact="false"></page-route>
+		<page-route path="/contact" src="_pages/contact.page.js"></page-route>
+		<page-route path="/404" src="_pages/not-found.page.html"></page-route>
 		
 		<page-redirect to="/404"></page-redirect>
 	</div>

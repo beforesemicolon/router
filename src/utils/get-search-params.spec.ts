@@ -1,9 +1,9 @@
-import {getSearchQuery} from './get-search-query';
+import {getSearchParams} from './get-search-params';
 import {updateSearchQuery} from '../pages';
 
 describe('getSearchQuery', () => {
 	it('should return a query string', () => {
-		expect(getSearchQuery()).toEqual({});
+		expect(getSearchParams()).toEqual({});
 		
 		updateSearchQuery({
 			date: "2020-01-01",
@@ -11,7 +11,7 @@ describe('getSearchQuery', () => {
 			item: {name: "test", price: 30}
 		})
 		
-		expect(getSearchQuery()).toEqual({
+		expect(getSearchParams()).toEqual({
 			"date": "2020-01-01",
 			"item": {
 				"name": "test",

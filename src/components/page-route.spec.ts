@@ -1,20 +1,65 @@
-import iniWithRoute from './page-route'
 import * as WB from '@beforesemicolon/web-component'
-import { html, WebComponent } from '@beforesemicolon/web-component'
-import { goToPage } from '../pages'
-import { waitFor } from '../test.utils'
+import {html, WebComponent} from '@beforesemicolon/web-component'
+import {goToPage} from '../pages'
 import * as fs from 'fs'
 import * as path from 'path'
-import { PageRoute, PageRouteQuery } from '../types'
+import {PageRoute, PageRouteQuery} from '../types'
+import iniWithRoute from './page-route'
 
 iniWithRoute(WB)
 
+beforeEach(() => {
+	document.body.innerHTML = ''
+	goToPage('/');
+})
+
 describe('PageRoute', () => {
-	beforeEach(() => {
-		Array.from(document.body.children, (el) => {
-			el.remove()
-		})
-		goToPage('/');
+
+	it('should fail to load content and show fallback slot', async () => {
+		jest.spyOn(window, 'fetch').mockImplementation(() => {
+			return Promise.resolve({
+				status: 404
+			} as Response)
+		});
+		
+		html`<page-route path="/test" src="/test"></page-route>`.render(document.body);
+		
+		const [r1] = Array.from(document.body.children) as PageRoute[];
+		
+		let slot = r1.contentRoot.querySelector('slot');
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r1.outerHTML).toBe('<page-route path="/test" src="/test" hidden=""></page-route>')
+		
+		goToPage('/test');
+		
+		await jest.advanceTimersByTimeAsync(500)
+		
+		expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="fallback"><p>Failed to load content</p></slot>');
+	})
+	
+	it('should fail during handling loaded content and show fallback slot', async () => {
+		jest.spyOn(window, 'fetch').mockImplementationOnce(() => {
+			return Promise.resolve({
+				status: 200,
+				text: () => Promise.resolve(() => {
+					throw new Error('failed')
+				}),
+			} as unknown as Response)
+		});
+		
+		html`<page-route path="/sample" src="/sample"></page-route>`.render(document.body);
+		
+		const [r1] = Array.from(document.body.children) as PageRoute[];
+		
+		let slot = r1.contentRoot.querySelector('slot');
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r1.outerHTML).toBe('<page-route path="/sample" src="/sample" hidden=""></page-route>')
+		
+		goToPage('/sample');
+		
+		await jest.advanceTimersByTimeAsync(500)
+		
+		expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="fallback"><p>Failed to load content</p></slot>');
 	})
 	
 	it('should render inner content with route static and fetched content', async () => {
@@ -31,62 +76,30 @@ describe('PageRoute', () => {
 		
 		expect(window.fetch).not.toHaveBeenCalled();
 		
+		jest.advanceTimersByTime(300)
+		
 		const [r1, r2] = Array.from(document.body.children) as PageRoute[];
 		
-		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
 		expect(r1.outerHTML).toBe('<page-route path="/">Hello World</page-route>')
-		
+		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+
 		let slot = r2.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
-		expect(r2.outerHTML).toBe('<page-route path="/test" src="/test"></page-route>')
-		
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r2.outerHTML).toBe('<page-route path="/test" src="/test" hidden=""></page-route>')
+
 		expect(r2.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
 		
-		await waitFor(() => {
-			goToPage('/test');
-		})
+		goToPage('/test');
 		
-		// r1 slot gets a name to hide content
+		await jest.advanceTimersByTimeAsync(0)
+		
 		slot = r1.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
-		expect(r1.outerHTML).toBe('<page-route path="/">Hello World</page-route>')
-		
-		// r2 slot loses the name to show content
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r1.outerHTML).toBe('<page-route path="/" hidden="">Hello World</page-route>')
+
 		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
-		// the content is placed inside
 		expect(r2.outerHTML).toBe('<page-route path="/test" src="/test"><p>Hello World</p></page-route>')
 	});
-	
-	it('should fail to load content and show fallback slot', async () => {
-		jest.spyOn(window, 'fetch').mockImplementation(() => {
-			return Promise.resolve({
-				status: 404
-			} as Response)
-		});
-		
-		html`<page-route path="/test" src="/test"></page-route>`.render(document.body);
-		
-		const [r1] = Array.from(document.body.children) as PageRoute[];
-		
-		let slot = r1.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
-		expect(r1.outerHTML).toBe('<page-route path="/test" src="/test"></page-route>')
-		
-		expect(r1.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
-		expect(r1.contentRoot.querySelector('slot[name="fallback"]')).toBeNull();
-		
-		await waitFor(() => {
-			goToPage('/test');
-			// show loading slot
-			expect(r1.contentRoot.querySelector('slot[name="loading"]')).not.toBeNull();
-		})
-		
-		expect(console.error).toHaveBeenCalledWith(new Error('Loading "/test" content failed with status code 404'));
-		// hide loading slot
-		expect(r1.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
-		// show fallback slot
-		expect(r1.contentRoot.querySelector('slot[name="fallback"]')).not.toBeNull();
-	})
 
 	it('should allow to nest routes', async () => {
 		html`
@@ -102,44 +115,39 @@ describe('PageRoute', () => {
 		const [r11, r12, r13] = Array.from(r1.children) as PageRoute[];
 
 		let slot = r1.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos');
+		await jest.advanceTimersByTimeAsync(0)
+		
+		expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/pending');
+		await jest.advanceTimersByTimeAsync(0)
 
-		await waitFor(() => {
-			goToPage('/todos');
-		})
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/in-progress');
+		await jest.advanceTimersByTimeAsync(0)
 
-		expect(slot?.getAttribute('name')).toBeNull()
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/completed');
+		await jest.advanceTimersByTimeAsync(0)
 
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-
-		await waitFor(() => {
-			goToPage('/todos/pending');
-		})
-
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-
-		await waitFor(() => {
-			goToPage('/todos/in-progress');
-		})
-
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-
-		await waitFor(() => {
-			goToPage('/todos/completed');
-		})
-
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 	})
 
 	it('should allow to nest routes inside a component', async () => {
@@ -165,44 +173,40 @@ describe('PageRoute', () => {
 		const [r1] = Array.from(document.body.children) as PageRoute[];
 
 		let slot = r1.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos');
+		await jest.advanceTimersByTimeAsync(0)
 
-		await waitFor(() => {
-			goToPage('/todos');
-		})
-
-		expect(slot?.getAttribute('name')).toBeNull()
+		expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
 
 		const cont = r1.children[0] as  PageRoute;
 		const [r11, r12, r13] = Array.from((cont.contentRoot as PageRoute).children) as PageRoute[];
 
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/pending');
+		await jest.advanceTimersByTimeAsync(0)
 
-		await waitFor(() => {
-			goToPage('/todos/pending');
-		})
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/in-progress');
+		await jest.advanceTimersByTimeAsync(0)
 
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/todos/completed');
+		await jest.advanceTimersByTimeAsync(0)
 
-		await waitFor(() => {
-			goToPage('/todos/in-progress');
-		})
-
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-
-		await waitFor(() => {
-			goToPage('/todos/completed');
-		})
-
-		expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-		expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
+		expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+		expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 	})
 
 	describe('should import content', () => {
@@ -218,12 +222,11 @@ describe('PageRoute', () => {
 
 			// content is not shown initially
 			const slot = r1.contentRoot.querySelector('slot');
-			expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
-			expect(r1.outerHTML).toBe('<page-route path="/sample" src="file:./sample.js"></page-route>')
-
-			await waitFor(() => {
-				goToPage('/sample');
-			})
+			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+			expect(r1.outerHTML).toBe('<page-route path="/sample" src="file:./sample.js" hidden=""></page-route>')
+			
+			goToPage('/sample');
+			await jest.advanceTimersByTimeAsync(0)
 
 			expect(console.error).not.toHaveBeenCalled();
 
@@ -251,23 +254,23 @@ describe('PageRoute', () => {
 
 			let slot = r1.contentRoot.querySelector('slot');
 
-			expect(slot?.getAttribute('name')).toMatch(/\d+/)
-			expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./content.js"></page-route>')
+			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+			expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./content.js" hidden=""></page-route>')
+			
+			goToPage('/todos/pending');
+			await jest.advanceTimersByTimeAsync(0)
 
-			await waitFor(() => {
-				goToPage('/todos/pending');
-			})
-
-			expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./content.js">Todos:\n' +
+			expect(r1.outerHTML).toBe(
+				'<page-route path="/todos" exact="false" src="file:./content.js">Todos:\n' +
 				'<page-route path="/pending">pending todos</page-route>\n' +
-				'<page-route path="/in-progress">in progress todos</page-route>\n' +
-				'<page-route path="/completed">completed todos</page-route></page-route>')
+				'<page-route path="/in-progress" hidden="">in progress todos</page-route>\n' +
+				'<page-route path="/completed" hidden="">completed todos</page-route></page-route>')
 
 			const [r11, r12, r13] = Array.from(r1.children) as PageRoute[];
 
-			expect(r11.contentRoot.querySelector('slot')?.getAttribute('name')).toBeNull()
-			expect(r12.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
-			expect(r13.contentRoot.querySelector('slot')?.getAttribute('name')).toMatch(/\d+/)
+			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
+			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
+			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 
 			fs.rmSync(path.resolve(__dirname, './content.js'))
 		})
@@ -285,12 +288,11 @@ describe('PageRoute', () => {
 
 			// content is not shown initially
 			const slot = r1.contentRoot.querySelector('slot');
-			expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
-			expect(r1.outerHTML).toBe('<page-route path="/diff" src="file:./diff.js"></page-route>')
-
-			await waitFor(() => {
-				goToPage('/diff');
-			})
+			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+			expect(r1.outerHTML).toBe('<page-route path="/diff" src="file:./diff.js" hidden=""></page-route>')
+			
+			goToPage('/diff');
+			await jest.advanceTimersByTimeAsync(0)
 
 			expect(console.error).not.toHaveBeenCalled();
 
@@ -314,12 +316,11 @@ describe('PageRoute', () => {
 
 			// content is not shown initially
 			const slot = r1.contentRoot.querySelector('slot');
-			expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
-			expect(r1.outerHTML).toBe('<page-route path="/app/:appId" src="file:./app.page.js"></page-route>')
-
-			await waitFor(() => {
-				goToPage('/app/my-app', {greeting: "Hello"});
-			})
+			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
+			expect(r1.outerHTML).toBe('<page-route path="/app/:appId" src="file:./app.page.js" hidden=""></page-route>')
+			
+			goToPage('/app/my-app', {greeting: "Hello"});
+			await jest.advanceTimersByTimeAsync(0)
 
 			// r2 slot loses the name to show content
 			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
@@ -332,70 +333,53 @@ describe('PageRoute', () => {
 })
 
 describe('PageRouteQuery', () => {
-	beforeEach(() => {
-		document.body.innerHTML = ''
-		goToPage('/');
-	})
-
+	
 	it('should render inner content with route query static and fetched content', async () => {
+		jest.useFakeTimers()
 		jest.spyOn(window, 'fetch').mockImplementation(() => {
 			return Promise.resolve({
 				status: 200,
 				text: () => Promise.resolve('<p>Hello World</p>')
 			} as Response)
 		});
-
-		await waitFor(() => {
-			goToPage('/?tab=one');
-		})
-
+		
+		expect(location.pathname).toBe('/')
+		expect(location.search).toBe('')
+		
 		html`
 			<page-route-query key="tab" value="one">Tab 1</page-route-query>
-			<page-route-query key="tab" value="two" src="/test"></page-route-query>`.render(document.body);
-
-		expect(window.fetch).not.toHaveBeenCalled();
-
-		const [r1, r2] = Array.from(document.body.children) as PageRouteQuery[];
-
-		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
-		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one">Tab 1</page-route-query>')
-
-		let slot = r2.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
-		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test"></page-route-query>')
-
-		expect(r2.contentRoot.querySelector('slot[name="loading"]')).toBeNull();
-
-		await waitFor(() => {
-			goToPage('/?tab=two');
-		})
-
-		// r1 slot gets a name to hide content
-		slot = r1.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name') ?? '').toMatch(/\d+/)
-		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one">Tab 1</page-route-query>')
-
-		// r2 slot loses the name to show content
-		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
-		// the content is placed inside
-		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test"><p>Hello World</p></page-route-query>')
-	});
-
-	it('should render with default attribute', async () => {
-		html`
-			<page-route-query key="tab" value="one" default="true">Tab 1</page-route-query>
-			<page-route-query key="tab" value="two">Tab 2</page-route-query>
+			<page-route-query key="tab" value="two" src="/test"></page-route-query>
 		`.render(document.body);
-
+		
 		const [r1, r2] = Array.from(document.body.children) as PageRouteQuery[];
-
+		
+		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one" hidden="">Tab 1</page-route-query>')
+		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
+		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test" hidden=""></page-route-query>')
+		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/?tab=one');
+		
+		expect(location.pathname).toBe('/')
+		expect(location.search).toBe('?tab=one')
+		
+		expect(window.fetch).not.toHaveBeenCalled();
+		
+		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one">Tab 1</page-route-query>')
 		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
-		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one" default="true">Tab 1</page-route-query>')
-
-		let slot = r2.contentRoot.querySelector('slot');
-		expect(slot?.getAttribute('name')).toMatch(/\d+/)
-		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two">Tab 2</page-route-query>')
-	})
+		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test" hidden=""></page-route-query>')
+		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
+		
+		goToPage('/?tab=two');
+		
+		expect(window.fetch).toHaveBeenCalledTimes(1);
+		await jest.advanceTimersByTimeAsync(500)
+		
+		expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one" hidden="">Tab 1</page-route-query>')
+		expect(r1.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
+		expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/test"><p>Hello World</p></page-route-query>')
+		expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+	});
 })
 
 describe('PageRedirect', () => {
@@ -406,7 +390,7 @@ describe('PageRedirect', () => {
 		goToPage('/');
 	})
 
-	it('should unknown redirect', async () => {
+	it('should redirect unknown routes', async () => {
 		html`
 			<page-route path="/">Home</page-route>
 			<page-route path="/todos" exact="false">
@@ -420,28 +404,20 @@ describe('PageRedirect', () => {
 		`.render(document.body);
 
 		expect(location.pathname).toBe('/')
-
-		await waitFor(() => {
-			goToPage('/unknown');
-		})
+		
+		goToPage('/unknown');
 
 		expect(location.pathname).toBe('/404')
 
-		await waitFor(() => {
-			goToPage('/todos');
-		})
+		goToPage('/todos');
 
 		expect(location.pathname).toBe('/todos')
-
-		await waitFor(() => {
-			goToPage('/todos/unknown');
-		})
+		
+		goToPage('/todos/unknown');
 
 		expect(location.pathname).toBe('/todos/pending')
 
-		await waitFor(() => {
-			goToPage('/todos/in-progress');
-		})
+		goToPage('/todos/in-progress');
 
 		expect(location.pathname).toBe('/todos/in-progress')
 	})
@@ -464,10 +440,8 @@ describe('PageRedirect', () => {
 		`.render(document.body);
 
 		expect(location.pathname).toBe('/todos/pending')
-
-		await waitFor(() => {
-			goToPage('/unknown');
-		})
+		
+		goToPage('/unknown');
 
 		expect(location.pathname).toBe('/404')
 	})
