@@ -107,7 +107,12 @@ export const registerRoute = (pathname: string, exact = false) => {
     knownRoutes.set(pathname, { pathname, exact })
 }
 
-export const isRegisteredRoute = (pathname: string) => knownRoutes.has(pathname)
+export const isRegisteredRoute = (pathname: string) =>
+    Array.from(knownRoutes.values()).some((p) => {
+        return Boolean(
+            getPathMatchParams(pathname, pathStringToPattern(p.pathname))
+        )
+    })
 
 export const getPageParams = <T extends Record<string, string>>(): T => {
     for (const p of knownRoutes.values()) {

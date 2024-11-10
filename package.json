@@ -1,6 +1,6 @@
 {
   "name": "@beforesemicolon/router",
-  "version": "0.17.2-next",
+  "version": "0.18.1-next",
   "description": "Web component router by Before Semicolon",
   "type": "module",
   "types": "./dist/types/index.d.ts",
@@ -17,10 +17,9 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "local": "nodemon --watch src -e ts --exec 'npm run build:browser && cp dist/client.js docs && http-server-spa docs index.html'",
-    "build:cjs-min": "esbuild `find src \\( -name '*.ts' ! -name '*.spec.ts' ! -name 'client.ts' \\)` --minify --outdir=dist/cjs --platform=node --format=cjs --keep-names --target=esnext",
-    "build:esm-min": "esbuild `find src \\( -name '*.ts' ! -name '*.spec.ts' ! -name 'client.ts' \\)` --minify --outdir=dist/esm --platform=node --format=esm --keep-names --target=esnext",
-    "build:browser": "esbuild src/client.ts --bundle --keep-names --format=esm --external:@beforesemicolon/web-component --sourcemap --target=esnext --outfile=dist/client.js",
-    "build": "rm -rf dist && npm-run-all lint && tsc --emitDeclarationOnly && npm-run-all build:cjs-min build:esm-min build:browser"
+    "build:browser": "node node_modules/@beforesemicolon/builder/dist/esm/build-browser.js",
+    "build:modules": "node node_modules/@beforesemicolon/builder/dist/esm/build-modules.js",
+    "build": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && npm-run-all build:modules build:browser"
   },
   "keywords": [
     "web-component",
@@ -36,11 +35,11 @@
     "type": "git"
   },
   "devDependencies": {
+    "@beforesemicolon/builder": "^1.3.0",
     "@types/jest": "^29.5.1",
     "@types/jsdom": "^21.1.1",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
-    "esbuild": "^0.17.18",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard": "^17.1.0",
