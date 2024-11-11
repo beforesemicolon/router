@@ -427,18 +427,18 @@ describe('Page*', () => {
 			expect(location.pathname).toBe('/')
 			
 			html`
-			<page-route path="/todos" exact="false">
-				Todos:
-				<page-route path="/pending">pending todos</page-route>
-				<page-route path="/in-progress">in progress todos</page-route>
-				<page-route path="/completed">completed todos</page-route>
-				<page-redirect to="/todos/pending" type="always"></page-redirect>
-			</page-route>
-			<page-route path="/404"></page-route>
-			
-			<page-redirect to="/todos" type="always"></page-redirect>
-			<page-redirect to="/404"></page-redirect>
-		`.render(document.body);
+				<page-route path="/todos" exact="false">
+					Todos:
+					<page-route path="/pending">pending todos</page-route>
+					<page-route path="/in-progress">in progress todos</page-route>
+					<page-route path="/completed">completed todos</page-route>
+					<page-redirect to="/todos/pending" type="always"></page-redirect>
+				</page-route>
+				<page-route path="/404"></page-route>
+				
+				<page-redirect to="/todos" type="always" title="Todo list"></page-redirect>
+				<page-redirect to="/404" title="404 - Page not found"></page-redirect>
+			`.render(document.body);
 			
 			expect(location.pathname).toBe('/todos/pending')
 			

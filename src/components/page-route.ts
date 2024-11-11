@@ -213,7 +213,7 @@ export default ({
                 pathname,
                 pathStringToPattern(
                     this.fullPath,
-                    this.#parentRoute?.props.exact() ?? false
+                    this.#parentRoute?.props?.exact?.() ?? false
                 )
             )
             const key = this.props.key()
@@ -251,9 +251,11 @@ export default ({
     }
 
     class PageRedirect extends WebComponent<PageRedirectProps> {
-        static observedAttributes = ['to', 'type']
+        static observedAttributes = ['to', 'type', 'title', 'payload']
         to = ''
         type = 'unknown'
+        title = ''
+        payload = {}
 
         onMount() {
             const pageRoute = getAncestorPageRoute(this) as PageRoute
@@ -266,10 +268,18 @@ export default ({
                 if (pathname.startsWith(parentPath)) {
                     if (this.props.type() === 'always') {
                         if (pathname + location.search === parentPath) {
-                            goToPage(this.props.to())
+                            goToPage(
+                                this.props.to(),
+                                this.props.payload(),
+                                this.props.title()
+                            )
                         }
                     } else if (!isRegisteredRoute(pathname)) {
-                        goToPage(this.props.to())
+                        goToPage(
+                            this.props.to(),
+                            this.props.payload(),
+                            this.props.title()
+                        )
                     }
                 }
             })

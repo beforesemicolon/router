@@ -9,6 +9,8 @@ export type PathChangeListener = (
 export interface PageRedirectProps {
     to: string
     type: 'unknown' | 'always'
+    title: string
+    payload: Record<string, unknown>
 }
 
 export interface PageRouteProps {
