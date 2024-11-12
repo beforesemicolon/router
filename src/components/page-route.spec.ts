@@ -360,6 +360,7 @@ describe('Page*', () => {
 			expect(r2.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
 			
 			goToPage('/?tab=one');
+			await jest.advanceTimersByTimeAsync(500)
 			
 			expect(location.pathname).toBe('/')
 			expect(location.search).toBe('?tab=one')
