@@ -1,16 +1,8 @@
 import { pathStringToPattern } from '../utils/path-string-to-pattern'
 import { getPathMatchParams } from '../utils/get-path-match-params'
-import {
-    getPageData,
-    goToPage,
-    isRegisteredRoute,
-    onPageChange,
-    registerRoute,
-} from '../pages'
-import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
+import { getPageData, onPageChange, registerRoute } from '../pages'
 import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
 import {
-    PageRedirectProps,
     PageRouteProps,
     PageRouteQueryProps,
     PathChangeListener,
@@ -158,7 +150,9 @@ export default ({
                     this.setState({ status: Status.Loaded })
                 }
 
-                document.title = this.props.title()
+                if (this.hasAttribute('title'))
+                    document.title = this.props.title()
+
                 this.hidden = false
                 return
             }
@@ -250,43 +244,6 @@ export default ({
         }
     }
 
-    class PageRedirect extends WebComponent<PageRedirectProps> {
-        static observedAttributes = ['to', 'type', 'title', 'payload']
-        to = ''
-        type = 'unknown'
-        title = ''
-        payload = {}
-
-        onMount() {
-            const pageRoute = getAncestorPageRoute(this) as PageRoute
-
-            return onPageChange((pathname: string) => {
-                const parentPath = cleanPathnameOptionalEnding(
-                    pageRoute?.fullPath ?? '/'
-                )
-
-                if (pathname.startsWith(parentPath)) {
-                    if (this.props.type() === 'always') {
-                        if (pathname + location.search === parentPath) {
-                            goToPage(
-                                this.props.to(),
-                                this.props.payload(),
-                                this.props.title()
-                            )
-                        }
-                    } else if (!isRegisteredRoute(pathname)) {
-                        goToPage(
-                            this.props.to(),
-                            this.props.payload(),
-                            this.props.title()
-                        )
-                    }
-                }
-            })
-        }
-    }
-
     customElements.define('page-route', PageRoute)
     customElements.define('page-route-query', PageRouteQuery)
-    customElements.define('page-redirect', PageRedirect)
 }

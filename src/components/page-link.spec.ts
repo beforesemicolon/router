@@ -106,3 +106,68 @@ describe('PageLink', () => {
 		expect(location.pathname).toBe('/some-page/sub')
 	})
 })
+
+describe('PageRedirect', () => {
+	beforeEach(() => {
+		Array.from(document.body.children, (el) => {
+			el.remove()
+		})
+		goToPage('/');
+	})
+	
+	it('should redirect unknown routes', async () => {
+		html`
+			<page-route path="/">Home</page-route>
+			<page-route path="/todos" exact="false">
+				<page-route path="/pending">Pending</page-route>
+				<page-route path="/in-progress">Pending</page-route>
+				<page-route path="/completed">Pending</page-route>
+				<page-redirect path="$/pending"></page-redirect>
+			</page-route>
+			<page-route path="/404">404 - Page not found</page-route>
+			<page-redirect path="/404"></page-redirect>
+		`.render(document.body);
+		
+		expect(location.pathname).toBe('/')
+		
+		goToPage('/unknown');
+
+		expect(location.pathname).toBe('/404')
+
+		goToPage('/todos');
+
+		expect(location.pathname).toBe('/todos')
+
+		goToPage('/todos/unknown');
+
+		expect(location.pathname).toBe('/todos/pending')
+
+		goToPage('/todos/in-progress');
+
+		expect(location.pathname).toBe('/todos/in-progress')
+	})
+	
+	it('should always redirect', async () => {
+		expect(location.pathname).toBe('/')
+		
+		html`
+				<page-route path="/todos" exact="false">
+					Todos:
+					<page-route path="/pending">pending todos</page-route>
+					<page-route path="/in-progress">in progress todos</page-route>
+					<page-route path="/completed">completed todos</page-route>
+					<page-redirect path="$/pending" type="always"></page-redirect>
+				</page-route>
+				<page-route path="/404"></page-route>
+				
+				<page-redirect path="/todos" type="always" title="Todo list"></page-redirect>
+				<page-redirect path="/404" title="404 - Page not found"></page-redirect>
+			`.render(document.body);
+		
+		expect(location.pathname).toBe('/todos/pending')
+
+		goToPage('/unknown');
+
+		expect(location.pathname).toBe('/404')
+	})
+})

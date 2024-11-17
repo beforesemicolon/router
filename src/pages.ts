@@ -4,6 +4,7 @@ import { cleanPathnameOptionalEnding } from './utils/clean-pathname-optional-end
 import { PathChangeListener } from './types'
 import { getPathMatchParams } from './utils/get-path-match-params'
 import { pathStringToPattern } from './utils/path-string-to-pattern'
+import { isObjectLiteral } from './utils/is-object-literal'
 
 const routeListeners: Set<PathChangeListener> = new Set()
 
@@ -36,10 +37,15 @@ export const onPageChange = (sub: PathChangeListener) => {
 
 export const goToPage = (
     pathname: string,
-    data: Record<string, unknown> = {},
+    state: Record<string, unknown> = {},
     title = document.title
 ) => {
-    window.history.pushState(data, title, pathname)
+    if (!isObjectLiteral(state))
+        throw new Error(
+            `goToPage: provided data is not an object literal: ${state}`
+        )
+
+    window.history.pushState(state, title, pathname)
 
     if (title !== document.title) {
         document.title = title
@@ -53,6 +59,11 @@ export const replacePage = (
     state: Record<string, unknown> = {},
     title = document.title
 ) => {
+    if (!isObjectLiteral(state))
+        throw new Error(
+            `replacePage: provided data is not an object literal: ${state}`
+        )
+
     window.history.replaceState(state, title, pathname)
 
     if (title !== document.title) {
@@ -71,7 +82,7 @@ export const nextPage = () => {
 }
 
 export const getPageData = <T extends Record<string, unknown>>(): T => {
-    return window.history.state
+    return history.state
 }
 
 export const updateSearchQuery = (query: Record<string, unknown> | null) => {
@@ -103,7 +114,7 @@ export const updateSearchQuery = (query: Record<string, unknown> | null) => {
 
 const knownRoutes: Map<string, { pathname: string; exact: boolean }> = new Map()
 
-export const registerRoute = (pathname: string, exact = false) => {
+export const registerRoute = (pathname: string, exact = true) => {
     knownRoutes.set(pathname, { pathname, exact })
 }
 
@@ -127,9 +138,9 @@ export const getPageParams = <T extends Record<string, string>>(): T => {
     return {} as T
 }
 
-export const parsePathname = (pathname: string) => {
+export const parsePathname = (pathnamePattern: string) => {
     const currentPathnameParts = location.pathname.split('/')
-    return pathname
+    return pathnamePattern
         .split('/')
         .map((p, i) => (/:.+/.test(p) ? currentPathnameParts[i] : p))
         .join('/')

@@ -1,6 +1,6 @@
 {
   "name": "@beforesemicolon/router",
-  "version": "0.19.1-next",
+  "version": "0.20.0-next",
   "description": "Web component router by Before Semicolon",
   "type": "module",
   "types": "./dist/types/index.d.ts",
@@ -13,9 +13,8 @@
   "scripts": {
     "lint": "eslint ./src && prettier --check ./src",
     "format": "eslint ./src --fix && prettier --write ./src",
-    "test": "jest",
+    "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
     "build:browser": "node node_modules/@beforesemicolon/builder/dist/esm/build-browser.js",
     "build:modules": "node node_modules/@beforesemicolon/builder/dist/esm/build-modules.js",
     "build": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && npm-run-all build:modules build:browser"

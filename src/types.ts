@@ -6,13 +6,6 @@ export type PathChangeListener = (
     data: Record<string, unknown>
 ) => void
 
-export interface PageRedirectProps {
-    to: string
-    type: 'unknown' | 'always'
-    title: string
-    payload: Record<string, unknown>
-}
-
 export interface PageRouteProps {
     path: string
     src: string
@@ -32,6 +25,11 @@ export interface PageLinkProps {
     keepCurrentSearch: boolean
     title: string
     payload: Record<string, unknown>
+}
+
+export interface PageRedirectProps
+    extends Omit<PageLinkProps, 'search' | 'keepCurrentSearch'> {
+    type: 'unknown' | 'always'
 }
 
 export interface PageDataProps {
@@ -76,6 +74,6 @@ export interface PageRouteQuery extends WebComponent<PageRouteQueryProps> {
     src: PageRouteQueryProps['src']
 }
 
-export interface PageRedirect extends WebComponent<PageRedirectProps> {
-    to: PageRedirectProps['to']
+export interface PageRedirect extends PageLink {
+    type: PageRedirectProps['type']
 }
