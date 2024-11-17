@@ -1,6 +1,6 @@
 import iniPageRoute from './page-data'
 import * as WB from "@beforesemicolon/web-component";
-import {html} from "@beforesemicolon/web-component";
+import { html, WebComponent } from '@beforesemicolon/web-component'
 import { goToPage, registerRoute } from '../pages'
 
 iniPageRoute(WB)
@@ -21,22 +21,33 @@ describe('PageData', () => {
 		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data>')
 		
 		goToPage('/sample/893427neuwidwioerwieru3843')
+		jest.advanceTimersToNextTimer()
 		
-		expect(document.body.innerHTML).toBe('<page-data param="id">893427neuwidwioerwieru3843</page-data>')
+		const [pd] = [...document.body.children] as WebComponent[];
+		
+		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data>')
+		expect(pd.contentRoot.innerHTML).toBe('893427neuwidwioerwieru3843')
 	});
 	
 	it('should render data', async () => {
 		html`
 			<page-data></page-data>
+			<page-data>fallback</page-data>
 			<page-data key="name"></page-data>
 			<page-data key="status.code"></page-data>
 			<page-data key="status.name"></page-data>
 		`.render(document.body)
 		
-		expect(document.body.innerHTML).toBe('<page-data>{}</page-data>\n' +
-			'\t\t\t<page-data key="name">{}</page-data>\n' +
-			'\t\t\t<page-data key="status.code">{}</page-data>\n' +
-			'\t\t\t<page-data key="status.name">{}</page-data>')
+		const pds = [...document.body.children] as WebComponent[];
+		
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"<slot></slot>",
+				"<slot></slot>",
+				"<slot></slot>",
+				"<slot></slot>",
+				"<slot></slot>"
+			])
 		
 		goToPage('/sample/893427neuwidwioerwieru3843', {
 			name: 'go to bed',
@@ -45,11 +56,16 @@ describe('PageData', () => {
 				name: 'pending'
 			}
 		})
-		
-		expect(document.body.innerHTML).toBe('<page-data>{"name":"go to bed","status":{"code":1,"name":"pending"}}</page-data>\n' +
-			'\t\t\t<page-data key="name">go to bed</page-data>\n' +
-			'\t\t\t<page-data key="status.code">1</page-data>\n' +
-			'\t\t\t<page-data key="status.name">pending</page-data>')
+		jest.advanceTimersToNextTimer()
+
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"{\"name\":\"go to bed\",\"status\":{\"code\":1,\"name\":\"pending\"}}",
+				"{\"name\":\"go to bed\",\"status\":{\"code\":1,\"name\":\"pending\"}}",
+				"go to bed",
+				"<slot></slot>",
+				"pending"
+			])
 	});
 	
 	it('should render search', async () => {
@@ -58,22 +74,39 @@ describe('PageData', () => {
 			<page-data search-param="foo"></page-data>
 		`.render(document.body)
 		
-		expect(document.body.innerHTML).toBe('<page-data search-param="sample"></page-data>\n' +
-			'\t\t\t<page-data search-param="foo"></page-data>')
+		const pds = [...document.body.children] as WebComponent[];
+		
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"<slot></slot>",
+				"<slot></slot>"
+			])
 		
 		goToPage('/?sample=value')
+		jest.advanceTimersToNextTimer()
 		
-		expect(document.body.innerHTML).toBe('<page-data search-param="sample">value</page-data>\n' +
-			'\t\t\t<page-data search-param="foo"></page-data>')
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"value",
+				"<slot></slot>"
+			])
 		
 		goToPage('/?foo=bar')
+		jest.advanceTimersToNextTimer()
 		
-		expect(document.body.innerHTML).toBe('<page-data search-param="sample"></page-data>\n' +
-			'\t\t\t<page-data search-param="foo">bar</page-data>')
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"<slot></slot>",
+				"bar",
+			])
 		
 		goToPage('/?sample=value&foo=bar')
+		jest.advanceTimersToNextTimer()
 		
-		expect(document.body.innerHTML).toBe('<page-data search-param="sample">value</page-data>\n' +
-			'\t\t\t<page-data search-param="foo">bar</page-data>')
+		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
+			[
+				"value",
+				"bar",
+			])
 	});
 })
