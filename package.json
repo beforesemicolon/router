@@ -1,6 +1,6 @@
 {
   "name": "@beforesemicolon/router",
-  "version": "0.20.0-next",
+  "version": "0.21.0-next",
   "description": "Web component router by Before Semicolon",
   "type": "module",
   "types": "./dist/types/index.d.ts",
@@ -33,7 +33,7 @@
     "type": "git"
   },
   "devDependencies": {
-    "@beforesemicolon/builder": "^1.3.0",
+    "@beforesemicolon/builder": "^1.4.0",
     "@types/jest": "^29.5.1",
     "@types/jsdom": "^21.1.1",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
@@ -56,6 +56,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@beforesemicolon/web-component": "^1.12.5-next"
+    "@beforesemicolon/web-component": "^1.4.1-next"
   }
 }
