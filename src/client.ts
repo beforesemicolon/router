@@ -7,13 +7,18 @@ import {
     onPageChange,
     previousPage,
     replacePage,
+    registerRoute,
+    isRegisteredRoute,
+    getPageParams,
+    updateSearchQuery,
 } from './pages'
 import { isOnPage } from './utils/is-on-page'
-import { getSearchQuery } from './utils/get-search-query'
+import { getSearchParams } from './utils/get-search-params'
 
 export * from './components/page-route'
 import initPageLink from './components/page-link'
 import initPageRoute from './components/page-route'
+import initPageData from './components/page-data'
 import type { WebComponent } from '@beforesemicolon/web-component'
 
 declare global {
@@ -33,10 +38,11 @@ if (!window.BFS?.MARKUP || !window.BFS.WebComponent) {
 }
 
 if (window.BFS) {
-    const BFS = { ...window.BFS, ...window.BFS?.MARKUP }
+    const BFS = { ...(window.BFS ?? {}), ...window.BFS?.MARKUP }
 
     initPageRoute(BFS)
     initPageLink(BFS)
+    initPageData(BFS)
 
     window.BFS = {
         ...(window.BFS || {}),
@@ -47,8 +53,12 @@ if (window.BFS) {
             nextPage,
             onPageChange,
             isOnPage,
-            getSearchQuery,
+            getSearchParams,
             getPageData,
+            getPageParams,
+            registerRoute,
+            isRegisteredRoute,
+            updateSearchQuery,
         },
     }
 }

@@ -1,15 +1,10 @@
-import { WebComponent } from '@beforesemicolon/web-component'
+import type { WebComponent } from '@beforesemicolon/web-component'
 
 export type PathChangeListener = (
     pathname: string,
     query: Record<string, string>,
     data: Record<string, unknown>
 ) => void
-
-export interface PageRedirectProps {
-    to: string
-    type: 'unknown' | 'always'
-}
 
 export interface PageRouteProps {
     path: string
@@ -22,16 +17,25 @@ export interface PageRouteQueryProps extends PageRouteProps {
     key: string
     value: string
     src: string
-    default: boolean
 }
 
 export interface PageLinkProps {
     path: string
     search: string
-    default: boolean
     keepCurrentSearch: boolean
     title: string
-    data: Record<string, unknown>
+    payload: Record<string, unknown>
+}
+
+export interface PageRedirectProps
+    extends Omit<PageLinkProps, 'search' | 'keepCurrentSearch'> {
+    type: 'unknown' | 'always'
+}
+
+export interface PageDataProps {
+    key: string
+    param: string
+    searchParam: string
 }
 
 export enum Status {
@@ -53,19 +57,23 @@ export interface PageLink extends WebComponent<PageLinkProps> {
     path: PageLinkProps['path']
     search: PageLinkProps['search']
     title: PageLinkProps['title']
-    default: PageLinkProps['default']
     keepCurrentSearch: PageLinkProps['keepCurrentSearch']
-    data: PageLinkProps['data']
+    payload: PageLinkProps['payload']
     fullPath: string
+}
+
+export interface PageData extends WebComponent<PageDataProps> {
+    key: PageDataProps['key']
+    param: PageDataProps['param']
+    searchParam: PageDataProps['searchParam']
 }
 
 export interface PageRouteQuery extends WebComponent<PageRouteQueryProps> {
     key: PageRouteQueryProps['key']
     value: PageRouteQueryProps['value']
     src: PageRouteQueryProps['src']
-    default: PageRouteQueryProps['default']
 }
 
-export interface PageRedirect extends WebComponent<PageRedirectProps> {
-    to: PageRedirectProps['to']
+export interface PageRedirect extends PageLink {
+    type: PageRedirectProps['type']
 }

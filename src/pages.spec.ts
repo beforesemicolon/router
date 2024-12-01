@@ -1,5 +1,13 @@
-import {goToPage, onPageChange, previousPage, replacePage, nextPage, updateSearchQuery} from "./pages";
-import {waitFor} from "./test.utils";
+import {
+	goToPage,
+	onPageChange,
+	previousPage,
+	replacePage,
+	nextPage,
+	updateSearchQuery,
+	registerRoute,
+	getPageParams, isRegisteredRoute, parsePathname,
+} from './pages'
 
 describe('pages', () => {
 	const onPageChangeListener = jest.fn();
@@ -10,63 +18,52 @@ describe('pages', () => {
 		unsub();
 	})
 	
+	beforeEach(() => {
+		goToPage('/')
+	})
+	
 	it('should go to page', async () => {
-		expect(history.length).toBe(1);
 		expect(location.pathname).toBe('/');
 
 		goToPage('/sample')
 
 		expect(onPageChangeListener).toHaveBeenCalledWith('/sample', {}, {})
-		expect(history.length).toBe(2);
-
-		await waitFor(() => {
-			goToPage('/test', {data: 1000}, 'test page')
-		})
+		
+		goToPage('/test', {data: 1000}, 'test page')
 
 		expect(onPageChangeListener).toHaveBeenCalledWith('/test', {}, {data: 1000})
 		expect(history.state).toEqual({data: 1000})
 		expect(document.title).toBe('test page')
-		expect(history.length).toBe(3);
 	});
 	
-	it('should go to previous page', (done) => {
-		expect(history.length).toBe(3);
+	it('should go to previous and next page', () => {
+		expect(location.pathname).toBe('/');
+		
+		goToPage('/sample')
+		
+		expect(location.pathname).toBe('/sample');
 		
 		previousPage()
 		
-		setTimeout(() => {
-			expect(history.length).toBe(3); // remains the same
-			expect(location.pathname).toBe('/sample')
-			expect(history.state).toEqual({})
-			expect(document.title).toBe('test page')
-			done()
-		}, 300)
-	});
-	
-	it('should go to next page', (done) => {
-		expect(history.length).toBe(3);
+		jest.advanceTimersByTime(300)
+		
+		expect(location.pathname).toBe('/')
+		
 		nextPage()
 		
-		setTimeout(() => {
-			expect(history.length).toBe(3); // remains the same
-			expect(location.pathname).toBe('/test')
-			expect(history.state).toEqual({data: 1000})
-			expect(document.title).toBe('test page')
-			done()
-		}, 300)
+		jest.advanceTimersByTime(300)
+		
+		expect(location.pathname).toBe('/sample')
 	});
 	
-	it('should replace page', (done) => {
-		expect(history.length).toBe(3);
+	it('should replace page', () => {
 		replacePage('/new', {data: 3000}, 'new page')
 		
-		setTimeout(() => {
-			expect(history.length).toBe(3); // remains the same
-			expect(location.pathname).toBe('/new')
-			expect(history.state).toEqual({data: 3000})
-			expect(document.title).toBe('new page')
-			done()
-		}, 300)
+		jest.advanceTimersByTime(300)
+		
+		expect(location.pathname).toBe('/new')
+		expect(history.state).toEqual({data: 3000})
+		expect(document.title).toBe('new page')
 	});
 	
 	it('should update search query', () => {
@@ -88,5 +85,22 @@ describe('pages', () => {
 		updateSearchQuery(null)
 		
 		expect(location.search).toEqual('');
+	});
+	
+	it('should get page params', async () => {
+		goToPage('/')
+		
+		expect(getPageParams()).toEqual({})
+		
+		expect(location.pathname).toBe('/');
+		
+		registerRoute('/app/:name/details')
+		
+		goToPage('/app/my-app/details')
+		
+		expect(location.pathname).toBe('/app/my-app/details');
+		expect(getPageParams()).toEqual({"name": "my-app"})
+		expect(isRegisteredRoute(location.pathname)).toBeTruthy()
+		expect(parsePathname('/app/:name/details')).toBe('/app/my-app/details')
 	});
 })

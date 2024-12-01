@@ -1,22 +1,24 @@
 // @ts-ignore
-global.crypto.randomUUID = () => String(Math.floor(Math.random() * 1000));
-document.documentElement.lang = 'en';
+global.crypto.randomUUID = () => String(Math.floor(Math.random() * 1000))
+document.documentElement.lang = 'en'
 
-beforeAll(() => {
-  // @ts-ignore
-  jest.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => cb());
-  window.fetch = jest.fn();
-  jest.spyOn(console, 'error');
-});
-
-afterAll(() => {
-  window.requestAnimationFrame.mockRestore();
-  window.fetch = undefined;
-});
-
+const ogFetch = window.fetch
 
 beforeEach(() => {
-  console.error.mockClear();
-  document.body.innerHTML = ''
-  jest.clearAllMocks()
+    window.fetch = jest.fn()
+    jest.spyOn(console, 'error')
+    jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+        const id = Math.random()
+        cb(id)
+        return id
+    })
+    document.body.innerHTML = ''
+    jest.useFakeTimers()
+})
+
+afterEach(() => {
+    window.requestAnimationFrame?.mockRestore?.()
+    jest.clearAllMocks()
+    window.fetch = ogFetch
+    jest.useRealTimers()
 })

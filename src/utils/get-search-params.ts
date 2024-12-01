@@ -1,7 +1,7 @@
 import { jsonParse } from './json-parse'
 
-export const getSearchQuery = <T extends Record<string, string>>(): T => {
-    const searchParams = new URLSearchParams(window.location.search)
+export const getSearchParams = <T extends Record<string, string>>(): T => {
+    const searchParams = new URLSearchParams(location.search)
     const res: Record<string, unknown> = {}
 
     for (const key of searchParams.keys()) {

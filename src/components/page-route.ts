@@ -1,26 +1,37 @@
 import { pathStringToPattern } from '../utils/path-string-to-pattern'
 import { getPathMatchParams } from '../utils/get-path-match-params'
-import { getPageData, goToPage, onPageChange } from '../pages'
-import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
+import { getPageData, onPageChange, registerRoute } from '../pages'
 import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
 import {
-    PageRedirectProps,
     PageRouteProps,
     PageRouteQueryProps,
     PathChangeListener,
     Status,
 } from '../types'
+import { HtmlTemplate } from '@beforesemicolon/web-component'
 
 export default ({
     html,
-    is,
-    isNot,
     WebComponent,
+    HtmlTemplate,
     when,
+    is,
 }: typeof import('@beforesemicolon/web-component')) => {
-    const knownRoutes: Set<string> = new Set([])
+    const cachedResult: Record<string, PageContent> = {}
 
-    knownRoutes.add('/') // default route always known
+    registerRoute('/') // default route always known
+
+    type PageContent =
+        | Node
+        | typeof HtmlTemplate
+        | string
+        | { render: (el: HTMLElement) => void }
+        | PageContentCallback
+    type PageContentCallback = (
+        data: ReturnType<typeof getPageData>,
+        params: Record<string, string>,
+        query: Record<string, unknown>
+    ) => Promise<PageContent>
 
     class PageRoute<
         T extends PageRouteProps = PageRouteProps,
@@ -33,27 +44,39 @@ export default ({
         src = ''
         title = ''
         exact = true
-        #slotName = String(Math.floor(Math.random() * 10000000000))
-        #cachedResult: Record<string, unknown> = {}
         #parentRoute: PageRoute | null = null
+        #search = ''
 
         get fullPath(): string {
-            return cleanPathnameOptionalEnding(
-                (this.#parentRoute?.fullPath ?? '') + this.props.path()
-            )
+            return (this.#parentRoute?.fullPath ?? '') + this.props.path()
+        }
+
+        _clearContent = () => {
+            if (this.hasAttribute('src')) {
+                const content = cachedResult[this.props.src()]
+
+                if (
+                    content &&
+                    typeof (content as HtmlTemplate).unmount === 'function'
+                ) {
+                    ;(content as HtmlTemplate).unmount()
+                } else {
+                    this.innerHTML = ''
+                }
+            }
         }
 
         _loadContent = async (
-            src: string,
             params: Record<string, string>,
             query: Record<string, unknown>
         ) => {
+            const src = this.props.src()
             this.setState({ status: Status.Loading })
-            let content = this.#cachedResult[src]
+            let content = cachedResult[src]
 
             if (!content) {
                 try {
-                    if (src.endsWith('.js')) {
+                    if (/\.([jt])s$/.test(src)) {
                         ;({ default: content } = await import(
                             src.startsWith('file:')
                                 ? src.replace(/^file:/, '')
@@ -73,7 +96,7 @@ export default ({
                         }
                     }
 
-                    this.#cachedResult[src] = content
+                    cachedResult[src] = content as PageContent
                 } catch (err) {
                     this.setState({ status: Status.LoadingFailed })
                     return console.error(err)
@@ -81,32 +104,38 @@ export default ({
             }
 
             if (this.mounted) {
-                if (typeof content === 'function') {
-                    content = await content(getPageData(), params, query)
-                }
-
-                // @ts-expect-error handle HTMLTemplate or anything with a render method
-                if (typeof content?.render === 'function') {
-                    // @ts-expect-error renderTarget is a property unique to Markup, in its absence we can render
-                    if (content.renderTarget !== this) {
-                        this.innerHTML = ''
-                        // @ts-expect-error handle HTMLTemplate or anything with a render method
-                        content.render(this)
+                try {
+                    if (typeof content === 'function') {
+                        content = await (content as PageContentCallback)(
+                            getPageData(),
+                            params,
+                            query
+                        )
                     }
-                } else if (content instanceof Node) {
-                    this.innerHTML = ''
-                    this.appendChild(content)
-                } else {
-                    this.innerHTML = String(content)
-                }
 
-                this.setState({ status: Status.Loaded })
+                    this._clearContent()
+
+                    if (
+                        typeof (content as HtmlTemplate).render === 'function'
+                    ) {
+                        ;(content as HtmlTemplate).render(this)
+                    } else if (content instanceof Node) {
+                        this.appendChild(content)
+                    } else {
+                        this.innerHTML = String(content)
+                    }
+
+                    this.setState({ status: Status.Loaded })
+                } catch (err) {
+                    this.setState({ status: Status.LoadingFailed })
+                    return console.error(err)
+                }
             }
         }
 
         _handlePageChange: PathChangeListener = (pathname: string, query) => {
             const params = getPathMatchParams(
-                pathname,
+                pathname + (this.#search ? location.search : ''),
                 pathStringToPattern(this.fullPath, this.props.exact())
             )
 
@@ -116,109 +145,105 @@ export default ({
                     this.state.status() !== Status.Loading &&
                     this.state.status() !== Status.Loaded
                 ) {
-                    this._loadContent(this.props.src(), params, query)
+                    this._loadContent(params, query)
                 } else if (this.state.status() !== Status.Loaded) {
                     this.setState({ status: Status.Loaded })
                 }
 
-                document.title = this.props.title()
-            } else if (this.state.status() !== Status.Idle) {
-                this.setState({ status: Status.Idle })
+                if (this.hasAttribute('title'))
+                    document.title = this.props.title()
+
+                this.hidden = false
+                return
             }
+
+            if (this.state.status() !== Status.Idle) {
+                this.setState({ status: Status.Idle })
+                this._clearContent()
+            }
+
+            this.hidden = true
         }
 
         onMount() {
             this.#parentRoute = getAncestorPageRoute(this) as PageRoute
 
             const url = new URL(this.fullPath, location.origin)
-            knownRoutes.add(url.pathname)
+            this.#search = url.search
+            registerRoute(url.pathname, this.props.exact())
 
             return onPageChange(this._handlePageChange)
         }
 
         render() {
+            const visible = html`<slot></slot>`
+            const hidden = html`<slot name="hidden"></slot>`
+            const loading = html`<slot name="loading"><p>Loading...</p></slot>`
+            const failed = html` <slot name="fallback"
+                ><p>Failed to load content</p></slot
+            >`
+
             return html`
-                <slot
-                    name="${this.#slotName} | ${isNot(
-                        this.state.status,
-                        Status.Loaded
-                    )}"
-                ></slot>
-                ${when(
-                    is(this.state.status, Status.Loading),
-                    html` <slot name="loading"><p>Loading...</p></slot>`
-                )}
-                ${when(
-                    is(this.state.status, Status.LoadingFailed),
-                    html` <slot name="fallback"></slot>`
-                )}
+                ${when(is(this.state.status, Status.Loaded), visible)}
+                ${when(is(this.state.status, Status.Loading), loading)}
+                ${when(is(this.state.status, Status.LoadingFailed), failed)}
+                ${when(is(this.state.status, Status.Idle), hidden)}
             `
         }
     }
 
     class PageRouteQuery extends PageRoute<PageRouteQueryProps> {
-        static observedAttributes = ['key', 'value', 'src', 'default']
+        static observedAttributes = ['key', 'value', 'src']
         key = ''
         value = ''
-        default = false
+        #parentRoute: PageRoute | null = null
 
-        get fullPath() {
-            return ''
+        get fullPath(): string {
+            return this.#parentRoute?.fullPath ?? '/'
         }
 
         _handlePageChange: PathChangeListener = (pathname: string, query) => {
+            const params = getPathMatchParams(
+                pathname,
+                pathStringToPattern(
+                    this.fullPath,
+                    this.#parentRoute?.props?.exact?.() ?? false
+                )
+            )
             const key = this.props.key()
+            const value = this.props.value()
 
-            if (
-                (query[key] === undefined && this.props.default()) ||
-                query[key] === this.props.value()
-            ) {
+            if (params === null) return
+
+            if (query[key] === value) {
                 if (
                     this.props.src() &&
                     this.state.status() !== Status.Loading &&
                     this.state.status() !== Status.Loaded
                 ) {
-                    this._loadContent(this.props.src(), {}, query)
+                    this._loadContent(params, query)
                 } else {
                     this.setState({ status: Status.Loaded })
                 }
-            } else if (this.state.status() !== Status.Idle) {
-                this.setState({ status: Status.Idle })
+
+                this.hidden = false
+                return
             }
+
+            if (this.state.status() !== Status.Idle) {
+                this.setState({ status: Status.Idle })
+                this.hasAttribute('src') && this._clearContent()
+            }
+
+            this.hidden = true
         }
 
         onMount() {
+            this.#parentRoute = getAncestorPageRoute(this) as PageRoute
             return onPageChange(this._handlePageChange)
-        }
-    }
-
-    class PageRedirect extends WebComponent<PageRedirectProps> {
-        static observedAttributes = ['to', 'type']
-        to = ''
-        type = 'unknown'
-
-        onMount() {
-            const pageRoute = getAncestorPageRoute(this) as PageRoute
-
-            return onPageChange((pathname: string) => {
-                const parentPath = cleanPathnameOptionalEnding(
-                    pageRoute?.fullPath ?? '/'
-                )
-
-                if (pathname.startsWith(parentPath)) {
-                    if (this.props.type() === 'always') {
-                        if (pathname === parentPath) {
-                            goToPage(this.props.to())
-                        }
-                    } else if (!knownRoutes.has(pathname)) {
-                        goToPage(this.props.to())
-                    }
-                }
-            })
         }
     }
 
     customElements.define('page-route', PageRoute)
     customElements.define('page-route-query', PageRouteQuery)
-    customElements.define('page-redirect', PageRedirect)
 }
