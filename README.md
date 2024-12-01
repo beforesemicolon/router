@@ -4,7 +4,6 @@
 [![Test](https://github.com/beforesemicolon/router/actions/workflows/test.yml/badge.svg)](https://github.com/beforesemicolon/router/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/%40beforesemicolon%2Frouter)](https://www.npmjs.com/package/@beforesemicolon/router)
 ![npm](https://img.shields.io/npm/l/%40beforesemicolon%2Frouter)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/c34e61bd-3c8f-4c01-a524-dcbcddfa78dd/deploy-status)](https://app.netlify.com/sites/bfs-router/deploys)
 
 Web component router based on [Markup](https://markup.beforesemicolon.com/).
 
