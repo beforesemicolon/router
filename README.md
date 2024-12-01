@@ -1,4 +1,4 @@
-# Web Component Router (beta)
+# Web Component based Router
 
 [![Static Badge](https://img.shields.io/badge/documentation-blue)](https://markup.beforesemicolon.com/documentation/capabilities/router)
 [![Test](https://github.com/beforesemicolon/router/actions/workflows/test.yml/badge.svg)](https://github.com/beforesemicolon/router/actions/workflows/test.yml)
