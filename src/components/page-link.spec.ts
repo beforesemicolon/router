@@ -41,6 +41,40 @@ describe('PageLink', () => {
 		expect(l1.outerHTML).toBe('<page-link path="/"></page-link>')
 		expect(l2.outerHTML).toBe('<page-link path="/test" active=""></page-link>')
 	});
+	
+	it('should render correctly with exact=false', async () => {
+		const l1ActiveMock = jest.fn();
+		const l2ActiveMock = jest.fn();
+		
+		html`
+			<page-link path="/todos" onactive="${l1ActiveMock}"></page-link>
+			<page-link path="/todos" onactive="${l2ActiveMock}" exact="false"></page-link>`
+			.render(document.body)
+		
+		const [l1, l2] = Array.from(document.body.children) as PageLink[];
+		
+		expect(l1ActiveMock).toHaveBeenCalledTimes(0)
+		expect(l2ActiveMock).toHaveBeenCalledTimes(0)
+		
+		expect(l1.outerHTML).toBe('<page-link path="/todos"></page-link>')
+		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false"></page-link>')
+		
+		l2.contentRoot.querySelector('a')?.click()
+
+		expect(l1ActiveMock).toHaveBeenCalledTimes(1)
+		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
+
+		expect(l1.outerHTML).toBe('<page-link path="/todos" active=""></page-link>')
+		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false" active=""></page-link>')
+		
+		goToPage('/todos/390orxmjr8wiehnadscsk')
+		
+		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
+		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
+		
+		expect(l1.outerHTML).toBe('<page-link path="/todos"></page-link>')
+		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false" active=""></page-link>')
+	});
 
 	it('should keep search', async () => {
 		goToPage('/?sample=true');

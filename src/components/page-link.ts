@@ -22,10 +22,12 @@ export default ({
             'keep-current-search',
             'title',
             'payload',
+            'exact',
         ]
         path = ''
         search = ''
         keepCurrentSearch = false
+        exact = true
         title = ''
         payload = {}
         #parentRoute: PageRoute | null = null
@@ -87,8 +89,8 @@ export default ({
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _handlePageChange = (_pathname: string) => {
-            const newActive = isOnPage(this.fullPath())
+        _handlePageChange = (pathname: string) => {
+            const newActive = isOnPage(this.fullPath(), this.props.exact())
 
             if (newActive !== this.hasAttribute('active')) {
                 this.toggleActive(newActive)

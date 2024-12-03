@@ -23,6 +23,7 @@ export interface PageLinkProps {
     path: string
     search: string
     keepCurrentSearch: boolean
+    exact: boolean
     title: string
     payload: Record<string, unknown>
 }
@@ -57,6 +58,7 @@ export interface PageLink extends WebComponent<PageLinkProps> {
     path: PageLinkProps['path']
     search: PageLinkProps['search']
     title: PageLinkProps['title']
+    exact: PageLinkProps['exact']
     keepCurrentSearch: PageLinkProps['keepCurrentSearch']
     payload: PageLinkProps['payload']
     fullPath: string
