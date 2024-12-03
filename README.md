@@ -52,7 +52,7 @@ Web component router based on [Markup](https://markup.beforesemicolon.com/).
                 Tab One content
             </page-route-query>
             
-            <page-route-query key="tab" value="one">
+            <page-route-query key="tab" value="two">
                 Tab Two content
             </page-route-query>
         </div>

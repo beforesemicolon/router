@@ -5,8 +5,10 @@ import * as fs from 'fs'
 import * as path from 'path'
 import {PageRoute, PageRouteQuery} from '../types'
 import iniWithRoute from './page-route'
+import initPageLink from './page-link';
 
 iniWithRoute(WB)
+initPageLink(WB)
 
 beforeEach(() => {
 	document.body.innerHTML = ''
@@ -381,6 +383,54 @@ describe('Page*', () => {
 			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
 			expect(r2.outerHTML).toBe('<page-route-query key="tab" value="two" src="/tabs"><p>Hello World</p></page-route-query>')
 			expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
+		});
+		
+		it('should render tabs accordingly', () => {
+			html`
+				<page-link search="tab=one">Tab 1</page-link>
+				<page-link search="tab=two">Tab 2</page-link>
+				
+				<page-route-query key="tab" value="one">
+					Tab One content
+				</page-route-query>
+				
+				<page-route-query key="tab" value="two">
+					Tab Two content
+				</page-route-query>
+			`.render(document.body);
+			
+			const [link1, link2, rq1, rq2] = Array.from(document.body.children) as WebComponent[];
+			
+			expect(document.body.innerHTML).toBe('<page-link search="tab=one">Tab 1</page-link>\n' +
+					'\t\t\t\t<page-link search="tab=two">Tab 2</page-link>\n' +
+					'\t\t\t\t\n' +
+					'\t\t\t\t<page-route-query key="tab" value="one" hidden="">\n' +
+					'\t\t\t\t\tTab One content\n' +
+					'\t\t\t\t</page-route-query>\n' +
+					'\t\t\t\t\n' +
+					'\t\t\t\t<page-route-query key="tab" value="two" hidden="">\n' +
+					'\t\t\t\t\tTab Two content\n' +
+					'\t\t\t\t</page-route-query>');
+			
+			expect(location.pathname).toBe('/');
+			expect(location.search).toBe('');
+			
+			expect(rq1.hidden).toBeTruthy()
+			expect(rq2.hidden).toBeTruthy()
+			
+			link1.contentRoot.querySelector('a')?.click()
+			
+			expect(location.search).toBe('?tab=one');
+			
+			expect(rq1.hidden).toBeFalsy()
+			expect(rq2.hidden).toBeTruthy()
+			
+			link2.contentRoot.querySelector('a')?.click()
+			
+			expect(location.search).toBe('?tab=two');
+			
+			expect(rq1.hidden).toBeTruthy()
+			expect(rq2.hidden).toBeFalsy()
 		});
 	})
 })
