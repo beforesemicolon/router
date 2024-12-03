@@ -10,7 +10,7 @@ export const getPathMatchParams = <T extends Record<string, string>>(
     if (match) {
         const [, ...paramValues] = match
         return params.reduce(
-            (acc, p, i) => ({ ...acc, [p]: paramValues[i] ?? null }),
+            (acc, p, i) => ({ ...acc, [p]: decodeURI(paramValues[i] ?? '') }),
             {} as T
         )
     }

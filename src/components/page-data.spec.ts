@@ -7,6 +7,7 @@ iniPageRoute(WB)
 
 describe('PageData', () => {
 	registerRoute('/sample/:id', true)
+	registerRoute('/todos/:id/:name', true)
 	
 	beforeEach(() => {
 		document.body.innerHTML = ''
@@ -14,19 +15,17 @@ describe('PageData', () => {
 	})
 	
 	it('should render param', async () => {
-		html`
-			<page-data param="id"></page-data>
-		`.render(document.body)
+		html`<page-data param="id"></page-data><page-data param="name"></page-data>`.render(document.body)
 		
-		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data>')
+		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data><page-data param="name"></page-data>')
 		
-		goToPage('/sample/893427neuwidwioerwieru3843')
+		goToPage('/todos/893427neuwidwioerwieru3843/pick kids up');
 		jest.advanceTimersToNextTimer()
 		
-		const [pd] = [...document.body.children] as WebComponent[];
+		let[id, name] = [...document.body.children] as WebComponent[];
 		
-		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data>')
-		expect(pd.contentRoot.innerHTML).toBe('893427neuwidwioerwieru3843')
+		expect(id.contentRoot.innerHTML).toBe('893427neuwidwioerwieru3843')
+		expect(name.contentRoot.innerHTML).toBe('pick kids up')
 	});
 	
 	it('should render data', async () => {
@@ -91,13 +90,13 @@ describe('PageData', () => {
 				"<slot></slot>"
 			])
 		
-		goToPage('/?foo=bar')
+		goToPage('/?foo=some value')
 		jest.advanceTimersToNextTimer()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
 			[
 				"<slot></slot>",
-				"bar",
+				"some value",
 			])
 		
 		goToPage('/?sample=value&foo=bar')
