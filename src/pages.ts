@@ -129,7 +129,7 @@ export const getPageParams = <T extends Record<string, string>>(): T => {
     for (const p of knownRoutes.values()) {
         const params = getPathMatchParams<T>(
             location.pathname,
-            pathStringToPattern(p.pathname, p.exact)
+            pathStringToPattern(p.pathname)
         )
 
         if (params) return params
