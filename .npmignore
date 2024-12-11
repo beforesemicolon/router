@@ -17,3 +17,4 @@ jest.config.cjs
 dist/cjs/test.utils.js
 dist/esm/test.utils.js
 .github
+public
