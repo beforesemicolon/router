@@ -1,14 +1,19 @@
-import { pathStringToPattern } from '../utils/path-string-to-pattern'
-import { getPathMatchParams } from '../utils/get-path-match-params'
-import { getPageData, onPageChange, registerRoute } from '../pages'
-import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
+import { HtmlTemplate } from '@beforesemicolon/web-component'
+import {
+    getPageData,
+    getRouteModule,
+    onPageChange,
+    registerRoute,
+} from '../pages'
 import {
     PageRouteProps,
     PageRouteQueryProps,
     PathChangeListener,
     Status,
 } from '../types'
-import { HtmlTemplate } from '@beforesemicolon/web-component'
+import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
+import { getPathMatchParams } from '../utils/get-path-match-params'
+import { pathStringToPattern } from '../utils/path-string-to-pattern'
 
 export default ({
     html,
@@ -36,22 +41,39 @@ export default ({
     class PageRoute<
         T extends PageRouteProps = PageRouteProps,
     > extends WebComponent<T, { status: Status }> {
-        static observedAttributes = ['path', 'src', 'title', 'exact']
+        static observedAttributes = [
+            'path',
+            'src',
+            'component',
+            'title',
+            'exact',
+        ]
         initialState = {
             status: Status.Idle,
         }
         path = ''
         src = ''
+        component: unknown = null
         title = ''
         exact = true
         #parentRoute: PageRoute | null = null
         #search = ''
+        #mountedTemplate: HtmlTemplate | null = null
 
         get fullPath(): string {
             return (this.#parentRoute?.fullPath ?? '') + this.props.path()
         }
 
         _clearContent = () => {
+            // Unmount Markup template if mounted
+            if (
+                this.#mountedTemplate &&
+                typeof this.#mountedTemplate.unmount === 'function'
+            ) {
+                this.#mountedTemplate.unmount()
+                this.#mountedTemplate = null
+            }
+
             if (this.hasAttribute('src')) {
                 const content = cachedResult[this.props.src()]
 
@@ -66,23 +88,87 @@ export default ({
             }
         }
 
+        _renderContent = (content: PageContent) => {
+            this._clearContent()
+
+            if (typeof (content as HtmlTemplate).render === 'function') {
+                // Markup HtmlTemplate - track for unmounting
+                this.#mountedTemplate = content as HtmlTemplate
+                ;(content as HtmlTemplate).render(this)
+            } else if (content instanceof Node) {
+                this.appendChild(content)
+            } else {
+                this.innerHTML = String(content)
+            }
+
+            this.setState({ status: Status.Loaded })
+        }
+
         _loadContent = async (
             params: Record<string, string>,
             query: Record<string, unknown>
         ) => {
+            // Check if component prop is provided (explicit import)
+            const componentValue =
+                typeof this.props.component === 'function'
+                    ? this.props.component()
+                    : this.component
+            if (componentValue != null) {
+                if (this.mounted) {
+                    try {
+                        let content: PageContent = componentValue as PageContent
+
+                        // If component is a function, call it
+                        if (typeof content === 'function') {
+                            content = await (content as PageContentCallback)(
+                                getPageData(),
+                                params,
+                                query
+                            )
+                        }
+
+                        this._renderContent(content)
+                    } catch (err) {
+                        this.setState({ status: Status.LoadingFailed })
+                        return console.error(err)
+                    }
+                }
+                return
+            }
+
+            // Fallback to src attribute (dynamic loading)
             const src = this.props.src()
+            if (!src) {
+                // No src or component, render slot content
+                this.setState({ status: Status.Loaded })
+                return
+            }
+
             this.setState({ status: Status.Loading })
             let content = cachedResult[src]
 
             if (!content) {
                 try {
-                    if (/\.([jt])s$/.test(src)) {
-                        ;({ default: content } = await import(
-                            src.startsWith('file:')
-                                ? src.replace(/^file:/, '')
-                                : new URL(src, location.origin).href
-                        ))
+                    // Check route module registry first (build-time optimization)
+                    const moduleLoader = getRouteModule(src)
+                    if (moduleLoader) {
+                        const moduleResult = await moduleLoader()
+                        content = (moduleResult as { default: PageContent })
+                            .default
+                    } else if (/\.([jt])s$/.test(src)) {
+                        // Dynamic import fallback
+                        ;({ default: content } = await (src.startsWith('file:')
+                            ? import(
+                                  /* @vite-ignore */ src.replace(/^file:/, '')
+                              )
+                            : import(
+                                  /* @vite-ignore */ new URL(
+                                      src,
+                                      location.origin
+                                  ).href
+                              )))
                     } else {
+                        // Fetch text/HTML file
                         const res = await fetch(src)
 
                         if (res.status === 200) {
@@ -113,19 +199,7 @@ export default ({
                         )
                     }
 
-                    this._clearContent()
-
-                    if (
-                        typeof (content as HtmlTemplate).render === 'function'
-                    ) {
-                        ;(content as HtmlTemplate).render(this)
-                    } else if (content instanceof Node) {
-                        this.appendChild(content)
-                    } else {
-                        this.innerHTML = String(content)
-                    }
-
-                    this.setState({ status: Status.Loaded })
+                    this._renderContent(content)
                 } catch (err) {
                     this.setState({ status: Status.LoadingFailed })
                     return console.error(err)
@@ -140,8 +214,15 @@ export default ({
             )
 
             if (params !== null) {
+                // Load content if src or component is provided and not already loaded
+                const componentValue =
+                    typeof this.props.component === 'function'
+                        ? this.props.component()
+                        : this.component
+                const hasComponent = componentValue != null
+                const hasSrc = this.hasAttribute('src') && this.props.src()
                 if (
-                    this.hasAttribute('src') &&
+                    (hasSrc || hasComponent) &&
                     this.state.status() !== Status.Loading &&
                     this.state.status() !== Status.Loaded
                 ) {

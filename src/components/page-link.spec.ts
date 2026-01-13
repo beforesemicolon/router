@@ -1,20 +1,30 @@
-import initPageLink from './page-link';
 import * as WB from "@beforesemicolon/web-component";
-import {html} from "@beforesemicolon/web-component";
-import { PageLink } from '../types'
-import { getPageData, goToPage } from '../pages'
-import iniWithRoute from './page-route'
+import { html } from "@beforesemicolon/web-component";
+import { getPageData, goToPage, setRoutingMode } from '../pages';
+import { PageLink } from '../types';
+import initPageLink from './page-link';
+import iniWithRoute from './page-route';
 
 initPageLink(WB)
 iniWithRoute(WB)
 
 describe('PageLink', () => {
-	beforeEach(() => {
+    beforeAll(() => {
+		// Set to history mode for tests
+		setRoutingMode('history');
+	})
+	
+	beforeEach(async () => {
+        jest.useFakeTimers()
 		Array.from(document.body.children, (el) => {
 			el.remove()
 		})
-		goToPage('/');
+		await goToPage('/');
 	})
+    
+    afterEach(() => {
+        jest.useRealTimers()
+    })
 
 	it('should render correctly', async () => {
 		const l1ActiveMock = jest.fn();
@@ -34,6 +44,7 @@ describe('PageLink', () => {
 		expect(l2.outerHTML).toBe('<page-link path="/test"></page-link>')
 
 		l2.contentRoot.querySelector('a')?.click()
+        await jest.advanceTimersByTimeAsync(50)
 
 		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -60,6 +71,7 @@ describe('PageLink', () => {
 		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false"></page-link>')
 		
 		l2.contentRoot.querySelector('a')?.click()
+        await jest.advanceTimersByTimeAsync(50)
 
 		expect(l1ActiveMock).toHaveBeenCalledTimes(1)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -67,7 +79,8 @@ describe('PageLink', () => {
 		expect(l1.outerHTML).toBe('<page-link path="/todos" active=""></page-link>')
 		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false" active=""></page-link>')
 		
-		goToPage('/todos/390orxmjr8wiehnadscsk')
+		await goToPage('/todos/390orxmjr8wiehnadscsk')
+        await jest.advanceTimersByTimeAsync(50)
 		
 		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -77,7 +90,7 @@ describe('PageLink', () => {
 	});
 
 	it('should keep search', async () => {
-		goToPage('/?sample=true');
+		await goToPage('/?sample=true');
 		
 		html`<page-link search="tab=one" keep-current-search="true"></page-link>
 			<page-link search="tab=two" keep-current-search="true"></page-link>`
@@ -93,6 +106,7 @@ describe('PageLink', () => {
 			'                </a>')
 
 		l2.contentRoot.querySelector('a')?.click()
+		await jest.advanceTimersByTimeAsync(0)
 		
 		expect(l1.hasAttribute('active')).toBeFalsy()
 		expect(l2.hasAttribute('active')).toBeTruthy()
@@ -100,7 +114,7 @@ describe('PageLink', () => {
 		expect(location.search).toBe('?sample=true&tab=two')
 	})
 
-	it('should pass data', () => {
+	it('should pass data', async () => {
 		html`<page-link path="/" payload='{"greeting":"Hello World"}'></page-link>`
 			.render(document.body)
 
@@ -108,12 +122,13 @@ describe('PageLink', () => {
 
 		expect(l1.outerHTML).toBe('<page-link path="/" payload="{&quot;greeting&quot;:&quot;Hello World&quot;}" active=""></page-link>')
 		l1.contentRoot.querySelector('a')?.click()
+		await jest.advanceTimersByTimeAsync(0)
 
 		expect(getPageData()).toEqual({ greeting: 'Hello World' })
 	})
 	
-	it('should use current pathname', () => {
-		goToPage('/some-page');
+	it('should use current pathname', async () => {
+		await goToPage('/some-page');
 		
 		html`<page-link path="~/sub" ></page-link>`
 			.render(document.body)
@@ -122,10 +137,13 @@ describe('PageLink', () => {
 		
 		l1.contentRoot.querySelector('a')?.click()
 		
+		// Wait for async navigation to complete
+		await jest.advanceTimersByTimeAsync(0)
+		
 		expect(location.pathname).toBe('/some-page/sub')
 	})
 	
-	it('should use parent page-route path', () => {
+	it('should use parent page-route path', async () => {
 		html`
 			<page-route path="/some-page">
 				<page-link path="$/sub" ></page-link>
@@ -137,17 +155,30 @@ describe('PageLink', () => {
 		
 		l1.contentRoot.querySelector('a')?.click()
 		
+		// Wait for async navigation to complete
+		await jest.advanceTimersByTimeAsync(0)
+		
 		expect(location.pathname).toBe('/some-page/sub')
 	})
 })
 
 describe('PageRedirect', () => {
-	beforeEach(() => {
-		Array.from(document.body.children, (el) => {
-			el.remove()
-		})
-		goToPage('/');
-	})
+    beforeAll(() => {
+        // Set to history mode for tests
+        setRoutingMode('history');
+    })
+    
+    beforeEach(async () => {
+        jest.useFakeTimers()
+        Array.from(document.body.children, (el) => {
+            el.remove()
+        })
+        await goToPage('/');
+    })
+    
+    afterEach(() => {
+        jest.useRealTimers()
+    })
 	
 	it('should redirect unknown routes', async () => {
 		html`
@@ -164,19 +195,23 @@ describe('PageRedirect', () => {
 		
 		expect(location.pathname).toBe('/')
 		
-		goToPage('/unknown');
+		await goToPage('/unknown');
+		await jest.advanceTimersByTimeAsync(10)
 
 		expect(location.pathname).toBe('/404')
 
-		goToPage('/todos');
+		await goToPage('/todos');
+		await jest.advanceTimersByTimeAsync(10)
 
 		expect(location.pathname).toBe('/todos')
 
-		goToPage('/todos/unknown');
+		await goToPage('/todos/unknown');
+		await jest.advanceTimersByTimeAsync(10)
 
 		expect(location.pathname).toBe('/todos/pending')
 
-		goToPage('/todos/in-progress');
+		await goToPage('/todos/in-progress');
+		await jest.advanceTimersByTimeAsync(10)
 
 		expect(location.pathname).toBe('/todos/in-progress')
 	})
@@ -198,9 +233,12 @@ describe('PageRedirect', () => {
 				<page-redirect path="/404" title="404 - Page not found"></page-redirect>
 			`.render(document.body);
 		
+		await jest.advanceTimersByTimeAsync(100)
+		
 		expect(location.pathname).toBe('/todos/pending')
 
-		goToPage('/unknown');
+		await goToPage('/unknown');
+		await jest.advanceTimersByTimeAsync(10)
 
 		expect(location.pathname).toBe('/404')
 	})
