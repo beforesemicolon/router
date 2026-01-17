@@ -1,6 +1,6 @@
 {
     "name": "@beforesemicolon/router",
-    "version": "1.2.1-next",
+    "version": "1.2.2-next",
     "description": "Web component router by Before Semicolon",
     "type": "module",
     "types": "./dist/types/index.d.ts",
