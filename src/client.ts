@@ -11,6 +11,14 @@ import {
     isRegisteredRoute,
     getPageParams,
     updateSearchQuery,
+    setRoutingMode,
+    getRoutingMode,
+    registerRouteModules,
+    getRouteModule,
+    registerRouteGuard,
+    registerGlobalGuard,
+    getRouteMeta,
+    parsePathname,
 } from './pages'
 import { isOnPage } from './utils/is-on-page'
 import { getSearchParams } from './utils/get-search-params'
@@ -59,6 +67,14 @@ if (window.BFS) {
             registerRoute,
             isRegisteredRoute,
             updateSearchQuery,
+            setRoutingMode,
+            getRoutingMode,
+            registerRouteModules,
+            getRouteModule,
+            registerRouteGuard,
+            registerGlobalGuard,
+            getRouteMeta,
+            parsePathname,
         },
     }
 }

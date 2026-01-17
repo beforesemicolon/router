@@ -1,17 +1,22 @@
 import iniPageRoute from './page-data'
 import * as WB from "@beforesemicolon/web-component";
 import { html, WebComponent } from '@beforesemicolon/web-component'
-import { goToPage, registerRoute } from '../pages'
+import { goToPage, registerRoute, setRoutingMode } from '../pages'
 
 iniPageRoute(WB)
 
 describe('PageData', () => {
+	beforeAll(() => {
+		// Set to history mode for tests
+		setRoutingMode('history');
+	})
+	
 	registerRoute('/sample/:id', true)
 	registerRoute('/todos/:id/:name', true)
 	
-	beforeEach(() => {
+	beforeEach(async () => {
 		document.body.innerHTML = ''
-		goToPage('/');
+		await goToPage('/');
 	})
 	
 	it('should render param', async () => {
@@ -19,7 +24,7 @@ describe('PageData', () => {
 		
 		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data><page-data param="name"></page-data>')
 		
-		goToPage('/todos/893427neuwidwioerwieru3843/pick kids up');
+		await goToPage('/todos/893427neuwidwioerwieru3843/pick kids up');
 		jest.advanceTimersToNextTimer()
 		
 		let[id, name] = [...document.body.children] as WebComponent[];
@@ -48,7 +53,7 @@ describe('PageData', () => {
 				"<slot></slot>"
 			])
 		
-		goToPage('/sample/893427neuwidwioerwieru3843', {
+		await goToPage('/sample/893427neuwidwioerwieru3843', {
 			name: 'go to bed',
 			status: {
 				code: 1,
@@ -81,7 +86,7 @@ describe('PageData', () => {
 				"<slot></slot>"
 			])
 		
-		goToPage('/?sample=value')
+		await goToPage('/?sample=value')
 		jest.advanceTimersToNextTimer()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
@@ -90,7 +95,7 @@ describe('PageData', () => {
 				"<slot></slot>"
 			])
 		
-		goToPage('/?foo=some value')
+		await goToPage('/?foo=some value')
 		jest.advanceTimersToNextTimer()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
@@ -99,7 +104,7 @@ describe('PageData', () => {
 				"some value",
 			])
 		
-		goToPage('/?sample=value&foo=bar')
+		await goToPage('/?sample=value&foo=bar')
 		jest.advanceTimersToNextTimer()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(

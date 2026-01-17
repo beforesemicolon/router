@@ -1,14 +1,35 @@
 import type { WebComponent } from '@beforesemicolon/web-component'
 
+export type RoutingMode = 'history' | 'hash'
+
 export type PathChangeListener = (
     pathname: string,
     query: Record<string, string>,
     data: Record<string, unknown>
 ) => void
 
+export type RouteGuard = (
+    pathname: string,
+    query: Record<string, unknown>,
+    data: Record<string, unknown>
+) => boolean | Promise<boolean> | string | Promise<string>
+
+export interface RouteMeta {
+    title?: string
+    requiresAuth?: boolean
+    breadcrumb?: string
+    [key: string]: unknown
+}
+
+export interface RouteOptions {
+    exact?: boolean
+    meta?: RouteMeta
+}
+
 export interface PageRouteProps {
     path: string
     src: string
+    component: unknown
     exact: boolean
     title: string
 }
@@ -49,6 +70,7 @@ export enum Status {
 export interface PageRoute extends WebComponent<PageRouteProps> {
     path: PageRouteProps['path']
     src: PageRouteProps['src']
+    component: PageRouteProps['component']
     title: PageRouteProps['title']
     exact: PageRouteProps['exact']
     fullPath: string
