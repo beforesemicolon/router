@@ -180,11 +180,18 @@ export default ({ html, WebComponent }: any) => {
         _handlePageChange = (pathname: string) => {
             if (redirectingPath === pathname) return
 
-            const parentPath = cleanPathnameOptionalEnding(
+            const parentPathPattern = cleanPathnameOptionalEnding(
                 this._parentFullPath()
             )
+            const parentPath = cleanPathnameOptionalEnding(
+                parsePathname(parentPathPattern)
+            )
+            const isWithinParentRoute =
+                parentPath === '/' ||
+                pathname === parentPath ||
+                pathname.startsWith(`${parentPath}/`)
 
-            if (pathname.startsWith(parentPath)) {
+            if (isWithinParentRoute) {
                 if (this.props.type() === 'always') {
                     if (pathname + location.search === parentPath) {
                         redirectingPath = pathname

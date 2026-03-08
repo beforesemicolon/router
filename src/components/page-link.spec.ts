@@ -242,4 +242,39 @@ describe('PageRedirect', () => {
 
 		expect(location.pathname).toBe('/404')
 	})
+
+	it('should always redirect dynamic parent route root path', async () => {
+		html`
+			<page-route path="/projects/:projectId" exact="false">
+				<page-route path="/editor">Editor</page-route>
+				<page-route path="/team">Team</page-route>
+				<page-redirect path="$/editor" type="always"></page-redirect>
+			</page-route>
+		`.render(document.body)
+
+		await goToPage('/projects/abc123')
+		await jest.advanceTimersByTimeAsync(20)
+
+		expect(location.pathname).toBe('/projects/abc123/editor')
+
+		await goToPage('/projects/abc123/team')
+		await jest.advanceTimersByTimeAsync(20)
+
+		expect(location.pathname).toBe('/projects/abc123/team')
+	})
+
+	it('should redirect unknown dynamic child routes to default child', async () => {
+		html`
+			<page-route path="/projects/:projectId" exact="false">
+				<page-route path="/editor">Editor</page-route>
+				<page-route path="/team">Team</page-route>
+				<page-redirect path="$/editor"></page-redirect>
+			</page-route>
+		`.render(document.body)
+
+		await goToPage('/projects/abc123/unknown')
+		await jest.advanceTimersByTimeAsync(20)
+
+		expect(location.pathname).toBe('/projects/abc123/editor')
+	})
 })
