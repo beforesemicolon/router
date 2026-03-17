@@ -10,6 +10,11 @@ import initPageLink from './page-link';
 iniWithRoute(WB)
 initPageLink(WB)
 
+const flushMicrotasks = () =>
+	new Promise<void>((resolve) =>
+		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
+	);
+
 beforeAll(() => {
 	// Set to history mode for tests
 	setRoutingMode('history');
@@ -40,7 +45,7 @@ describe('Page*', () => {
 			
 			await goToPage('/test');
 			
-			await jest.advanceTimersByTimeAsync(500)
+			await flushMicrotasks()
 			
 			expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="fallback"><p>Failed to load content</p></slot>');
 		})
@@ -65,7 +70,7 @@ describe('Page*', () => {
 			
 			await goToPage('/sample');
 			
-			await jest.advanceTimersByTimeAsync(500)
+			await flushMicrotasks()
 			
 			expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="fallback"><p>Failed to load content</p></slot>');
 		})
@@ -84,7 +89,7 @@ describe('Page*', () => {
 			
 			expect(window.fetch).not.toHaveBeenCalled();
 			
-			jest.advanceTimersByTime(300)
+			await flushMicrotasks()
 			
 			const [r1, r2] = Array.from(document.body.children) as PageRoute[];
 			
@@ -99,7 +104,7 @@ describe('Page*', () => {
 			
 			await goToPage('/test');
 			
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			slot = r1.contentRoot.querySelector('slot');
 			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
@@ -129,7 +134,7 @@ describe('Page*', () => {
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
@@ -137,21 +142,21 @@ describe('Page*', () => {
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/pending');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/in-progress');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/completed');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
@@ -184,7 +189,7 @@ describe('Page*', () => {
 			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(slot?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
@@ -196,21 +201,21 @@ describe('Page*', () => {
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/pending');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/in-progress');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot></slot>')
 			expect(r13.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/todos/completed');
-			await jest.advanceTimersByTimeAsync(0)
+			await flushMicrotasks()
 			
 			expect(r11.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
 			expect(r12.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="hidden"></slot>')
@@ -234,7 +239,7 @@ describe('Page*', () => {
 				expect(r1.outerHTML).toBe('<page-route path="/sample" src="file:./sample.js" hidden=""></page-route>')
 				
 				await goToPage('/sample');
-				await jest.advanceTimersByTimeAsync(0)
+				await flushMicrotasks()
 				
 				expect(console.error).not.toHaveBeenCalled();
 				
@@ -266,7 +271,7 @@ describe('Page*', () => {
 				expect(r1.outerHTML).toBe('<page-route path="/todos" exact="false" src="file:./content.js" hidden=""></page-route>')
 				
 				await goToPage('/todos/pending');
-				await jest.advanceTimersByTimeAsync(0)
+				await flushMicrotasks()
 				
 				expect(r1.outerHTML).toBe(
 					'<page-route path="/todos" exact="false" src="file:./content.js">Todos:\n' +
@@ -300,7 +305,7 @@ describe('Page*', () => {
 				expect(r1.outerHTML).toBe('<page-route path="/diff" src="file:./diff.js" hidden=""></page-route>')
 				
 				await goToPage('/diff');
-				await jest.advanceTimersByTimeAsync(0)
+				await flushMicrotasks()
 				
 				expect(console.error).not.toHaveBeenCalled();
 				
@@ -328,7 +333,7 @@ describe('Page*', () => {
 				expect(r1.outerHTML).toBe('<page-route path="/app/:appId" src="file:./app.page.js" hidden=""></page-route>')
 				
 				await goToPage('/app/my-app', {greeting: "Hello"});
-				await jest.advanceTimersByTimeAsync(0)
+				await flushMicrotasks()
 				
 				// r2 slot loses the name to show content
 				expect(r1.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
@@ -341,14 +346,6 @@ describe('Page*', () => {
 	})
 	
 	describe('PageRouteQuery', () => {
-		beforeEach(() => {
-			jest.useFakeTimers()
-		})
-		
-		afterEach(() => {
-			jest.useRealTimers()
-		})
-		
 		it('should render inner content with route query static and fetched content', async () => {
 			jest.spyOn(window, 'fetch').mockImplementation(() => {
 				return Promise.resolve({
@@ -373,7 +370,7 @@ describe('Page*', () => {
 			expect(r2.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
 			
 			await goToPage('/?tab=one');
-			await jest.advanceTimersByTimeAsync(500)
+			await flushMicrotasks()
 			
 			expect(location.pathname).toBe('/')
 			expect(location.search).toBe('?tab=one')
@@ -388,7 +385,7 @@ describe('Page*', () => {
 			await goToPage('/?tab=two');
 			
 			expect(window.fetch).toHaveBeenCalledTimes(1);
-			await jest.advanceTimersByTimeAsync(500)
+			await flushMicrotasks()
 			
 			expect(r1.outerHTML).toBe('<page-route-query key="tab" value="one" hidden="">Tab 1</page-route-query>')
 			expect(r1.contentRoot.innerHTML.trim()).toBe('<slot name="hidden"></slot>')
@@ -431,7 +428,7 @@ describe('Page*', () => {
    
 			link1.contentRoot.querySelector('a')?.click()
 			// Wait for async navigation
-            await jest.advanceTimersByTimeAsync(50)
+            await flushMicrotasks()
 
 			expect(location.search).toBe('?tab=one');
 
@@ -440,7 +437,7 @@ describe('Page*', () => {
 
 			link2.contentRoot.querySelector('a')?.click()
 			// Wait for async navigation
-            await jest.advanceTimersByTimeAsync(50)
+            await flushMicrotasks()
 
 			expect(location.search).toBe('?tab=two');
 

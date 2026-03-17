@@ -8,6 +8,11 @@ import iniWithRoute from './page-route';
 initPageLink(WB)
 iniWithRoute(WB)
 
+const flushMicrotasks = () =>
+	new Promise<void>((resolve) =>
+		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
+	);
+
 describe('PageLink', () => {
     beforeAll(() => {
 		// Set to history mode for tests
@@ -15,16 +20,11 @@ describe('PageLink', () => {
 	})
 	
 	beforeEach(async () => {
-        jest.useFakeTimers()
 		Array.from(document.body.children, (el) => {
 			el.remove()
 		})
 		await goToPage('/');
 	})
-    
-    afterEach(() => {
-        jest.useRealTimers()
-    })
 
 	it('should render correctly', async () => {
 		const l1ActiveMock = jest.fn();
@@ -44,7 +44,7 @@ describe('PageLink', () => {
 		expect(l2.outerHTML).toBe('<page-link path="/test"></page-link>')
 
 		l2.contentRoot.querySelector('a')?.click()
-        await jest.advanceTimersByTimeAsync(50)
+        await flushMicrotasks()
 
 		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -71,7 +71,7 @@ describe('PageLink', () => {
 		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false"></page-link>')
 		
 		l2.contentRoot.querySelector('a')?.click()
-        await jest.advanceTimersByTimeAsync(50)
+        await flushMicrotasks()
 
 		expect(l1ActiveMock).toHaveBeenCalledTimes(1)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -80,7 +80,7 @@ describe('PageLink', () => {
 		expect(l2.outerHTML).toBe('<page-link path="/todos" exact="false" active=""></page-link>')
 		
 		await goToPage('/todos/390orxmjr8wiehnadscsk')
-        await jest.advanceTimersByTimeAsync(50)
+        await flushMicrotasks()
 		
 		expect(l1ActiveMock).toHaveBeenCalledTimes(2)
 		expect(l2ActiveMock).toHaveBeenCalledTimes(1)
@@ -106,7 +106,7 @@ describe('PageLink', () => {
 			'                </a>')
 
 		l2.contentRoot.querySelector('a')?.click()
-		await jest.advanceTimersByTimeAsync(0)
+		await flushMicrotasks()
 		
 		expect(l1.hasAttribute('active')).toBeFalsy()
 		expect(l2.hasAttribute('active')).toBeTruthy()
@@ -122,7 +122,7 @@ describe('PageLink', () => {
 
 		expect(l1.outerHTML).toBe('<page-link path="/" payload="{&quot;greeting&quot;:&quot;Hello World&quot;}" active=""></page-link>')
 		l1.contentRoot.querySelector('a')?.click()
-		await jest.advanceTimersByTimeAsync(0)
+		await flushMicrotasks()
 
 		expect(getPageData()).toEqual({ greeting: 'Hello World' })
 	})
@@ -138,7 +138,7 @@ describe('PageLink', () => {
 		l1.contentRoot.querySelector('a')?.click()
 		
 		// Wait for async navigation to complete
-		await jest.advanceTimersByTimeAsync(0)
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/some-page/sub')
 	})
@@ -156,7 +156,7 @@ describe('PageLink', () => {
 		l1.contentRoot.querySelector('a')?.click()
 		
 		// Wait for async navigation to complete
-		await jest.advanceTimersByTimeAsync(0)
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/some-page/sub')
 	})
@@ -169,15 +169,10 @@ describe('PageRedirect', () => {
     })
     
     beforeEach(async () => {
-        jest.useFakeTimers()
         Array.from(document.body.children, (el) => {
             el.remove()
         })
         await goToPage('/');
-    })
-    
-    afterEach(() => {
-        jest.useRealTimers()
     })
 	
 	it('should redirect unknown routes', async () => {
@@ -196,22 +191,22 @@ describe('PageRedirect', () => {
 		expect(location.pathname).toBe('/')
 		
 		await goToPage('/unknown');
-		await jest.advanceTimersByTimeAsync(10)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/404')
 
 		await goToPage('/todos');
-		await jest.advanceTimersByTimeAsync(10)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/todos')
 
 		await goToPage('/todos/unknown');
-		await jest.advanceTimersByTimeAsync(10)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/todos/pending')
 
 		await goToPage('/todos/in-progress');
-		await jest.advanceTimersByTimeAsync(10)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/todos/in-progress')
 	})
@@ -233,12 +228,12 @@ describe('PageRedirect', () => {
 				<page-redirect path="/404" title="404 - Page not found"></page-redirect>
 			`.render(document.body);
 		
-		await jest.advanceTimersByTimeAsync(100)
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/todos/pending')
 
 		await goToPage('/unknown');
-		await jest.advanceTimersByTimeAsync(10)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/404')
 	})
@@ -253,12 +248,12 @@ describe('PageRedirect', () => {
 		`.render(document.body)
 
 		await goToPage('/projects/abc123')
-		await jest.advanceTimersByTimeAsync(20)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/projects/abc123/editor')
 
 		await goToPage('/projects/abc123/team')
-		await jest.advanceTimersByTimeAsync(20)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/projects/abc123/team')
 	})
@@ -273,7 +268,7 @@ describe('PageRedirect', () => {
 		`.render(document.body)
 
 		await goToPage('/projects/abc123/unknown')
-		await jest.advanceTimersByTimeAsync(20)
+		await flushMicrotasks()
 
 		expect(location.pathname).toBe('/projects/abc123/editor')
 	})

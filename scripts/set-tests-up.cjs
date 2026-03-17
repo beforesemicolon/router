@@ -13,12 +13,10 @@ beforeEach(() => {
         return id
     })
     document.body.innerHTML = ''
-    jest.useFakeTimers()
 })
 
 afterEach(() => {
     window.requestAnimationFrame?.mockRestore?.()
     jest.clearAllMocks()
     window.fetch = ogFetch
-    jest.useRealTimers()
 })

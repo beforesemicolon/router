@@ -5,6 +5,11 @@ import { goToPage, registerRoute, setRoutingMode } from '../pages'
 
 iniPageRoute(WB)
 
+const flushMicrotasks = () =>
+	new Promise<void>((resolve) =>
+		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
+	);
+
 describe('PageData', () => {
 	beforeAll(() => {
 		// Set to history mode for tests
@@ -25,7 +30,7 @@ describe('PageData', () => {
 		expect(document.body.innerHTML).toBe('<page-data param="id"></page-data><page-data param="name"></page-data>')
 		
 		await goToPage('/todos/893427neuwidwioerwieru3843/pick kids up');
-		jest.advanceTimersToNextTimer()
+		await flushMicrotasks()
 		
 		let[id, name] = [...document.body.children] as WebComponent[];
 		
@@ -60,7 +65,7 @@ describe('PageData', () => {
 				name: 'pending'
 			}
 		})
-		jest.advanceTimersToNextTimer()
+		await flushMicrotasks()
 
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
 			[
@@ -87,7 +92,7 @@ describe('PageData', () => {
 			])
 		
 		await goToPage('/?sample=value')
-		jest.advanceTimersToNextTimer()
+		await flushMicrotasks()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
 			[
@@ -96,7 +101,7 @@ describe('PageData', () => {
 			])
 		
 		await goToPage('/?foo=some value')
-		jest.advanceTimersToNextTimer()
+		await flushMicrotasks()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
 			[
@@ -105,7 +110,7 @@ describe('PageData', () => {
 			])
 		
 		await goToPage('/?sample=value&foo=bar')
-		jest.advanceTimersToNextTimer()
+		await flushMicrotasks()
 		
 		expect(pds.map(pd => pd.contentRoot.innerHTML)).toEqual(
 			[

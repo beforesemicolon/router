@@ -8,8 +8,13 @@ import {
 	registerRoute,
 	getPageParams, isRegisteredRoute, parsePathname,
 	setRoutingMode, getRoutingMode, registerGlobalGuard, registerRouteModules, getRouteModule, getRouteMeta,
-    registerRouteGuard,
+	registerRouteGuard,
 } from './pages'
+
+const flushMicrotasks = () =>
+	new Promise<void>((resolve) =>
+		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
+	);
 
 describe('pages', () => {
 	const onPageChangeListener = jest.fn();
@@ -59,13 +64,15 @@ describe('pages', () => {
 		
 		previousPage()
 		
-		jest.advanceTimersByTime(300)
+		await flushMicrotasks()
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/')
 		
 		nextPage()
 		
-		jest.advanceTimersByTime(300)
+		await flushMicrotasks()
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/sample')
 	});
@@ -73,7 +80,7 @@ describe('pages', () => {
 	it('should replace page', async () => {
 		await replacePage('/new', {data: 3000}, 'new page')
 		
-		jest.advanceTimersByTime(300)
+		await flushMicrotasks()
 		
 		expect(location.pathname).toBe('/new')
 		expect(history.state).toEqual({data: 3000})
@@ -127,7 +134,7 @@ describe('pages', () => {
             })
             
             await goToPage('/protected')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(guardCalled).toBe(true)
             expect(location.pathname).toBe('/protected')
@@ -139,7 +146,7 @@ describe('pages', () => {
             })
             
             await goToPage('/blocked')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(location.pathname).toBe('/') // Should stay at original location
         })
@@ -150,7 +157,7 @@ describe('pages', () => {
             })
             
             await goToPage('/admin')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(location.pathname).toBe('/login')
         })
@@ -165,7 +172,7 @@ describe('pages', () => {
             })
             
             await goToPage('/async-protected')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(asyncGuardCompleted).toBe(true)
             expect(location.pathname).toBe('/async-protected')
@@ -182,12 +189,12 @@ describe('pages', () => {
             })
             
             await goToPage('/some-page')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             expect(globalGuardCalled).toBe(true)
             expect(location.pathname).toBe('/some-page')
             
             await goToPage('/forbidden')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             expect(location.pathname).toBe('/some-page') // Should stay at previous location
         })
         
@@ -204,7 +211,7 @@ describe('pages', () => {
             })
             
             await goToPage('/test-guard', { user: 'test' }, 'Test Page')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(receivedPathname).toBe('/test-guard')
             expect(receivedQuery).toBeDefined()
@@ -225,7 +232,7 @@ describe('pages', () => {
             setRoutingMode('hash')
             
             await goToPage('/test-hash')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(location.hash).toBe('#/test-hash')
             
@@ -236,7 +243,7 @@ describe('pages', () => {
             setRoutingMode('hash')
             
             await goToPage('/test?foo=bar')
-            await jest.advanceTimersByTimeAsync(0)
+            await flushMicrotasks()
             
             expect(location.hash).toBe('#/test?foo=bar')
             
