@@ -23,6 +23,7 @@ export default ({
     is,
 }: typeof import('@beforesemicolon/web-component')) => {
     const cachedResult: Record<string, PageContent> = {}
+    const pendingLoads: Record<string, Promise<PageContent>> = {}
 
     registerRoute('/') // default route always known
 
@@ -149,40 +150,55 @@ export default ({
 
             if (!content) {
                 try {
-                    // Check route module registry first (build-time optimization)
-                    const moduleLoader = getRouteModule(src)
-                    if (moduleLoader) {
-                        const moduleResult = await moduleLoader()
-                        content = (moduleResult as { default: PageContent })
-                            .default
-                    } else if (/\.([jt])s$/.test(src)) {
-                        // Dynamic import fallback
-                        ;({ default: content } = await (src.startsWith('file:')
-                            ? import(
-                                  /* @vite-ignore */ src.replace(/^file:/, '')
-                              )
-                            : import(
-                                  /* @vite-ignore */ new URL(
-                                      src,
-                                      location.origin
-                                  ).href
-                              )))
-                    } else {
-                        // Fetch text/HTML file
-                        const res = await fetch(src)
+                    if (!pendingLoads[src]) {
+                        pendingLoads[src] = (async () => {
+                            const moduleLoader = getRouteModule(src)
+                            let loadedContent: PageContent
 
-                        if (res.status === 200) {
-                            content = await res.text()
-                        } else {
-                            throw new Error(
-                                `Loading "${this.props.src()}" content failed with status code ${
-                                    res.status
-                                }`
-                            )
-                        }
+                            if (moduleLoader) {
+                                const moduleResult = await moduleLoader()
+                                loadedContent = (
+                                    moduleResult as {
+                                        default: PageContent
+                                    }
+                                ).default
+                            } else if (/\.([jt])s$/.test(src)) {
+                                ;({ default: loadedContent } =
+                                    await (src.startsWith('file:')
+                                        ? import(
+                                              /* @vite-ignore */ src.replace(
+                                                  /^file:/,
+                                                  ''
+                                              )
+                                          )
+                                        : import(
+                                              /* @vite-ignore */ new URL(
+                                                  src,
+                                                  location.origin
+                                              ).href
+                                          )))
+                            } else {
+                                const res = await fetch(src)
+
+                                if (res.status === 200) {
+                                    loadedContent = await res.text()
+                                } else {
+                                    throw new Error(
+                                        `Loading "${this.props.src()}" content failed with status code ${
+                                            res.status
+                                        }`
+                                    )
+                                }
+                            }
+
+                            cachedResult[src] = loadedContent
+                            return loadedContent
+                        })().finally(() => {
+                            delete pendingLoads[src]
+                        })
                     }
 
-                    cachedResult[src] = content as PageContent
+                    content = await pendingLoads[src]
                 } catch (err) {
                     this.setState({ status: Status.LoadingFailed })
                     return console.error(err)
