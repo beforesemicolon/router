@@ -85,8 +85,6 @@ window.addEventListener('popstate', () => {
  */
 export const setRoutingMode = (mode: RoutingMode) => {
     routingMode = mode
-    // Trigger broadcast to update all listeners
-    broadcast()
 }
 
 /**
@@ -346,11 +344,7 @@ export const registerRoute = (
         routeMetadata.set(pathname, options.meta)
     }
 
-    // Trigger broadcast asynchronously to avoid synchronous recursion during mounting,
-    // allowing listeners to re-evaluate params/active state with the newly registered route.
-    queueMicrotask(() => {
-        broadcast()
-    })
+    // Registering a route is passive; broadcasts only occur during actual navigations.
 }
 
 /**
