@@ -8,6 +8,15 @@ export type PathChangeListener = (
     data: Record<string, unknown>
 ) => void
 
+export interface PageLocation {
+    pathname: string
+    query: Record<string, string>
+    data: Record<string, unknown>
+    params: Record<string, string>
+}
+
+export type PageListener = (active: boolean, location: PageLocation) => void
+
 export type RouteGuard = (
     pathname: string,
     query: Record<string, unknown>,

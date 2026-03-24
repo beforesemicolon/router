@@ -1,5 +1,6 @@
 import {
 	goToPage,
+	onPage,
 	onPageChange,
 	previousPage,
 	replacePage,
@@ -197,6 +198,29 @@ describe('pages', () => {
             await flushMicrotasks()
             expect(location.pathname).toBe('/some-page') // Should stay at previous location
         })
+
+        it('should apply global guards when subscribing on the current location', async () => {
+            window.history.replaceState({}, document.title, '/guarded-login')
+
+            registerGlobalGuard((pathname) => {
+                if (pathname === '/guarded-login') {
+                    return '/guarded-projects'
+                }
+
+                return true
+            })
+
+            const listener = jest.fn()
+            const unsubscribe = onPageChange(listener)
+
+            await flushMicrotasks()
+            await flushMicrotasks()
+
+            expect(location.pathname).toBe('/guarded-projects')
+            expect(listener).toHaveBeenCalledWith('/guarded-projects', {}, {})
+
+            unsubscribe()
+        })
         
         it('should pass pathname, query, and data to guards', async () => {
             let receivedPathname: string | null = null
@@ -216,6 +240,98 @@ describe('pages', () => {
             expect(receivedPathname).toBe('/test-guard')
             expect(receivedQuery).toBeDefined()
             expect(receivedData).toEqual({ user: 'test' })
+        })
+
+        it('should normalize null history state before guard redirects on current location', async () => {
+            window.history.replaceState(null, document.title, '/guarded-login')
+
+            registerGlobalGuard((pathname) => {
+                if (pathname === '/guarded-login') {
+                    return '/guarded-projects'
+                }
+
+                return true
+            })
+
+            const listener = jest.fn()
+            const unsubscribe = onPageChange(listener)
+
+            await flushMicrotasks()
+            await flushMicrotasks()
+
+            expect(location.pathname).toBe('/guarded-projects')
+            expect(history.state).toEqual({})
+            expect(listener).toHaveBeenCalledWith('/guarded-projects', {}, {})
+
+            unsubscribe()
+        })
+
+        it('should only evaluate current-location guards once for concurrent subscribers', async () => {
+            window.history.replaceState({}, document.title, '/guarded-projects')
+
+            const guard = jest.fn(() => true)
+            registerGlobalGuard(guard)
+
+            const listenerA = jest.fn()
+            const listenerB = jest.fn()
+            const unsubscribeA = onPageChange(listenerA)
+            const unsubscribeB = onPageChange(listenerB)
+
+            await flushMicrotasks()
+            await flushMicrotasks()
+
+            expect(guard).toHaveBeenCalledTimes(1)
+            expect(listenerA).toHaveBeenCalledWith('/guarded-projects', {}, {})
+            expect(listenerB).toHaveBeenCalledWith('/guarded-projects', {}, {})
+
+            unsubscribeA()
+            unsubscribeB()
+        })
+
+        it('should notify only relevant onPage subscribers for a route change', async () => {
+            const homeListener = jest.fn()
+            const projectsListener = jest.fn()
+            const unsubscribeHome = onPage('/', homeListener)
+            const unsubscribeProjects = onPage('/projects', projectsListener)
+
+            homeListener.mockClear()
+            projectsListener.mockClear()
+
+            await goToPage('/projects')
+            await flushMicrotasks()
+
+            expect(homeListener).toHaveBeenCalledTimes(1)
+            expect(homeListener).toHaveBeenCalledWith(false, {
+                pathname: '/projects',
+                query: {},
+                data: {},
+                params: {},
+            })
+            expect(projectsListener).toHaveBeenCalledTimes(1)
+            expect(projectsListener).toHaveBeenCalledWith(true, {
+                pathname: '/projects',
+                query: {},
+                data: {},
+                params: {},
+            })
+
+            homeListener.mockClear()
+            projectsListener.mockClear()
+
+            await goToPage('/about')
+            await flushMicrotasks()
+
+            expect(homeListener).toHaveBeenCalledTimes(0)
+            expect(projectsListener).toHaveBeenCalledTimes(1)
+            expect(projectsListener).toHaveBeenCalledWith(false, {
+                pathname: '/about',
+                query: {},
+                data: {},
+                params: {},
+            })
+
+            unsubscribeHome()
+            unsubscribeProjects()
         })
     })
     

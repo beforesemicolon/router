@@ -1,6 +1,6 @@
 import * as WB from '@beforesemicolon/web-component'
 import {html, WebComponent} from '@beforesemicolon/web-component'
-import {goToPage, setRoutingMode} from '../pages'
+import {goToPage, onPageChange, registerRouteModules, setRoutingMode} from '../pages'
 import * as fs from 'fs'
 import * as path from 'path'
 import {PageRoute, PageRouteQuery} from '../types'
@@ -15,6 +15,22 @@ const flushMicrotasks = () =>
 		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
 	);
 
+let routeCacheProbeConnections = 0
+let routeCacheProbeDisconnections = 0
+class RouteCacheProbe extends HTMLElement {
+	connectedCallback() {
+		routeCacheProbeConnections += 1
+	}
+
+	disconnectedCallback() {
+		routeCacheProbeDisconnections += 1
+	}
+}
+
+if (!customElements.get('route-cache-probe')) {
+	customElements.define('route-cache-probe', RouteCacheProbe)
+}
+
 beforeAll(() => {
 	// Set to history mode for tests
 	setRoutingMode('history');
@@ -22,6 +38,8 @@ beforeAll(() => {
 
 beforeEach(async () => {
 	document.body.innerHTML = ''
+	routeCacheProbeConnections = 0
+	routeCacheProbeDisconnections = 0
 	await goToPage('/');
 })
 
@@ -48,6 +66,73 @@ describe('Page*', () => {
 			await flushMicrotasks()
 			
 			expect(r1.contentRoot.querySelector('slot')?.outerHTML).toBe('<slot name="fallback"><p>Failed to load content</p></slot>');
+		})
+
+		it('treats module failures as terminal until the route is left', async () => {
+			let moduleCallCount = 0
+
+			registerRouteModules({
+				'/async-fail': () => {
+					moduleCallCount++
+					return Promise.resolve({
+						default: () => {
+							throw new Error('boom')
+						},
+					})
+				},
+			})
+
+			html`<page-route path="/async-fail" src="/async-fail"></page-route>`.render(document.body)
+
+			const [route] = Array.from(document.body.children) as PageRoute[]
+
+			await goToPage('/async-fail')
+			await flushMicrotasks()
+
+			expect(moduleCallCount).toBe(1)
+			expect(
+				route.contentRoot.querySelector('slot[name="fallback"]')
+			).not.toBeNull()
+
+			await goToPage('/async-fail')
+			await flushMicrotasks()
+
+			expect(moduleCallCount).toBe(1)
+
+			await goToPage('/async-fail')
+			await flushMicrotasks()
+
+			expect(moduleCallCount).toBe(1)
+		})
+
+		it('treats load failure as terminal until the route is left', async () => {
+			const fetchSpy = jest
+				.spyOn(window, 'fetch')
+				.mockResolvedValue({ status: 404 } as Response)
+
+			html`<page-route path="/fail" src="/fail"></page-route>`.render(document.body);
+
+			const [r1] = Array.from(document.body.children) as PageRoute[];
+
+			await goToPage('/fail');
+			await flushMicrotasks()
+
+			expect(fetchSpy).toHaveBeenCalledTimes(1);
+			expect(r1.contentRoot.querySelector('slot[name="fallback"]')).not.toBeNull();
+
+			await goToPage('/fail');
+			await flushMicrotasks()
+
+			expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+			await goToPage('/');
+			await flushMicrotasks()
+
+			await goToPage('/fail');
+			await flushMicrotasks()
+
+			expect(fetchSpy).toHaveBeenCalledTimes(2);
+			fetchSpy.mockRestore();
 		})
 		
 		it('should fail during handling loaded content and show fallback slot', async () => {
@@ -113,6 +198,96 @@ describe('Page*', () => {
 			expect(r2.contentRoot.innerHTML.trim()).toBe('<slot></slot>')
 			expect(r2.outerHTML).toBe('<page-route path="/test" src="/test"><p>Hello World</p></page-route>')
 		});
+
+		it('unmounts inactive route content but remounts the same cached instance without reloading', async () => {
+			let moduleCallCount = 0
+
+			registerRouteModules({
+				'/projects': () => {
+					moduleCallCount += 1
+					return Promise.resolve({
+						default: html`<route-cache-probe></route-cache-probe>`,
+					})
+				},
+			})
+
+			html`
+			<page-route path="/">Home</page-route>
+			<page-route path="/projects" src="/projects"></page-route>
+			`.render(document.body);
+
+			const [, projectsRoute] = Array.from(document.body.children) as PageRoute[];
+
+			await goToPage('/projects');
+			await flushMicrotasks();
+
+			const firstProbe = projectsRoute.querySelector('route-cache-probe')
+			expect(moduleCallCount).toBe(1);
+			expect(firstProbe).not.toBeNull();
+			expect(routeCacheProbeConnections).toBe(1);
+			expect(routeCacheProbeDisconnections).toBe(0);
+
+			await goToPage('/');
+			await flushMicrotasks();
+
+			expect(moduleCallCount).toBe(1);
+			expect(projectsRoute.querySelector('route-cache-probe')).toBeNull();
+			expect(projectsRoute.hidden).toBe(true);
+			expect(routeCacheProbeConnections).toBe(1);
+			expect(routeCacheProbeDisconnections).toBe(1);
+
+			await goToPage('/projects');
+			await flushMicrotasks();
+
+			const secondProbe = projectsRoute.querySelector('route-cache-probe')
+			expect(moduleCallCount).toBe(1);
+			expect(projectsRoute.hidden).toBe(false);
+			expect(secondProbe).not.toBeNull();
+			expect(secondProbe).toBe(firstProbe);
+			expect(routeCacheProbeConnections).toBe(2);
+			expect(routeCacheProbeDisconnections).toBe(1);
+		})
+
+		it('restores cached route content before generic page-change listeners run', async () => {
+			registerRouteModules({
+				'/projects': () =>
+					Promise.resolve({
+						default: html`<route-cache-probe></route-cache-probe>`,
+					}),
+				'/editor': () =>
+					Promise.resolve({
+						default: html`<p>Editor</p>`,
+					}),
+			})
+
+			html`
+			<page-route path="/projects" src="/projects"></page-route>
+			<page-route path="/editor" src="/editor"></page-route>
+			`.render(document.body)
+
+			const [projectsRoute] = Array.from(document.body.children) as PageRoute[]
+
+			await goToPage('/projects')
+			await flushMicrotasks()
+
+			await goToPage('/editor')
+			await flushMicrotasks()
+
+			const observedDuringPageChange: Array<Element | null> = []
+			const unsubscribe = onPageChange(() => {
+				observedDuringPageChange.push(
+					projectsRoute.querySelector('route-cache-probe')
+				)
+			})
+
+			observedDuringPageChange.length = 0
+
+			await goToPage('/projects')
+			await flushMicrotasks()
+
+			expect(observedDuringPageChange[0]).not.toBeNull()
+			unsubscribe()
+		})
 		
 		it('should allow to nest routes', async () => {
 			html`

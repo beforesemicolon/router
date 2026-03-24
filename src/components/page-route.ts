@@ -1,19 +1,17 @@
 import { HtmlTemplate } from '@beforesemicolon/web-component'
 import {
     getPageData,
-    getRouteModule,
-    onPageChange,
+    onPage,
     registerRoute,
+    resolveRouteModule,
 } from '../pages'
 import {
+    PageRoute as PageRouteElement,
     PageRouteProps,
     PageRouteQueryProps,
-    PathChangeListener,
     Status,
 } from '../types'
 import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
-import { getPathMatchParams } from '../utils/get-path-match-params'
-import { pathStringToPattern } from '../utils/path-string-to-pattern'
 
 export default ({
     html,
@@ -57,16 +55,18 @@ export default ({
         component: unknown = null
         title = ''
         exact = true
-        #parentRoute: PageRoute | null = null
+        #parentRoute: PageRouteElement | null = null
         #search = ''
         #mountedTemplate: HtmlTemplate | null = null
+        #cachedNodes = document.createDocumentFragment()
+        #cachedContent: PageContent | null = null
+        #cachedContentKey: string | null = null
 
         get fullPath(): string {
             return (this.#parentRoute?.fullPath ?? '') + this.props.path()
         }
 
-        _clearContent = () => {
-            // Unmount Markup template if mounted
+        _destroyContent = () => {
             if (
                 this.#mountedTemplate &&
                 typeof this.#mountedTemplate.unmount === 'function'
@@ -75,22 +75,19 @@ export default ({
                 this.#mountedTemplate = null
             }
 
-            if (this.hasAttribute('src')) {
-                const content = cachedResult[this.props.src()]
+            this.innerHTML = ''
+            this.#cachedNodes = document.createDocumentFragment()
+        }
 
-                if (
-                    content &&
-                    typeof (content as HtmlTemplate).unmount === 'function'
-                ) {
-                    ;(content as HtmlTemplate).unmount()
-                } else {
-                    this.innerHTML = ''
-                }
+        _detachContent = () => {
+            while (this.firstChild) {
+                this.#cachedNodes.appendChild(this.firstChild)
             }
         }
 
         _renderContent = (content: PageContent) => {
-            this._clearContent()
+            this._destroyContent()
+            this.#cachedContent = content
 
             if (typeof (content as HtmlTemplate).render === 'function') {
                 // Markup HtmlTemplate - track for unmounting
@@ -105,63 +102,121 @@ export default ({
             this.setState({ status: Status.Loaded })
         }
 
-        _loadContent = async (
-            params: Record<string, string>,
-            query: Record<string, unknown>
-        ) => {
-            // Check if component prop is provided (explicit import)
+        _restoreCachedContent = () => {
+            if (this.#cachedNodes.hasChildNodes()) {
+                this.appendChild(this.#cachedNodes)
+                this.setState({ status: Status.Loaded })
+                return true
+            }
+
+            const content = this.#cachedContent
+
+            if (!content) {
+                return false
+            }
+
+            if (content instanceof Node) {
+                this.appendChild(content)
+                this.setState({ status: Status.Loaded })
+                return true
+            } else if (typeof (content as HtmlTemplate).render === 'function') {
+                this._renderContent(content)
+                return true
+            } else {
+                this.innerHTML = String(content)
+                this.setState({ status: Status.Loaded })
+                return true
+            }
+        }
+
+        _getMatchedKey = (pathname: string) =>
+            pathname + (this.#search ? location.search : '')
+
+        _isCachedMatch = (matchedKey: string) =>
+            this.#cachedContentKey === matchedKey
+
+        _markCachedMatch = (matchedKey: string) => {
+            this.#cachedContentKey = matchedKey
+        }
+
+        _setInactive = () => {
             const componentValue =
                 typeof this.props.component === 'function'
                     ? this.props.component()
                     : this.component
-            if (componentValue != null) {
-                if (this.mounted) {
-                    try {
-                        let content: PageContent = componentValue as PageContent
+            const canCacheRenderedContent =
+                this.hasAttribute('src') || componentValue != null
+            const didLoadFail = this.state.status() === Status.LoadingFailed
 
-                        // If component is a function, call it
-                        if (typeof content === 'function') {
-                            content = await (content as PageContentCallback)(
-                                getPageData(),
-                                params,
-                                query
-                            )
-                        }
+            if (this.state.status() !== Status.Idle) {
+                this.setState({ status: Status.Idle })
 
-                        this._renderContent(content)
-                    } catch (err) {
-                        this.setState({ status: Status.LoadingFailed })
-                        return console.error(err)
-                    }
+                if (canCacheRenderedContent && !didLoadFail) {
+                    this._detachContent()
                 }
-                return
             }
 
-            // Fallback to src attribute (dynamic loading)
-            const src = this.props.src()
-            if (!src) {
-                // No src or component, render slot content
-                this.setState({ status: Status.Loaded })
-                return
+            if (didLoadFail && canCacheRenderedContent) {
+                this._destroyContent()
+                this.#cachedContent = null
+                this.#cachedContentKey = null
             }
 
-            this.setState({ status: Status.Loading })
-            let content = cachedResult[src]
+            this.hidden = true
+        }
 
-            if (!content) {
-                try {
+        _loadContent = async (
+            params: Record<string, string>,
+            query: Record<string, unknown>
+        ) => {
+            try {
+                // Check if component prop is provided (explicit import)
+                const componentValue =
+                    typeof this.props.component === 'function'
+                        ? this.props.component()
+                        : this.component
+                if (componentValue != null) {
+                    if (this.mounted) {
+                        try {
+                            let content: PageContent =
+                                componentValue as PageContent
+
+                            // If component is a function, call it
+                            if (typeof content === 'function') {
+                                content = await (
+                                    content as PageContentCallback
+                                )(getPageData(), params, query)
+                            }
+
+                            this._renderContent(content)
+                        } catch (err) {
+                            this.setState({ status: Status.LoadingFailed })
+                            return console.error(err)
+                        }
+                    }
+                    return
+                }
+
+                // Fallback to src attribute (dynamic loading)
+                const src = this.props.src()
+                if (!src) {
+                    // No src or component, render slot content
+                    this.setState({ status: Status.Loaded })
+                    return
+                }
+
+                this.setState({ status: Status.Loading })
+                let content = cachedResult[src]
+
+                if (!content) {
                     if (!pendingLoads[src]) {
                         pendingLoads[src] = (async () => {
-                            const moduleLoader = getRouteModule(src)
                             let loadedContent: PageContent
 
-                            if (moduleLoader) {
-                                const moduleResult = await moduleLoader()
-                                loadedContent = (
-                                    moduleResult as {
-                                        default: PageContent
-                                    }
-                                ).default
+                            const routeModule = await resolveRouteModule(src)
+
+                            if (routeModule !== undefined) {
+                                loadedContent = routeModule as PageContent
                             } else if (/\.([jt])s$/.test(src)) {
                                 ;({ default: loadedContent } =
                                     await (src.startsWith('file:')
@@ -199,14 +254,9 @@ export default ({
                     }
 
                     content = await pendingLoads[src]
-                } catch (err) {
-                    this.setState({ status: Status.LoadingFailed })
-                    return console.error(err)
                 }
-            }
 
-            if (this.mounted) {
-                try {
+                if (this.mounted) {
                     if (typeof content === 'function') {
                         content = await (content as PageContentCallback)(
                             getPageData(),
@@ -216,20 +266,25 @@ export default ({
                     }
 
                     this._renderContent(content)
-                } catch (err) {
-                    this.setState({ status: Status.LoadingFailed })
-                    return console.error(err)
                 }
+            } catch (err) {
+                this.setState({ status: Status.LoadingFailed })
+                return console.error(err)
             }
         }
 
-        _handlePageChange: PathChangeListener = (pathname: string, query) => {
-            const params = getPathMatchParams(
-                pathname + (this.#search ? location.search : ''),
-                pathStringToPattern(this.fullPath, this.props.exact())
-            )
+        _handlePageChange = (
+            active: boolean,
+            location: {
+                pathname: string
+                query: Record<string, string>
+                params: Record<string, string>
+                data: Record<string, unknown>
+            }
+        ) => {
+            const matchedKey = this._getMatchedKey(location.pathname)
 
-            if (params !== null) {
+            if (active) {
                 // Load content if src or component is provided and not already loaded
                 const componentValue =
                     typeof this.props.component === 'function'
@@ -237,39 +292,49 @@ export default ({
                         : this.component
                 const hasComponent = componentValue != null
                 const hasSrc = this.hasAttribute('src') && this.props.src()
-                if (
+                const status = this.state.status()
+                const canLoad =
                     (hasSrc || hasComponent) &&
-                    this.state.status() !== Status.Loading &&
+                    !this._isCachedMatch(matchedKey) &&
+                    status === Status.Idle &&
                     this.state.status() !== Status.Loaded
+
+                if (canLoad) {
+                    this._markCachedMatch(matchedKey)
+                    this._loadContent(location.params, location.query)
+                } else if (
+                    status === Status.Idle &&
+                    this._isCachedMatch(matchedKey) &&
+                    this._restoreCachedContent()
                 ) {
-                    this._loadContent(params, query)
-                } else if (this.state.status() !== Status.Loaded) {
+                    // cached content restored
+                } else if (status === Status.LoadingFailed) {
+                    // keep the fallback rendered until the route changes
+                } else if (status !== Status.Loaded) {
                     this.setState({ status: Status.Loaded })
                 }
 
                 if (this.hasAttribute('title'))
                     document.title = this.props.title()
-
                 this.hidden = false
                 return
             }
 
-            if (this.state.status() !== Status.Idle) {
-                this.setState({ status: Status.Idle })
-                this._clearContent()
-            }
-
-            this.hidden = true
+            this._setInactive()
         }
 
         onMount() {
-            this.#parentRoute = getAncestorPageRoute(this) as PageRoute
+            this.#parentRoute = getAncestorPageRoute(this)
 
             const url = new URL(this.fullPath, location.origin)
             this.#search = url.search
             registerRoute(url.pathname, this.props.exact())
 
-            return onPageChange(this._handlePageChange)
+            return onPage(
+                this.fullPath,
+                this._handlePageChange,
+                this.props.exact()
+            )
         }
 
         render() {
@@ -293,33 +358,48 @@ export default ({
         static observedAttributes = ['key', 'value', 'src']
         key = ''
         value = ''
-        #parentRoute: PageRoute | null = null
+        #parentRoute: PageRouteElement | null = null
 
         get fullPath(): string {
             return this.#parentRoute?.fullPath ?? '/'
         }
 
-        _handlePageChange: PathChangeListener = (pathname: string, query) => {
-            const params = getPathMatchParams(
-                pathname,
-                pathStringToPattern(
-                    this.fullPath,
-                    this.#parentRoute?.props?.exact?.() ?? false
-                )
-            )
+        _handlePageChange = (
+            active: boolean,
+            location: {
+                pathname: string
+                query: Record<string, string>
+                params: Record<string, string>
+                data: Record<string, unknown>
+            }
+        ) => {
             const key = this.props.key()
             const value = this.props.value()
 
-            if (params === null) return
+            if (!active) {
+                this._setInactive()
+                return
+            }
 
-            if (query[key] === value) {
+            if (location.query[key] === value) {
+                const matchedKey = this._getMatchedKey(location.pathname)
+
                 if (
                     this.props.src() &&
-                    this.state.status() !== Status.Loading &&
-                    this.state.status() !== Status.Loaded
+                    this.state.status() === Status.Idle &&
+                    !this._isCachedMatch(matchedKey)
                 ) {
-                    this._loadContent(params, query)
-                } else {
+                    this._markCachedMatch(matchedKey)
+                    this._loadContent(location.params, location.query)
+                } else if (
+                    this.state.status() === Status.Idle &&
+                    this._isCachedMatch(matchedKey) &&
+                    this._restoreCachedContent()
+                ) {
+                    // cached content restored
+                } else if (this.state.status() === Status.LoadingFailed) {
+                    // keep the fallback rendered until the route changes
+                } else if (this.state.status() !== Status.Loaded) {
                     this.setState({ status: Status.Loaded })
                 }
 
@@ -327,17 +407,16 @@ export default ({
                 return
             }
 
-            if (this.state.status() !== Status.Idle) {
-                this.setState({ status: Status.Idle })
-                this.hasAttribute('src') && this._clearContent()
-            }
-
-            this.hidden = true
+            this._setInactive()
         }
 
         onMount() {
-            this.#parentRoute = getAncestorPageRoute(this) as PageRoute
-            return onPageChange(this._handlePageChange)
+            this.#parentRoute = getAncestorPageRoute(this)
+            return onPage(
+                this.fullPath,
+                this._handlePageChange,
+                this.#parentRoute?.props?.exact?.() ?? false
+            )
         }
     }
 

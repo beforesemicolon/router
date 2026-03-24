@@ -88,6 +88,8 @@ Web component router based on [Markup](https://markup.beforesemicolon.com/).
 
 -   **🌐 History & Hash Routing** - Support for both history API and hash-based routing
 -   **🛡️ Route Guards** - Protect routes with authentication or permission checks (sync/async)
+-   **🎯 Central Route Matching** - Resolve route activation once and notify only relevant route listeners
+-   **♻️ Cached Route Remounting** - Detach inactive route content and remount the same cached instance on revisit
 -   **⚡ Component Prop** - Use explicit imports for build-time optimization and type safety
 -   **📦 Module Registry** - Register modules for bundler optimization (Vite, Webpack, etc.)
 -   **🏷️ Route Metadata** - Attach metadata to routes (titles, breadcrumbs, permissions, custom data)
@@ -180,6 +182,14 @@ Renders content based on URL pathname:
 </page-route>
 ```
 
+`page-route` has three runtime states:
+
+-   `Idle`: route is inactive and hidden
+-   `Loading`: route matched and is loading new content, so `slot="loading"` is rendered
+-   `LoadingFailed`: route failed to load, so `slot="fallback"` is rendered
+
+When a route goes inactive, the router detaches its rendered content from the DOM and keeps the resolved route content cached. When the same route matches again, the cached content is remounted before generic page-change listeners run.
+
 #### `<page-link>`
 
 Navigation links with automatic active state:
@@ -208,6 +218,8 @@ Navigation links with automatic active state:
     <!-- Will navigate to /dashboard/overview -->
 </page-route>
 ```
+
+`page-link` still listens to generic location changes so it can keep relative links and active state in sync, but route rendering itself is now driven by the router core through route-scoped subscriptions.
 
 #### `<page-redirect>`
 
@@ -258,6 +270,58 @@ Display route data, params, or search params:
 <!-- Display page state data -->
 <page-data key="user.name">Guest</page-data>
 ```
+
+### Routing APIs
+
+The router also exposes JavaScript APIs through the package entrypoint and `window.BFS.ROUTER`.
+
+#### `goToPage(pathname, state?, title?)`
+
+Runs guards, updates history, then broadcasts the resolved location.
+
+#### `replacePage(pathname, state?, title?)`
+
+Like `goToPage`, but replaces the current history entry instead of pushing a new one.
+
+#### `onPageChange(callback)`
+
+Subscribes to every location change and receives:
+
+```ts
+(pathname, query, data) => void
+```
+
+Use this for generic listeners such as analytics, breadcrumbs, or UI that depends on every page change.
+
+#### `onPage(pathname, callback, exact = true)`
+
+Subscribes to one route pattern and receives:
+
+```ts
+(active, { pathname, query, data, params }) => void
+```
+
+This is the optimized route-aware subscription used internally by `page-route` and `page-route-query`. Only relevant subscribers are notified when a route becomes active, stays active, or becomes inactive.
+
+#### `registerRouteModules(modules)`
+
+Registers lazy route modules, typically from bundler helpers such as `import.meta.glob()`. Registered modules are resolved once and cached by the router.
+
+#### `registerGlobalGuard(guard)` and `registerRouteGuard(pathname, guard)`
+
+Registers navigation guards. Guards are evaluated for direct navigations, current-location enforcement for initial subscribers, and browser-driven `popstate` / `hashchange`.
+
+### Guard flow
+
+The current navigation lifecycle is:
+
+1. A requested or current location is resolved.
+2. Global and route guards run.
+3. If redirected, the redirected location is resolved first.
+4. Route-scoped listeners registered with `onPage(...)` run first.
+5. Generic listeners registered with `onPageChange(...)` run after that.
+
+That ordering ensures cached route content can be restored before broader page-change work runs.
 
 ### Routing APIs
 

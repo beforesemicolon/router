@@ -8,8 +8,10 @@ import {
 import { PageLinkProps, PageRedirectProps, PageRoute } from '../types'
 import { cleanPathnameOptionalEnding } from '../utils/clean-pathname-optional-ending'
 import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
+import { getPathMatchParams } from '../utils/get-path-match-params'
 import { pathnameToHash } from '../utils/hash-routing'
 import { isOnPage } from '../utils/is-on-page'
+import { pathStringToPattern } from '../utils/path-string-to-pattern'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default ({ html, WebComponent }: any) => {
@@ -30,10 +32,10 @@ export default ({ html, WebComponent }: any) => {
         exact = true
         title = ''
         payload = {}
-        #parentRoute: PageRoute | null = null
+        _parentRoute: PageRoute | null = null
 
         _parentFullPath() {
-            return this.#parentRoute?.fullPath ?? '/'
+            return this._parentRoute?.fullPath ?? '/'
         }
 
         fullPath = () => {
@@ -137,7 +139,7 @@ export default ({ html, WebComponent }: any) => {
         }
 
         onMount() {
-            this.#parentRoute = getAncestorPageRoute(this as unknown as Element)
+            this._parentRoute = getAncestorPageRoute(this as unknown as Element)
 
             return onPageChange(this._handlePageChange)
         }
@@ -183,6 +185,17 @@ export default ({ html, WebComponent }: any) => {
             const parentPathPattern = cleanPathnameOptionalEnding(
                 this._parentFullPath()
             )
+
+            if (
+                this._parentRoute &&
+                !getPathMatchParams(
+                    pathname,
+                    pathStringToPattern(parentPathPattern, false)
+                )
+            ) {
+                return
+            }
+
             const parentPath = cleanPathnameOptionalEnding(
                 parsePathname(parentPathPattern)
             )
@@ -214,6 +227,12 @@ export default ({ html, WebComponent }: any) => {
                     })
                 }
             }
+        }
+
+        onMount() {
+            this._parentRoute = getAncestorPageRoute(this as unknown as Element)
+
+            return onPageChange(this._handlePageChange)
         }
 
         render() {

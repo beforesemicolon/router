@@ -272,4 +272,25 @@ describe('PageRedirect', () => {
 
 		expect(location.pathname).toBe('/projects/abc123/editor')
 	})
+
+	it('should not redirect when leaving a dynamic parent route', async () => {
+		html`
+			<page-route path="/projects">Projects</page-route>
+			<page-route path="/projects/:projectId" exact="false">
+				<page-route path="/editor">Editor</page-route>
+				<page-route path="/dashboard">Dashboard</page-route>
+				<page-redirect path="$/dashboard" type="always"></page-redirect>
+			</page-route>
+		`.render(document.body)
+
+		await goToPage('/projects/abc123/editor')
+		await flushMicrotasks()
+
+		expect(location.pathname).toBe('/projects/abc123/editor')
+
+		await goToPage('/projects')
+		await flushMicrotasks()
+
+		expect(location.pathname).toBe('/projects')
+	})
 })

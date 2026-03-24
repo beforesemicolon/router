@@ -1,4 +1,5 @@
 import {
+    PageListener,
     PathChangeListener,
     RouteGuard,
     RouteMeta,
@@ -22,6 +23,8 @@ let routingMode: RoutingMode = 'history'
 
 // Route module registry for build-time optimization
 const routeModules: Map<string, () => Promise<unknown>> = new Map()
+const routeModuleCache: Map<string, unknown> = new Map()
+const routeModulePending: Map<string, Promise<unknown>> = new Map()
 
 // Route guards
 const routeGuards: Map<string, RouteGuard[]> = new Map()
@@ -31,6 +34,27 @@ const globalGuards: RouteGuard[] = []
 const routeMetadata: Map<string, RouteMeta> = new Map()
 
 const routeListeners: Set<PathChangeListener> = new Set()
+const pageListeners: Set<{
+    pathname: string
+    exact: boolean
+    callback: PageListener
+    lastActive?: boolean
+}> = new Set()
+let currentLocationGuardCheck: Promise<{
+    pathname: string
+    query: Record<string, string>
+    data: Record<string, unknown>
+} | null> | null = null
+let hasResolvedCurrentLocation = false
+
+const hasRegisteredGuards = () =>
+    globalGuards.length > 0 || routeGuards.size > 0
+
+const getCurrentLocationSnapshot = () => ({
+    pathname: getCurrentPathname(),
+    query: getSearchParams() as Record<string, string>,
+    data: getPageData(),
+})
 
 /**
  * Get current pathname based on routing mode
@@ -52,11 +76,11 @@ const getCurrentSearch = (): string => {
     return location.search
 }
 
-const broadcast = () => {
-    const pathname = getCurrentPathname()
-    const query = getSearchParams()
-    const data = getPageData()
-
+const notifyRouteListeners = (
+    pathname: string,
+    query: Record<string, string>,
+    data: Record<string, unknown>
+) => {
     routeListeners.forEach((cb) => {
         cb(pathname, query, data)
     })
@@ -69,14 +93,149 @@ const broadcast = () => {
     )
 }
 
+const matchPageSubscription = (
+    pathnamePattern: string,
+    exact: boolean,
+    location: {
+        pathname: string
+        query: Record<string, string>
+        data: Record<string, unknown>
+    }
+) => {
+    const url = new URL(pathnamePattern, globalThis.location.origin)
+    const params = getPathMatchParams(
+        location.pathname,
+        pathStringToPattern(url.pathname, exact)
+    )
+
+    if (params === null) {
+        return {
+            active: false,
+            params: {},
+        }
+    }
+
+    if (url.search) {
+        const targetSearch = new URLSearchParams(url.search)
+        const matchesSearch = Array.from(targetSearch.entries()).every(
+            ([key, value]) => location.query[key] === value
+        )
+
+        if (!matchesSearch) {
+            return {
+                active: false,
+                params: {},
+            }
+        }
+    }
+
+    return {
+        active: true,
+        params,
+    }
+}
+
+const notifyPageListeners = (location: {
+    pathname: string
+    query: Record<string, string>
+    data: Record<string, unknown>
+}) => {
+    pageListeners.forEach((subscription) => {
+        const match = matchPageSubscription(
+            subscription.pathname,
+            subscription.exact,
+            location
+        )
+        const shouldNotify =
+            subscription.lastActive === undefined ||
+            match.active ||
+            match.active !== subscription.lastActive
+
+        subscription.lastActive = match.active
+
+        if (!shouldNotify) {
+            return
+        }
+
+        subscription.callback(match.active, {
+            pathname: location.pathname,
+            query: location.query,
+            data: location.data,
+            params: match.params,
+        })
+    })
+}
+
+const emitLocation = (location: {
+    pathname: string
+    query: Record<string, string>
+    data: Record<string, unknown>
+}) => {
+    hasResolvedCurrentLocation = true
+    notifyPageListeners(location)
+    notifyRouteListeners(location.pathname, location.query, location.data)
+}
+
+const checkCurrentLocationGuards = async () => {
+    const { pathname, query, data } = getCurrentLocationSnapshot()
+    const guardResult = await checkGuards(pathname, query, data)
+
+    if (!guardResult.allowed) {
+        if (guardResult.redirect) {
+            const currentLocation = pathname + getCurrentSearch()
+            if (guardResult.redirect !== currentLocation) {
+                await replacePage(guardResult.redirect, data, document.title)
+            }
+        }
+
+        return null
+    }
+
+    return { pathname, query, data }
+}
+
+const resolveCurrentLocationGuards = () => {
+    if (!currentLocationGuardCheck) {
+        currentLocationGuardCheck = checkCurrentLocationGuards().finally(() => {
+            currentLocationGuardCheck = null
+        })
+    }
+
+    return currentLocationGuardCheck
+}
+
+const broadcast = () => {
+    emitLocation(getCurrentLocationSnapshot())
+}
+
+const broadcastCurrentLocation = async () => {
+    const currentLocation = await resolveCurrentLocationGuards()
+
+    if (!currentLocation) {
+        return
+    }
+
+    emitLocation(currentLocation)
+}
+
 // Listen to hash changes for hash routing mode
 window.addEventListener('hashchange', () => {
     if (routingMode === 'hash') {
+        if (hasRegisteredGuards()) {
+            void broadcastCurrentLocation()
+            return
+        }
+
         broadcast()
     }
 })
 
 window.addEventListener('popstate', () => {
+    if (hasRegisteredGuards()) {
+        void broadcastCurrentLocation()
+        return
+    }
+
     broadcast()
 })
 
@@ -115,12 +274,52 @@ export const getRouteModule = (
     return routeModules.get(path)
 }
 
+export const resolveRouteModule = async (
+    path: string
+): Promise<unknown | undefined> => {
+    if (!routeModules.has(path)) {
+        return undefined
+    }
+
+    if (routeModuleCache.has(path)) {
+        return routeModuleCache.get(path)
+    }
+
+    if (!routeModulePending.has(path)) {
+        routeModulePending.set(
+            path,
+            routeModules.get(path)!()
+                .then((moduleResult) => {
+                    const resolvedContent =
+                        (moduleResult as { default?: unknown })?.default ??
+                        moduleResult
+                    routeModuleCache.set(path, resolvedContent)
+                    return resolvedContent
+                })
+                .finally(() => {
+                    routeModulePending.delete(path)
+                })
+        )
+    }
+
+    return routeModulePending.get(path)
+}
+
+export const preloadRouteModule = async (path: string): Promise<void> => {
+    await resolveRouteModule(path)
+}
+
+export const preloadRouteModules = async (paths: string[]): Promise<void> => {
+    await Promise.all(paths.map((path) => preloadRouteModule(path)))
+}
+
 /**
  * Register a route guard
  * @param pathname Route pathname pattern (use '*' for all routes)
  * @param guard Guard function that returns boolean, string (redirect), or Promise
  */
 export const registerRouteGuard = (pathname: string, guard: RouteGuard) => {
+    hasResolvedCurrentLocation = false
     if (!routeGuards.has(pathname)) {
         routeGuards.set(pathname, [])
     }
@@ -131,6 +330,7 @@ export const registerRouteGuard = (pathname: string, guard: RouteGuard) => {
  * Register a global guard that runs for all routes
  */
 export const registerGlobalGuard = (guard: RouteGuard) => {
+    hasResolvedCurrentLocation = false
     globalGuards.push(guard)
 }
 
@@ -182,10 +382,86 @@ const checkGuards = async (
 
 export const onPageChange = (sub: PathChangeListener) => {
     routeListeners.add(sub)
-    sub(getCurrentPathname(), getSearchParams(), getPageData())
+
+    if (hasResolvedCurrentLocation || !hasRegisteredGuards()) {
+        const currentLocation = getCurrentLocationSnapshot()
+        sub(
+            currentLocation.pathname,
+            currentLocation.query,
+            currentLocation.data
+        )
+
+        return () => {
+            routeListeners.delete(sub)
+        }
+    }
+
+    void (async () => {
+        const currentLocation = await resolveCurrentLocationGuards()
+
+        if (!currentLocation || !routeListeners.has(sub)) {
+            return
+        }
+
+        sub(
+            currentLocation.pathname,
+            currentLocation.query,
+            currentLocation.data
+        )
+    })()
 
     return () => {
         routeListeners.delete(sub)
+    }
+}
+
+export const onPage = (pathname: string, sub: PageListener, exact = true) => {
+    const subscription: {
+        pathname: string
+        exact: boolean
+        callback: PageListener
+        lastActive?: boolean
+    } = {
+        pathname,
+        exact,
+        callback: sub,
+    }
+
+    pageListeners.add(subscription)
+
+    if (hasResolvedCurrentLocation || !hasRegisteredGuards()) {
+        const currentLocation = getCurrentLocationSnapshot()
+        const match = matchPageSubscription(pathname, exact, currentLocation)
+        subscription.lastActive = match.active
+        sub(match.active, {
+            pathname: currentLocation.pathname,
+            query: currentLocation.query,
+            data: currentLocation.data,
+            params: match.params,
+        })
+    } else {
+        void resolveCurrentLocationGuards().then((currentLocation) => {
+            if (!currentLocation || !pageListeners.has(subscription)) {
+                return
+            }
+
+            const match = matchPageSubscription(
+                pathname,
+                exact,
+                currentLocation
+            )
+            subscription.lastActive = match.active
+            sub(match.active, {
+                pathname: currentLocation.pathname,
+                query: currentLocation.query,
+                data: currentLocation.data,
+                params: match.params,
+            })
+        })
+    }
+
+    return () => {
+        pageListeners.delete(subscription)
     }
 }
 
@@ -270,7 +546,7 @@ export const nextPage = () => {
 }
 
 export const getPageData = <T extends Record<string, unknown>>(): T => {
-    return history.state
+    return (isObjectLiteral(history.state) ? history.state : {}) as T
 }
 
 export const updateSearchQuery = (query: Record<string, unknown> | null) => {
@@ -343,8 +619,6 @@ export const registerRoute = (
     if (options.meta) {
         routeMetadata.set(pathname, options.meta)
     }
-
-    // Registering a route is passive; broadcasts only occur during actual navigations.
 }
 
 /**
