@@ -125,6 +125,20 @@ describe('pages', () => {
 		expect(isRegisteredRoute(location.pathname)).toBeTruthy()
 		expect(parsePathname('/app/:name/details')).toBe('/app/my-app/details')
 	});
+
+	it('should get correct page params with overlapping named routes', async () => {
+		registerRoute('/businesses/:businessId/projects/:projectId/:tab', { name: 'main' })
+		registerRoute('/businesses/:businessId/:tab', { name: 'main' })
+
+		await goToPage('/businesses/bs/projects/123/tasks')
+		
+		// The first one matches and is registered first, so it should be the one providing params
+		expect(getPageParams()).toEqual({
+			businessId: 'bs',
+			projectId: '123',
+			tab: 'tasks'
+		})
+	})
     
     describe('Route Guards', () => {
         it('should allow navigation when guard returns true', async () => {

@@ -518,6 +518,42 @@ describe('Page*', () => {
 				fs.rmSync(path.resolve(__dirname, './app.page.js'))
 			})
 		})
+
+		it('enforces switch-like behavior when routes share the same name', async () => {
+			html`
+				<page-route name="main" path="/business/:businessId/projects/:projectId" exact="false">ProjectDetails</page-route>
+				<page-route name="main" path="/business/:businessId/:tab" exact="false">BusinessTab</page-route>
+			`.render(document.body);
+
+			const [r1, r2] = Array.from(document.body.children) as PageRoute[];
+
+			// 1. Visit /business/123/projects/456/summary
+			// Both match, but r1 is registered first.
+			await goToPage('/business/123/projects/456/summary');
+			await flushMicrotasks();
+
+			expect(r1.hidden).toBe(false);
+			expect(r2.hidden).toBe(true);
+			expect(r1.textContent).toContain('ProjectDetails');
+
+			// 2. Visit /business/123/overview
+			// Only r2 matches.
+			await goToPage('/business/123/overview');
+			await flushMicrotasks();
+
+			expect(r1.hidden).toBe(true);
+			expect(r2.hidden).toBe(false);
+			expect(r2.textContent).toContain('BusinessTab');
+
+			// 3. Visit /business/123/projects
+			// Only r2 matches (tab="projects").
+			await goToPage('/business/123/projects');
+			await flushMicrotasks();
+
+			expect(r1.hidden).toBe(true);
+			expect(r2.hidden).toBe(false);
+			expect(r2.textContent).toContain('BusinessTab');
+		})
 	})
 	
 	describe('PageRouteQuery', () => {

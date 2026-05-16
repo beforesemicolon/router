@@ -1,4 +1,5 @@
 import {
+    KnownRoute,
     PageListener,
     PathChangeListener,
     RouteGuard,
@@ -39,6 +40,7 @@ const pageListeners: Set<{
     exact: boolean
     callback: PageListener
     lastActive?: boolean
+    matchGroup?: string
 }> = new Set()
 let currentLocationGuardCheck: Promise<{
     pathname: string
@@ -140,12 +142,23 @@ const notifyPageListeners = (location: {
     query: Record<string, string>
     data: Record<string, unknown>
 }) => {
+    const activatedGroups = new Set<string>()
+
     pageListeners.forEach((subscription) => {
         const match = matchPageSubscription(
             subscription.pathname,
             subscription.exact,
             location
         )
+
+        if (match.active && subscription.matchGroup) {
+            if (activatedGroups.has(subscription.matchGroup)) {
+                match.active = false
+            } else {
+                activatedGroups.add(subscription.matchGroup)
+            }
+        }
+
         const shouldNotify =
             subscription.lastActive === undefined ||
             match.active ||
@@ -415,16 +428,23 @@ export const onPageChange = (sub: PathChangeListener) => {
     }
 }
 
-export const onPage = (pathname: string, sub: PageListener, exact = true) => {
+export const onPage = (
+    pathname: string,
+    sub: PageListener,
+    exact = true,
+    matchGroup?: string
+) => {
     const subscription: {
         pathname: string
         exact: boolean
         callback: PageListener
         lastActive?: boolean
+        matchGroup?: string
     } = {
         pathname,
         exact,
         callback: sub,
+        matchGroup,
     }
 
     pageListeners.add(subscription)
@@ -432,6 +452,17 @@ export const onPage = (pathname: string, sub: PageListener, exact = true) => {
     if (hasResolvedCurrentLocation || !hasRegisteredGuards()) {
         const currentLocation = getCurrentLocationSnapshot()
         const match = matchPageSubscription(pathname, exact, currentLocation)
+
+        if (match.active && matchGroup) {
+            for (const listener of pageListeners) {
+                if (listener === subscription) break
+                if (listener.matchGroup === matchGroup && listener.lastActive) {
+                    match.active = false
+                    break
+                }
+            }
+        }
+
         subscription.lastActive = match.active
         sub(match.active, {
             pathname: currentLocation.pathname,
@@ -450,6 +481,20 @@ export const onPage = (pathname: string, sub: PageListener, exact = true) => {
                 exact,
                 currentLocation
             )
+
+            if (match.active && matchGroup) {
+                for (const listener of pageListeners) {
+                    if (listener === subscription) break
+                    if (
+                        listener.matchGroup === matchGroup &&
+                        listener.lastActive
+                    ) {
+                        match.active = false
+                        break
+                    }
+                }
+            }
+
             subscription.lastActive = match.active
             sub(match.active, {
                 pathname: currentLocation.pathname,
@@ -593,10 +638,7 @@ export const updateSearchQuery = (query: Record<string, unknown> | null) => {
     broadcast()
 }
 
-const knownRoutes: Map<
-    string,
-    { pathname: string; exact: boolean; meta?: RouteMeta }
-> = new Map()
+const knownRoutes: Map<string, KnownRoute> = new Map()
 
 export const registerRoute = (
     pathname: string,
@@ -613,6 +655,7 @@ export const registerRoute = (
         pathname,
         exact,
         meta: options.meta,
+        name: options.name,
     })
 
     // Store metadata separately for easy access
@@ -637,14 +680,23 @@ export const isRegisteredRoute = (pathname: string) =>
 
 export const getPageParams = <T extends Record<string, string>>(): T => {
     const currentPathname = getCurrentPathname()
+    const activatedGroups = new Set<string>()
 
     for (const p of knownRoutes.values()) {
         const params = getPathMatchParams<T>(
             currentPathname,
-            pathStringToPattern(p.pathname)
+            pathStringToPattern(p.pathname, p.exact)
         )
 
-        if (params) return params
+        if (params) {
+            if (p.name) {
+                if (activatedGroups.has(p.name)) {
+                    continue
+                }
+                activatedGroups.add(p.name)
+            }
+            return params
+        }
     }
 
     return {} as T

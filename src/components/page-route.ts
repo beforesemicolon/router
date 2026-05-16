@@ -46,6 +46,7 @@ export default ({
             'component',
             'title',
             'exact',
+            'name',
         ]
         initialState = {
             status: Status.Idle,
@@ -55,6 +56,7 @@ export default ({
         component: unknown = null
         title = ''
         exact = true
+        name = ''
         #parentRoute: PageRouteElement | null = null
         #search = ''
         #mountedTemplate: HtmlTemplate | null = null
@@ -328,12 +330,16 @@ export default ({
 
             const url = new URL(this.fullPath, location.origin)
             this.#search = url.search
-            registerRoute(url.pathname, this.props.exact())
+            registerRoute(url.pathname, {
+                exact: this.props.exact(),
+                name: this.props.name(),
+            })
 
             return onPage(
                 this.fullPath,
                 this._handlePageChange,
-                this.props.exact()
+                this.props.exact(),
+                this.props.name()
             )
         }
 
@@ -355,7 +361,7 @@ export default ({
     }
 
     class PageRouteQuery extends PageRoute<PageRouteQueryProps> {
-        static observedAttributes = ['key', 'value', 'src']
+        static observedAttributes = ['key', 'value', 'src', 'name']
         key = ''
         value = ''
         #parentRoute: PageRouteElement | null = null
@@ -415,7 +421,8 @@ export default ({
             return onPage(
                 this.fullPath,
                 this._handlePageChange,
-                this.#parentRoute?.props?.exact?.() ?? false
+                this.#parentRoute?.props?.exact?.() ?? false,
+                this.props.name()
             )
         }
     }

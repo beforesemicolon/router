@@ -33,6 +33,14 @@ export interface RouteMeta {
 export interface RouteOptions {
     exact?: boolean
     meta?: RouteMeta
+    name?: string
+}
+
+export interface KnownRoute {
+    pathname: string
+    exact: boolean
+    meta?: RouteMeta
+    name?: string
 }
 
 export interface PageRouteProps {
@@ -41,6 +49,7 @@ export interface PageRouteProps {
     component: unknown
     exact: boolean
     title: string
+    name: string
 }
 
 export interface PageRouteQueryProps extends PageRouteProps {
@@ -82,6 +91,7 @@ export interface PageRoute extends WebComponent<PageRouteProps> {
     component: PageRouteProps['component']
     title: PageRouteProps['title']
     exact: PageRouteProps['exact']
+    name: PageRouteProps['name']
     fullPath: string
 }
 

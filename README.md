@@ -180,6 +180,10 @@ Renders content based on URL pathname:
         <page-data param="slug"></page-data>
     </page-route>
 </page-route>
+
+<!-- Switch-like behavior with name attribute -->
+<page-route name="main" path="/users/admin">Admin View</page-route>
+<page-route name="main" path="/users/:userId">User View</page-route>
 ```
 
 `page-route` has three runtime states:
