@@ -139,4 +139,6 @@ dist
 .pnp.*
 
 public
+website
+.netlify/
 GEMINI.md

@@ -1,3 +1,6 @@
-import { buildModules, buildBrowser } from '@beforesemicolon/builder'
+import { buildBrowser, buildModules } from '@beforesemicolon/builder'
 
-Promise.all([buildBrowser(), buildModules()]).catch(console.error)
+Promise.all([buildBrowser(), buildModules()]).catch((error) => {
+    console.error(error)
+    process.exit(1)
+})

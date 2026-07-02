@@ -1,0 +1,4 @@
+{
+    "watch": ["docs"],
+    "ext": "js,css,md,json,svg,png,jpg,jpeg,webp,ico"
+}

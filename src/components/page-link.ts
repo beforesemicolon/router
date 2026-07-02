@@ -155,8 +155,8 @@ export default ({ html, WebComponent }: any) => {
                 return routingMode === 'hash' && fullPath.startsWith('#')
                     ? fullPath
                     : fullPath.startsWith('#')
-                    ? fullPath.substring(1)
-                    : fullPath
+                      ? fullPath.substring(1)
+                      : fullPath
             }
 
             return html`

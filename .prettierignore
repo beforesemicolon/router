@@ -1,1 +1,4 @@
 **/*.spec.ts
+dist/
+website/
+.netlify/
