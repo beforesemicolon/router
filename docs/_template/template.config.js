@@ -1,6 +1,13 @@
 import landingHero from './layouts/landing-hero.js'
 
 export default {
+    meta: {
+        siteName: 'Router',
+        title: 'Router by Before Semicolon',
+        description:
+            'A tiny, plug-and-play router built on Web Component. Route by pathname or search query, load HTML/JS pages, and nest routes.',
+        image: '/assets/router-banner.jpg',
+    },
     markdownLayouts: {
         'landing-hero': landingHero,
     },
