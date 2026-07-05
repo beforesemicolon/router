@@ -6,7 +6,7 @@ description: A tiny Web Component router for HTML-first apps. Declare links, rou
 layout: landing
 ---
 
-::: layout landing-hero version="@beforesemicolon/router" title="Routing" title2="in plain HTML." primaryLabel="Get Started" secondaryLabel="$ npm i @beforesemicolon/router"
+::: layout landing-hero version="v1.2.0" title="Routing" title2="in plain HTML." primaryLabel="Get Started" secondaryLabel="$ npm i @beforesemicolon/router"
 
 === copy
 
