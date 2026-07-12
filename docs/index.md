@@ -60,9 +60,9 @@ JS - TXT PAGES
 
 `// THE ECOSYSTEM`
 
-## Powered by Markup & Web Component.
+## Built on Web Component & Markup.
 
-Router is built on top of Web Component, which is built on top of Markup. Same engine, modular packages, zero lock-in.
+Router is built on top of Web Component and Markup. Same engine, modular packages, zero lock-in.
 
 === product title="Markup" package="@beforesemicolon/markup" color=orange icon=reactive href="https://markup.beforesemicolon.com"
 
