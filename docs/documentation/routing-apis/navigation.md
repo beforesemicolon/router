@@ -1,20 +1,20 @@
 ---
-name: Navigation APIs
+name: "{{t.common.pageTitles.navigationApis}}"
 order: 7.1
-title: Programmatic Navigation - Router by Before Semicolon
-description: Learn how to transition paths, pass payloads, and go back/forward in history using JavaScript.
+title: "{{t.pages.documentation.routing_apis.navigation.meta.programmatic_navigation_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.routing_apis.navigation.meta.learn_how_to_transition_paths_pass_payloads_and_go_back}}"
 layout: document
 ---
 
-## Navigation APIs
+## {{t.common.pageTitles.navigationApis}}
 
-These functions trigger state updates in the browser's history session, allowing you to transition between pages programmatically.
+{{t.pages.documentation.routing_apis.navigation.content.these_functions_trigger_state_updates_in_the_browser_s_history}}
 
 ---
 
 ### `goToPage`
 
-Adds a new entry to the browser's history stack.
+{{t.pages.documentation.routing_apis.navigation.content.adds_a_new_entry_to_the_browser_s_history_stack}}
 
 ```typescript
 function goToPage(
@@ -24,7 +24,7 @@ function goToPage(
 ): Promise<void>
 ```
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { goToPage } from '@beforesemicolon/router'
@@ -40,7 +40,7 @@ await goToPage(
 
 ### `replacePage`
 
-Updates the current entry in the history stack instead of creating a new one. This is ideal for redirections so clicking the browser's back button doesn't trap the user in a redirect loop.
+{{t.pages.documentation.routing_apis.navigation.content.updates_the_current_entry_in_the_history_stack_instead_of}}
 
 ```typescript
 function replacePage(
@@ -50,7 +50,7 @@ function replacePage(
 ): Promise<void>
 ```
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { replacePage } from '@beforesemicolon/router'
@@ -64,7 +64,7 @@ if (!isAuthenticated) {
 
 ### `previousPage`
 
-Navigates back to the previous entry in the browser session. Identical to clicking the browser's back button.
+{{t.pages.documentation.routing_apis.navigation.content.navigates_back_to_the_previous_entry_in_the_browser_session}}
 
 ```typescript
 function previousPage(): void
@@ -74,7 +74,7 @@ function previousPage(): void
 
 ### `nextPage`
 
-Navigates forward to the next entry in the browser session. Identical to clicking the browser's forward button.
+{{t.pages.documentation.routing_apis.navigation.content.navigates_forward_to_the_next_entry_in_the_browser_session}}
 
 ```typescript
 function nextPage(): void

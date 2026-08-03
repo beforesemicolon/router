@@ -1,20 +1,20 @@
 ---
-name: Route Registration
+name: "{{t.pages.documentation.routing_apis.registration.meta.route_registration}}"
 order: 7.4
-title: Route Registration APIs - Router by Before Semicolon
-description: Learn how to register pathname patterns and compile paths using JavaScript.
+title: "{{t.pages.documentation.routing_apis.registration.meta.route_registration_apis_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.routing_apis.registration.meta.learn_how_to_register_pathname_patterns_and_compile_paths_using}}"
 layout: document
 ---
 
-## Route Registration APIs
+## {{t.pages.documentation.routing_apis.registration.content.route_registration_apis}}
 
-These utilities allow you to manage registered route patterns and compile parameterized paths dynamically.
+{{t.pages.documentation.routing_apis.registration.content.these_utilities_allow_you_to_manage_registered_route_patterns_and}}
 
 ---
 
 ### `registerRoute`
 
-Manually registers a route pattern with the central matching engine. This is performed automatically by `<page-route>` tags but can be done imperatively in JS.
+{{t.pages.documentation.routing_apis.registration.content.manually_registers_a_route_pattern_with_the_central_matching_engine}}
 
 ```typescript
 interface RegisterRouteOptions {
@@ -29,9 +29,9 @@ function registerRoute(
 ): void
 ```
 
--   If a boolean is passed as the second argument, it is treated as the `exact` configuration.
+-   {{t.pages.documentation.routing_apis.registration.content.if_a_boolean_is_passed_as_the_second_argument_it}}
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { registerRoute } from '@beforesemicolon/router'
@@ -49,13 +49,13 @@ registerRoute('/users/:userId', {
 
 ### `isRegisteredRoute`
 
-Checks whether a concrete pathname matches any registered route pattern.
+{{t.pages.documentation.routing_apis.registration.content.checks_whether_a_concrete_pathname_matches_any_registered_route_pattern}}
 
 ```typescript
 function isRegisteredRoute(pathname: string): boolean
 ```
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { isRegisteredRoute } from '@beforesemicolon/router'
@@ -69,13 +69,13 @@ isRegisteredRoute('/invalid-path') // false
 
 ### `parsePathname`
 
-Takes a path pattern containing parameters and compiles it into a full URL path using values from the current active location.
+{{t.pages.documentation.routing_apis.registration.content.takes_a_path_pattern_containing_parameters_and_compiles_it_into}}
 
 ```typescript
 function parsePathname(pattern: string): string
 ```
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 // Browser location is: /users/42

@@ -1,16 +1,16 @@
 ---
-name: Page Route Query
+name: "{{t.pages.documentation.web_components.page_route_query.meta.page_route_query}}"
 order: 6.2
-title: Page Route Query Component - Router by Before Semicolon
-description: Learn how to render views conditionally based on search queries using `<page-route-query>`.
+title: "{{t.pages.documentation.web_components.page_route_query.meta.page_route_query_component_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.web_components.page_route_query.meta.learn_how_to_render_views_conditionally_based_on_search_queries}}"
 layout: document
 ---
 
 ## `<page-route-query>`
 
-The `<page-route-query>` component mounts content conditionally based on URL search query parameter values (`?key=value`) instead of the URL pathname.
+{{t.pages.documentation.web_components.page_route_query.content.the_component_mounts_content_conditionally_based_on_url_search_query}}
 
-This component is ideal for creating tabbed navigation, filters, or modular modals without writing JavaScript state logic.
+{{t.pages.documentation.web_components.page_route_query.content.this_component_is_ideal_for_creating_tabbed_navigation_filters_or}}
 
 ```html
 <page-route-query key="modal" value="open">
@@ -23,20 +23,20 @@ This component is ideal for creating tabbed navigation, filters, or modular moda
 
 ---
 
-### Attributes
+### {{t.common.labels.attributes}}
 
-| Attribute | Type     | Default     | Description                                                          |
-| :-------- | :------- | :---------- | :------------------------------------------------------------------- |
-| `key`     | `string` | `undefined` | The search parameter name to watch (e.g. `"tab"`).                   |
-| `value`   | `string` | `undefined` | The exact parameter value that triggers a match.                     |
-| `src`     | `string` | `undefined` | Relative path to an external file (HTML, JS, TXT) to load on-demand. |
-| `name`    | `string` | `undefined` | Mutually exclusive query-route group identifier.                     |
+{{t.pages.documentation.web_components.page_route_query.content.attribute_type_default_description}}
+{{t.pages.documentation.web_components.page_route_query.content.line_29}}
+{{t.pages.documentation.web_components.page_route_query.content.key_string_undefined_the_search_parameter_name_to_watch_e}}
+{{t.pages.documentation.web_components.page_route_query.content.value_string_undefined_the_exact_parameter_value_that_triggers_a}}
+{{t.pages.documentation.web_components.page_route_query.content.src_string_undefined_relative_path_to_an_external_file_html}}
+{{t.pages.documentation.web_components.page_route_query.content.name_string_undefined_mutually_exclusive_query_route_group_identifier}}
 
 ---
 
-### Example: Tabbed Layout
+### {{t.pages.documentation.web_components.page_route_query.content.example_tabbed_layout}}
 
-Combine `<page-route-query>` with `<page-link>` to create fully declarative, active-state-aware tabs:
+{{t.pages.documentation.web_components.page_route_query.content.combine_with_to_create_fully_declarative_active_state_aware_tabs}}
 
 ```html
 <div class="tabs-container">
@@ -67,8 +67,8 @@ Combine `<page-route-query>` with `<page-link>` to create fully declarative, act
 
 ---
 
-### Behavior and Caching
+### {{t.pages.documentation.web_components.page_route_query.content.behavior_and_caching}}
 
--   Just like `<page-route>`, the query matcher detaches template views when the parameter doesn't match and caches them.
--   When the query matches again, the cached template is restored instantly.
--   Loader slots (`loading`) and fallbacks (`fallback`) are fully supported when using the `src` attribute.
+-   {{t.pages.documentation.web_components.page_route_query.content.just_like_the_query_matcher_detaches_template_views_when_the}}
+-   {{t.pages.documentation.web_components.page_route_query.content.when_the_query_matches_again_the_cached_template_is_restored}}
+-   {{t.pages.documentation.web_components.page_route_query.content.loader_slots_loading_and_fallbacks_fallback_are_fully_supported_when}}

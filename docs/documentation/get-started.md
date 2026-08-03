@@ -1,29 +1,29 @@
 ---
-name: Get Started
+name: "{{t.common.actions.getStarted}}"
 order: 2
-title: Get Started with Router - Before Semicolon
-description: Build your first HTML-first Router app with page-link, page-route, page-data, lazy route files, and 404 redirects.
+title: "{{t.pages.documentation.get_started.meta.get_started_with_router_before_semicolon}}"
+description: "{{t.pages.documentation.get_started.meta.build_your_first_html_first_router_app_with_page_link}}"
 layout: document
 ---
 
-## Get Started
+## {{t.common.actions.getStarted}}
 
-Setting up routing does not require a route config file, wrapper framework, or build tool. A small app can be fully routed with HTML tags, and a larger app can move each view into lazy HTML or JavaScript route files.
+{{t.pages.documentation.get_started.content.setting_up_routing_does_not_require_a_route_config_file}}
 
-Let's build a simple multi-tab dashboard step-by-step:
+{{t.pages.documentation.get_started.content.let_s_build_a_simple_multi_tab_dashboard_step_by}}
 
-## Step 1: Add the Scripts
+## {{t.pages.documentation.get_started.content.step_1_add_the_scripts}}
 
-Import the required scripts. The Router relies on `@beforesemicolon/web-component` for the underlying custom element behavior:
+{{t.pages.documentation.get_started.content.import_the_required_scripts_the_router_relies_on_beforesemicolon_web}}
 
 ```html
 <script src="https://unpkg.com/@beforesemicolon/web-component/dist/client.js"></script>
 <script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
 ```
 
-## Step 2: Declare Navigation Links
+## {{t.pages.documentation.get_started.content.step_2_declare_navigation_links}}
 
-Create navigation links using the `<page-link>` tag. Use the `path` attribute to point to specific URLs and `title` to specify the document title:
+{{t.pages.documentation.get_started.content.create_navigation_links_using_the_tag_use_the_path_attribute}}
 
 ```html
 <nav>
@@ -33,9 +33,9 @@ Create navigation links using the `<page-link>` tag. Use the `path` attribute to
 </nav>
 ```
 
-## Step 3: Define Page Routes
+## {{t.pages.documentation.get_started.content.step_3_define_page_routes}}
 
-Wrap your page views inside `<page-route>` tags. The contents of these elements will only render when the browser pathname matches their `path` attribute:
+{{t.pages.documentation.get_started.content.wrap_your_page_views_inside_tags_the_contents_of_these}}
 
 ```html
 <!-- Home Page -->
@@ -57,9 +57,9 @@ Wrap your page views inside `<page-route>` tags. The contents of these elements 
 </page-route>
 ```
 
-## Step 4: Handle 404s and Redirects
+## {{t.pages.documentation.get_started.content.step_4_handle_404s_and_redirects}}
 
-To redirect users when they navigate to an unregistered or invalid URL, define a `404` route and a `<page-redirect>` at the bottom of your routing list:
+{{t.pages.documentation.get_started.content.to_redirect_users_when_they_navigate_to_an_unregistered_or}}
 
 ```html
 <!-- 404 Fallback page -->
@@ -73,11 +73,11 @@ To redirect users when they navigate to an unregistered or invalid URL, define a
 
 ---
 
-## Next Steps
+## {{t.pages.documentation.get_started.content.next_steps}}
 
-Now that you have a basic routing layout, you can explore:
+{{t.pages.documentation.get_started.content.now_that_you_have_a_basic_routing_layout_you_can}}
 
--   **[Guide & Best Practices](./guide-best-practices/)** for route structure, redirects, guards, and production conventions.
--   **[Page Route](./web-components/page-route/)** to render params, nested views, loading states, and lazy route files.
--   **[Navigation APIs](./routing-apis/navigation/)** to navigate programmatically inside JavaScript.
--   **[Route Guards](./advanced-features/route-guards/)** to secure pages with sync or async checks.
+-   {{t.pages.documentation.get_started.content.guide_best_practices_for_route_structure_redirects_guards_and_production}}
+-   {{t.pages.documentation.get_started.content.page_route_to_render_params_nested_views_loading_states_and}}
+-   {{t.pages.documentation.get_started.content.navigation_apis_to_navigate_programmatically_inside_javascript}}
+-   {{t.pages.documentation.get_started.content.route_guards_to_secure_pages_with_sync_or_async_checks}}

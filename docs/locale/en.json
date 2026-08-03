@@ -1,0 +1,586 @@
+{
+    "_routes": {
+        "index": "/",
+        "documentation/index": "/documentation/",
+        "documentation/get-started": "/documentation/get-started",
+        "documentation/installation": "/documentation/installation",
+        "documentation/guide-best-practices": "/documentation/guide-best-practices",
+        "documentation/ai": "/documentation/ai",
+        "documentation/advanced-features/route-guards": "/documentation/advanced-features/route-guards",
+        "documentation/advanced-features/hash-routing": "/documentation/advanced-features/hash-routing",
+        "documentation/advanced-features/module-registry": "/documentation/advanced-features/module-registry",
+        "documentation/advanced-features/route-metadata": "/documentation/advanced-features/route-metadata",
+        "documentation/advanced-features/component-prop": "/documentation/advanced-features/component-prop",
+        "documentation/routing-apis/navigation": "/documentation/routing-apis/navigation",
+        "documentation/routing-apis/subscribing": "/documentation/routing-apis/subscribing",
+        "documentation/routing-apis/params-queries": "/documentation/routing-apis/params-queries",
+        "documentation/routing-apis/registration": "/documentation/routing-apis/registration",
+        "documentation/web-components/page-route": "/documentation/web-components/page-route",
+        "documentation/web-components/page-route-query": "/documentation/web-components/page-route-query",
+        "documentation/web-components/page-link": "/documentation/web-components/page-link",
+        "documentation/web-components/page-redirect": "/documentation/web-components/page-redirect",
+        "documentation/web-components/page-data": "/documentation/web-components/page-data"
+    },
+    "common": {
+        "navigation": {
+            "home": "Home",
+            "content": "Content",
+            "features": "Features",
+            "code": "Code",
+            "install": "Install",
+            "documentation": "Documentation",
+            "docs": "Docs",
+            "learningResources": "Learning Resources",
+            "aboutBeforeSemicolon": "About Before Semicolon",
+            "openSource": "Open Source",
+            "website": "Website",
+            "blog": "Blog",
+            "youtubeChannel": "YouTube Channel"
+        },
+        "actions": {
+            "editDoc": "edit this doc",
+            "getStarted": "Get Started",
+            "readDocs": "Read the Docs",
+            "copy": "Copy",
+            "copied": "Copied",
+            "copyCode": "Copy code",
+            "codeCopied": "Code copied",
+            "commandCopied": "Command copied",
+            "copyInstallCommand": "Copy {{manager}} install command",
+            "previousExample": "Previous example",
+            "nextExample": "Next example"
+        },
+        "accessibility": {
+            "installationPackageManager": "Installation package manager",
+            "goToSlide": "Go to slide {{number}}",
+            "mobileMenu": {
+                "open": "Open documentation menu",
+                "close": "Close documentation menu"
+            }
+        },
+        "labels": {
+            "example": "Example",
+            "exampleUppercase": "EXAMPLE",
+            "attributes": "Attributes"
+        },
+        "pageTitles": {
+            "componentProp": "Component Prop",
+            "hashRouting": "Hash Routing",
+            "moduleRegistry": "Module Registry",
+            "routeGuards": "Route Guards",
+            "routeMetadata": "Route Metadata",
+            "aiGuide": "AI Guide",
+            "guideBestPractices": "Guide & Best Practices",
+            "overview": "What is Router?",
+            "installation": "Installation",
+            "navigationApis": "Navigation APIs",
+            "subscribingApis": "Subscribing APIs"
+        },
+        "messages": {
+            "unsubscribeCleanup": "Returns a **cleanup function** to unsubscribe."
+        },
+        "footer": {
+            "description": "A tiny, plug-and-play router for pathname, query, and hybrid navigation with Web Component support.",
+            "copyright": "Copyright &copy; 2026 Before Semicolon. All rights reserved."
+        }
+    },
+    "pages": {
+        "documentation": {
+            "advanced_features": {
+                "component_prop": {
+                    "meta": {
+                        "component_prop_router_by_before_semicolon": "Component Prop - Router by Before Semicolon",
+                        "learn_how_to_pass_component_references_directly_to_routes_for": "Learn how to pass component references directly to routes for type safety and bundler compilation."
+                    },
+                    "content": {
+                        "instead_of_using_the_src_attribute_with_file_path_strings": "Instead of using the `src` attribute with file path strings, `<page-route>` allows you to pass component constructor/class references directly using the `component` property.",
+                        "this_approach_is_highly_recommended_when_bundling_applications_as_it": "This approach is highly recommended when bundling applications, as it provides compile-time type-checking and robust source mapping.",
+                        "benefits_of_the_component_prop": "Benefits of the `component` Prop",
+                        "type_safety_typescript_validates_class_references_at_compile_time": "**Type Safety:** TypeScript validates class references at compile-time.",
+                        "ide_assistance_autocomplete_and_symbol_renaming_work_natively": "**IDE Assistance:** Autocomplete and symbol renaming work natively.",
+                        "tree_shaking_static_imports_allow_bundlers_to_shake_out_unused": "**Tree-Shaking:** Static imports allow bundlers to shake out unused code.",
+                        "hmr_support_faster_hot_module_replacements_during_development": "**HMR Support:** Faster hot-module replacements during development.",
+                        "component_formats": "Component Formats",
+                        "the_value_passed_to_the_component_property_can_be": "The value passed to the `component` property can be:",
+                        "text_1_plain_html_string": "1. Plain HTML String",
+                        "text_2_markup_template_literal": "2. Markup Template Literal",
+                        "text_3_native_dom_node": "3. Native DOM Node",
+                        "text_4_contextual_loader_function": "4. Contextual Loader Function",
+                        "a_function_that_receives_navigation_data_path_params_and_search": "A function that receives navigation data, path params, and search queries, and returns any of the above formats:"
+                    }
+                },
+                "hash_routing": {
+                    "meta": {
+                        "hash_routing_router_by_before_semicolon": "Hash Routing - Router by Before Semicolon",
+                        "learn_how_to_set_up_url_hash_based_routing_path": "Learn how to set up URL hash-based routing (#/path) for static hosting environments."
+                    },
+                    "content": {
+                        "the_router_supports_both_standard_html5_history_api_routing_pathnames": "The router supports both standard HTML5 History API routing (pathnames) and Hash-based routing (`#/path`).",
+                        "hash_routing_is_perfect_for_static_file_hosting_environments_like": "Hash routing is perfect for static file hosting environments (like GitHub Pages or Netlify static deploys) because it bypasses the need for server-side redirection fallback configurations.",
+                        "configures_the_router_s_active_mode_accepts_history_default_or": "Configures the router's active mode. Accepts `\"history\"` (default) or `\"hash\"`.",
+                        "retrieves_the_currently_active_routing_mode": "Retrieves the currently active routing mode.",
+                        "benefits_of_hash_routing": "Benefits of Hash Routing",
+                        "zero_server_config_standard_servers_return_a_404_error_when": "**Zero Server Config:** Standard servers return a 404 error when accessing a direct path like `/about` on page refresh unless configured to rewrite to `index.html`. Hash routing is fully client-side and requires no server-side fallback rules.",
+                        "static_hosting_highly_compatible_with_static_environments_like_aws_s3": "**Static Hosting:** Highly compatible with static environments like AWS S3 buckets, GitHub Pages, or Netlify.",
+                        "legacy_compatibility_works_flawlessly_in_older_web_browser_engines": "**Legacy Compatibility:** Works flawlessly in older web browser engines."
+                    }
+                },
+                "module_registry": {
+                    "meta": {
+                        "module_registry_router_by_before_semicolon": "Module Registry - Router by Before Semicolon",
+                        "learn_how_to_pre_register_page_modules_for_code_splitting": "Learn how to pre-register page modules for code splitting and bundler integration."
+                    },
+                    "content": {
+                        "when_building_large_scale_applications_with_modern_asset_bundlers_like": "When building large-scale applications with modern asset bundlers (like Vite or Webpack), dynamic string imports in the `src` attribute (e.g. `<page-route src=\"./pages/home.js\">`) are difficult for bundlers to trace during static analysis.",
+                        "the_module_registry_allows_you_to_pre_register_a_map": "The **Module Registry** allows you to pre-register a map of page paths to their loader functions, enabling proper code-splitting and asset tracing in your build pipeline.",
+                        "registers_a_map_of_paths_to_their_module_loader_functions": "Registers a map of paths to their module loader functions.",
+                        "integration_examples": "Integration Examples",
+                        "vite_supports_importing_multiple_files_matching_a_glob_pattern_automatically": "Vite supports importing multiple files matching a glob pattern automatically:",
+                        "webpack_uses_require_context_to_trace_directory_structures": "Webpack uses `require.context` to trace directory structures:",
+                        "text_3_manual_registration": "3. Manual Registration",
+                        "you_can_also_manually_map_imports": "You can also manually map imports:",
+                        "usage_in_html": "Usage in HTML",
+                        "once_modules_are_registered_define_your_tags_as_normal_the": "Once modules are registered, define your `<page-route>` tags as normal. The router will intercept the `src` string and resolve it using the pre-registered loader instead of triggering a generic browser fetch request:",
+                        "retrieves_a_registered_module_loader_by_its_path": "Retrieves a registered module loader by its path.",
+                        "preloading_registered_modules": "Preloading Registered Modules",
+                        "registered_modules_can_be_preloaded_before_the_user_navigates_to": "Registered modules can be preloaded before the user navigates to them."
+                    }
+                },
+                "route_guards": {
+                    "meta": {
+                        "route_guards_router_by_before_semicolon": "Route Guards - Router by Before Semicolon",
+                        "learn_how_to_secure_paths_and_perform_checks_before_transitioning": "Learn how to secure paths and perform checks before transitioning using route guards."
+                    },
+                    "content": {
+                        "route_guards_allow_you_to_protect_routes_with_authentication_checks": "Route Guards allow you to protect routes with authentication checks, authorization, or other custom logic.",
+                        "guards_can_block_navigation_entirely_or_redirect_the_user_to": "Guards can block navigation entirely or redirect the user to a different location.",
+                        "guard_return_values": "Guard Return Values",
+                        "a_guard_function_can_return": "A guard function can return:",
+                        "true_allow_the_navigation": "`true`: Allow the navigation.",
+                        "false_block_the_navigation_remains_on_the_current_page": "`false`: Block the navigation (remains on the current page).",
+                        "string_redirects_the_user_to_the_specified_path_string": "`string`: Redirects the user to the specified path string.",
+                        "promise_async_checks_e_g_database_fetches_are_fully_supported": "`Promise<boolean | string>`: Async checks (e.g. database fetches) are fully supported.",
+                        "global_guards": "Global Guards",
+                        "global_guards_execute_on_every_navigation_event_before_any_route": "Global guards execute on _every_ navigation event, before any route-specific guards.",
+                        "route_specific_guards": "Route-Specific Guards",
+                        "route_specific_guards_run_only_when_navigating_to_a_path": "Route-specific guards run only when navigating to a path that matches the registered pattern.",
+                        "guard_execution_order": "Guard Execution Order",
+                        "global_guards_executed_in_the_order_they_were_registered": "**Global Guards:** Executed in the order they were registered.",
+                        "route_specific_guards_executed_in_the_order_they_were_registered": "**Route-Specific Guards:** Executed in the order they were registered.",
+                        "the_first_guard_that_returns_false_or_a_redirect_string": "The _first_ guard that returns `false` or a redirect `string` stops execution immediately; subsequent guards are skipped."
+                    }
+                },
+                "route_metadata": {
+                    "meta": {
+                        "route_metadata_router_by_before_semicolon": "Route Metadata - Router by Before Semicolon",
+                        "learn_how_to_attach_permissions_layouts_or_custom_page_properties": "Learn how to attach permissions, layouts, or custom page properties to routes."
+                    },
+                    "content": {
+                        "you_can_attach_custom_metadata_such_as_page_layouts_breadcrumbs": "You can attach custom metadata (such as page layouts, breadcrumbs, permissions, or access roles) when registering routes.",
+                        "metadata_is_stored_by_the_registered_route_pattern_use_the": "Metadata is stored by the registered route pattern. Use the same pattern when calling `getRouteMeta`.",
+                        "attaching_metadata": "Attaching Metadata",
+                        "pass_metadata_inside_the_options_configuration_of_registerroute": "Pass metadata inside the options configuration of `registerRoute`:",
+                        "retrieving_metadata_getroutemeta": "Retrieving Metadata (`getRouteMeta`)",
+                        "retrieves_the_metadata_object_associated_with_a_registered_path_pattern": "Retrieves the metadata object associated with a registered path pattern.",
+                        "common_use_cases": "Common Use Cases",
+                        "text_1_dynamic_document_titles": "1. Dynamic Document Titles",
+                        "update_the_browser_document_title_dynamically_upon_page_transitions": "Update the browser document title dynamically upon page transitions:",
+                        "text_2_guarding_permissions": "2. Guarding Permissions",
+                        "check_permissions_dynamically_inside_a_route_guard": "Check permissions dynamically inside a route guard:"
+                    }
+                }
+            },
+            "ai": {
+                "meta": {
+                    "ai_guide_for_before_semicolon_router": "AI Guide for Before Semicolon Router",
+                    "a_compact_reference_for_ai_assistants_and_developers_generating_router": "A compact reference for AI assistants and developers generating Router code, with accurate components, APIs, patterns, and constraints."
+                },
+                "content": {
+                    "use_this_page_as_the_compact_reference_when_generating_examples": "Use this page as the compact reference when generating examples, tutorials, migrations, or application code for `@beforesemicolon/router`.",
+                    "package_purpose": "Package Purpose",
+                    "beforesemicolon_router_is_an_html_first_routing_library_built_with": "`@beforesemicolon/router` is an HTML-first routing library built with Web Components. It provides custom elements for navigation and route rendering, plus a small JavaScript API for programmatic navigation, subscriptions, guards, route modules, metadata, query updates, and hash routing.",
+                    "required_imports": "Required Imports",
+                    "for_bundled_apps": "For bundled apps:",
+                    "when_using_exported_apis": "When using exported APIs:",
+                    "for_direct_browser_use_load_web_component_first": "For direct browser use, load Web Component first:",
+                    "cdn_apis_are_available_at_bfs_router": "CDN APIs are available at `BFS.ROUTER`.",
+                    "custom_elements": "Custom Elements",
+                    "use_these_elements_exactly": "Use these elements exactly:",
+                    "route_patterns": "Route Patterns",
+                    "use_name_for_dynamic_params": "Use `:name` for dynamic params:",
+                    "set_exact_false_for_layout_routes_that_should_remain_active": "Set `exact=\"false\"` for layout routes that should remain active for nested paths:",
+                    "link_rules": "Link Rules",
+                    "use_path_for_path_navigation_and_search_for_query_updates": "Use `path` for path navigation and `search` for query updates. Use `keep-current-search` when updating one query key while preserving the others.",
+                    "use_inside_a_nested_route_to_reference_the_closest_parent": "Use `$` inside a nested route to reference the closest parent route path:",
+                    "use_to_reference_the_current_browser_pathname": "Use `~` to reference the current browser pathname:",
+                    "lazy_route_content": "Lazy Route Content",
+                    "src_can_load_html_text_or_javascript_modules_javascript_modules": "`src` can load HTML, text, or JavaScript modules. JavaScript modules must default export a string, a DOM `Node`, a Markup `HtmlTemplate`, or a function that receives `(data, params, query)`.",
+                    "programmatic_navigation": "Programmatic Navigation",
+                    "gotopage_and_replacepage_are_async_and_accept_an_object_literal": "`goToPage` and `replacePage` are async and accept an object-literal state payload.",
+                    "guards": "Guards",
+                    "registerglobalguard_and_registerrouteguard_register_guards_and_do_not_return_cleanup": "`registerGlobalGuard` and `registerRouteGuard` register guards and do not return cleanup functions. A guard returns:",
+                    "true_to_allow_navigation": "`true` to allow navigation.",
+                    "false_to_block_navigation": "`false` to block navigation.",
+                    "a_path_string_to_redirect": "A path string to redirect.",
+                    "a_promise_resolving_to_one_of_those_values": "A promise resolving to one of those values.",
+                    "query_data": "Query Data",
+                    "getsearchparams_parses_search_values_with_the_router_json_parser_values": "`getSearchParams` parses search values with the router JSON parser. Values written with `updateSearchQuery` round-trip through JSON stringification.",
+                    "avoid_these_mistakes": "Avoid These Mistakes",
+                    "do_not_use_react_router_syntax_such_as_or_usenavigate": "Do not use React Router syntax such as `<Route>` or `useNavigate`.",
+                    "do_not_claim_route_guard_registration_returns_an_unsubscribe_function": "Do not claim route guard registration returns an unsubscribe function.",
+                    "do_not_use_href_on_use_path_and_search": "Do not use `href` on `<page-link>`; use `path` and `search`.",
+                    "do_not_use_component_as_a_string_in_html_component": "Do not use `component=\"...\"` as a string in HTML. `component` is a property for JavaScript-rendered routes.",
+                    "do_not_use_route_state_for_permanent_data_prefer_params": "Do not use route state for permanent data. Prefer params, query strings, or application storage."
+                }
+            },
+            "get_started": {
+                "meta": {
+                    "get_started_with_router_before_semicolon": "Get Started with Router - Before Semicolon",
+                    "build_your_first_html_first_router_app_with_page_link": "Build your first HTML-first Router app with page-link, page-route, page-data, lazy route files, and 404 redirects."
+                },
+                "content": {
+                    "setting_up_routing_does_not_require_a_route_config_file": "Setting up routing does not require a route config file, wrapper framework, or build tool. A small app can be fully routed with HTML tags, and a larger app can move each view into lazy HTML or JavaScript route files.",
+                    "let_s_build_a_simple_multi_tab_dashboard_step_by": "Let's build a simple multi-tab dashboard step-by-step:",
+                    "step_1_add_the_scripts": "Step 1: Add the Scripts",
+                    "import_the_required_scripts_the_router_relies_on_beforesemicolon_web": "Import the required scripts. The Router relies on `@beforesemicolon/web-component` for the underlying custom element behavior:",
+                    "step_2_declare_navigation_links": "Step 2: Declare Navigation Links",
+                    "create_navigation_links_using_the_tag_use_the_path_attribute": "Create navigation links using the `<page-link>` tag. Use the `path` attribute to point to specific URLs and `title` to specify the document title:",
+                    "step_3_define_page_routes": "Step 3: Define Page Routes",
+                    "wrap_your_page_views_inside_tags_the_contents_of_these": "Wrap your page views inside `<page-route>` tags. The contents of these elements will only render when the browser pathname matches their `path` attribute:",
+                    "step_4_handle_404s_and_redirects": "Step 4: Handle 404s and Redirects",
+                    "to_redirect_users_when_they_navigate_to_an_unregistered_or": "To redirect users when they navigate to an unregistered or invalid URL, define a `404` route and a `<page-redirect>` at the bottom of your routing list:",
+                    "next_steps": "Next Steps",
+                    "now_that_you_have_a_basic_routing_layout_you_can": "Now that you have a basic routing layout, you can explore:",
+                    "guide_best_practices_for_route_structure_redirects_guards_and_production": "**[Guide & Best Practices](./guide-best-practices/)** for route structure, redirects, guards, and production conventions.",
+                    "page_route_to_render_params_nested_views_loading_states_and": "**[Page Route](./web-components/page-route/)** to render params, nested views, loading states, and lazy route files.",
+                    "navigation_apis_to_navigate_programmatically_inside_javascript": "**[Navigation APIs](./routing-apis/navigation/)** to navigate programmatically inside JavaScript.",
+                    "route_guards_to_secure_pages_with_sync_or_async_checks": "**[Route Guards](./advanced-features/route-guards/)** to secure pages with sync or async checks."
+                }
+            },
+            "guide_best_practices": {
+                "meta": {
+                    "router_guide_best_practices_router_by_before_semicolon": "Router Guide & Best Practices - Router by Before Semicolon",
+                    "practical_guidance_for_building_maintainable_html_first_routing_with_before": "Practical guidance for building maintainable HTML-first routing with Before Semicolon Router, including route structure, redirects, guards, links, and lazy loading."
+                },
+                "content": {
+                    "router_works_best_when_the_url_is_treated_as_the": "Router works best when the URL is treated as the source of truth for navigation, filters, tabs, and shareable UI state. Keep route declarations close to the layout they control, then use the JavaScript API only for behavior that cannot be expressed cleanly in HTML.",
+                    "start_with_declarative_routes": "Start With Declarative Routes",
+                    "for_most_pages_use_and_directly_in_the_document_this": "For most pages, use `<page-route>`, `<page-link>`, and `<page-redirect>` directly in the document. This keeps the app understandable from the HTML structure alone.",
+                    "use_nested_routes_for_layouts": "Use Nested Routes For Layouts",
+                    "parent_routes_are_useful_for_sections_that_share_navigation_headings": "Parent routes are useful for sections that share navigation, headings, or route data. Child paths extend the nearest parent route.",
+                    "use_query_routes_for_ui_state": "Use Query Routes For UI State",
+                    "use_when_the_view_is_still_the_same_page_but": "Use `<page-route-query>` when the view is still the same page but a query value should choose a tab, drawer, filter, or modal.",
+                    "prefer_component_for_typed_apps": "Prefer `component` For Typed Apps",
+                    "if_you_are_rendering_routes_from_markup_or_web_component": "If you are rendering routes from Markup or Web Component code, the `component` property avoids string-based dynamic imports and gives bundlers a direct reference.",
+                    "register_guards_before_navigation": "Register Guards Before Navigation",
+                    "guards_run_before_route_listeners_and_route_components_are_notified": "Guards run before route listeners and route components are notified. Register them during application startup, before rendering protected routes or triggering navigation.",
+                    "keep_404s_last": "Keep 404s Last",
+                    "checks_the_routes_that_have_been_registered_put_fallback_redirects": "`<page-redirect>` checks the routes that have been registered. Put fallback redirects after the valid `<page-route>` declarations they depend on.",
+                    "choose_history_or_hash_routing_early": "Choose History Or Hash Routing Early",
+                    "history_routing_gives_clean_urls_and_is_the_default_hash": "History routing gives clean URLs and is the default. Hash routing is useful when your host cannot rewrite unknown paths back to `index.html`.",
+                    "production_checklist": "Production Checklist",
+                    "give_every_meaningful_route_a_document_title_through_or_your": "Give every meaningful route a document `title` through `<page-link>`, `<page-route>`, or your own `onPageChange` handler.",
+                    "use_route_params_for_resource_identity_and_search_params_for": "Use route params for resource identity and search params for shareable view state.",
+                    "keep_route_modules_small_and_lazy_load_secondary_screens": "Keep route modules small and lazy-load secondary screens.",
+                    "use_name_on_overlapping_route_groups_so_only_the_first": "Use `name` on overlapping route groups so only the first matching route renders.",
+                    "use_payload_only_for_transient_navigation_state_persist_important_state": "Use `payload` only for transient navigation state. Persist important state in the URL or application data store."
+                }
+            },
+            "overview": {
+                "meta": {
+                    "what_is_router_html_first_web_component_routing": "What is Router? - HTML-First Web Component Routing",
+                    "learn_how_before_semicolon_router_brings_declarative_lazy_guarded_framework": "Learn how Before Semicolon Router brings declarative, lazy, guarded, framework-agnostic routing to HTML, Web Components, SPAs, MPAs, and hybrid apps."
+                },
+                "content": {
+                    "beforesemicolon_router_is_a_web_component_based_routing_solution_for": "`@beforesemicolon/router` is a Web Component based routing solution for single-page apps, multi-page apps, and hybrid sites that want client-side navigation without adopting a framework router.",
+                    "it_uses_custom_elements_so_routes_live_in_the_same": "It uses custom elements, so routes live in the same HTML structure as the views they control. You can start with static markup, add lazy route files as the app grows, and reach for JavaScript APIs only when you need guards, analytics, programmatic navigation, or bundler integration.",
+                    "execution_model": "Execution Model",
+                    "the_router_resolves_page_activations_through_a_central_matching_engine": "The router resolves page activations through a central matching engine:",
+                    "single_matcher_the_url_is_parsed_and_matched_once_per": "**Single Matcher:** The URL is parsed and matched once per navigation event.",
+                    "unified_guards_global_and_route_specific_guards_run_exactly_once": "**Unified Guards:** Global and route-specific guards run exactly once for each transition, avoiding redundant checks.",
+                    "surgical_notifications_only_route_aware_elements_affected_by_the_url": "**Surgical Notifications:** Only route-aware elements affected by the URL change are notified, preventing unnecessary re-renders.",
+                    "cached_remounts_when_a_route_becomes_inactive_its_dom_nodes": "**Cached Remounts:** When a route becomes inactive, its DOM nodes are detached and kept in memory. Navigating back remounts the cached content instantly instead of recreating it.",
+                    "key_features": "Key Features",
+                    "declarative_navigation_change_pages_and_update_document_titles_via_the": "**Declarative Navigation:** Change pages and update document titles via the `<page-link>` tag.",
+                    "path_matching_load_inline_views_or_external_route_files_using": "**Path Matching:** Load inline views or external route files using `<page-route>` with dynamic parameters (e.g., `:id`).",
+                    "search_parameter_rendering_react_to_url_query_strings_cleanly_using": "**Search Parameter Rendering:** React to URL query strings cleanly using `<page-route-query>`.",
+                    "intelligent_fallbacks_set_up_default_locations_or_catch_all_404": "**Intelligent Fallbacks:** Set up default locations or catch-all 404 pages using `<page-redirect>`.",
+                    "metadata_accessibility_access_pathname_params_query_values_or_state_payload": "**Metadata Accessibility:** Access pathname params, query values, or state payload details instantly using `<page-data>`.",
+                    "advanced_control_secure_routes_with_async_route_guards_swap_between": "**Advanced Control:** Secure routes with async Route Guards, swap between History and Hash routing modes, and integrate with module bundlers."
+                }
+            },
+            "installation": {
+                "meta": {
+                    "install_router_before_semicolon": "Install Router - Before Semicolon",
+                    "install_beforesemicolon_router_with_npm_yarn_pnpm_or_direct_browser": "Install @beforesemicolon/router with npm, yarn, pnpm, or direct browser script tags for HTML-first Web Component routing."
+                },
+                "content": {
+                    "beforesemicolon_router_works_in_bundled_applications_and_directly_in_modern": "`@beforesemicolon/router` works in bundled applications and directly in modern browsers through CDN script tags.",
+                    "package_managers": "Package Managers",
+                    "install_the_package_via_your_preferred_package_manager_to_bundle": "Install the package via your preferred package manager to bundle it with Vite, Webpack, or Esbuild:",
+                    "direct_cdn_zero_build": "Direct CDN (Zero-Build)",
+                    "for_simple_html_prototypes_or_build_less_applications_load_the": "For simple HTML prototypes or build-less applications, load the compiled browser bundles directly from `unpkg.com` or `jsDelivr`:",
+                    "locking_versions": "Locking Versions",
+                    "it_is_highly_recommended_to_lock_the_version_in_production": "It is highly recommended to lock the version in production environments to avoid breaking changes when new updates are published:",
+                    "global_namespace": "Global Namespace",
+                    "when_loaded_via_a_script_tag_all_exported_classes_routing": "When loaded via a script tag, all exported classes, routing functions, and utilities are available under the global `BFS` window object:"
+                }
+            },
+            "routing_apis": {
+                "navigation": {
+                    "meta": {
+                        "programmatic_navigation_router_by_before_semicolon": "Programmatic Navigation - Router by Before Semicolon",
+                        "learn_how_to_transition_paths_pass_payloads_and_go_back": "Learn how to transition paths, pass payloads, and go back/forward in history using JavaScript."
+                    },
+                    "content": {
+                        "these_functions_trigger_state_updates_in_the_browser_s_history": "These functions trigger state updates in the browser's history session, allowing you to transition between pages programmatically.",
+                        "adds_a_new_entry_to_the_browser_s_history_stack": "Adds a new entry to the browser's history stack.",
+                        "updates_the_current_entry_in_the_history_stack_instead_of": "Updates the current entry in the history stack instead of creating a new one. This is ideal for redirections so clicking the browser's back button doesn't trap the user in a redirect loop.",
+                        "navigates_back_to_the_previous_entry_in_the_browser_session": "Navigates back to the previous entry in the browser session. Identical to clicking the browser's back button.",
+                        "navigates_forward_to_the_next_entry_in_the_browser_session": "Navigates forward to the next entry in the browser session. Identical to clicking the browser's forward button."
+                    }
+                },
+                "params_queries": {
+                    "meta": {
+                        "params_queries": "Params & Queries",
+                        "params_queries_apis_router_by_before_semicolon": "Params & Queries APIs - Router by Before Semicolon",
+                        "learn_how_to_retrieve_pathname_parameters_read_search_queries_and": "Learn how to retrieve pathname parameters, read search queries, and update search queries."
+                    },
+                    "content": {
+                        "params_queries_apis": "Params & Queries APIs",
+                        "these_functions_allow_you_to_read_and_write_parameters_or": "These functions allow you to read and write parameters or history states programmatically.",
+                        "retrieves_an_object_containing_all_parameters_parsed_from_the_current": "Retrieves an object containing all parameters parsed from the current URL pathname.",
+                        "retrieves_parsed_url_query_parameters_as_a_key_value_object": "Retrieves parsed URL query parameters as a key-value object. Supports automatic JSON parsing for complex query objects.",
+                        "updates_or_clears_url_search_parameters_updates_are_made_in": "Updates or clears URL search parameters. Updates are made in-place using history replacement (does not add a new entry to the browser back stack).",
+                        "pass_null_to_clear_all_query_parameters_from_the_url": "Pass `null` to clear all query parameters from the URL.",
+                        "retrieves_the_current_history_state_payload_object": "Retrieves the current history state payload object."
+                    }
+                },
+                "registration": {
+                    "meta": {
+                        "route_registration": "Route Registration",
+                        "route_registration_apis_router_by_before_semicolon": "Route Registration APIs - Router by Before Semicolon",
+                        "learn_how_to_register_pathname_patterns_and_compile_paths_using": "Learn how to register pathname patterns and compile paths using JavaScript."
+                    },
+                    "content": {
+                        "route_registration_apis": "Route Registration APIs",
+                        "these_utilities_allow_you_to_manage_registered_route_patterns_and": "These utilities allow you to manage registered route patterns and compile parameterized paths dynamically.",
+                        "manually_registers_a_route_pattern_with_the_central_matching_engine": "Manually registers a route pattern with the central matching engine. This is performed automatically by `<page-route>` tags but can be done imperatively in JS.",
+                        "if_a_boolean_is_passed_as_the_second_argument_it": "If a boolean is passed as the second argument, it is treated as the `exact` configuration.",
+                        "checks_whether_a_concrete_pathname_matches_any_registered_route_pattern": "Checks whether a concrete pathname matches any registered route pattern.",
+                        "takes_a_path_pattern_containing_parameters_and_compiles_it_into": "Takes a path pattern containing parameters and compiles it into a full URL path using values from the current active location."
+                    }
+                },
+                "subscribing": {
+                    "meta": {
+                        "subscription_observers_router_by_before_semicolon": "Subscription Observers - Router by Before Semicolon",
+                        "learn_how_to_observe_route_patterns_or_listen_to_global": "Learn how to observe route patterns or listen to global navigation events."
+                    },
+                    "content": {
+                        "these_apis_notify_your_javascript_code_when_url_modifications_or": "These APIs notify your JavaScript code when URL modifications or navigation events occur.",
+                        "subscribes_to_a_specific_route_pattern_the_callback_triggers_whenever": "Subscribes to a specific route pattern. The callback triggers whenever the matched state transitions (e.g., active to inactive, or parameters change).",
+                        "active_true_if_the_current_location_matches_the_pattern": "**`active`:** `true` if the current location matches the pattern.",
+                        "location_object_containing_pathname_query_search_params_data_history_state": "**`location`:** Object containing `pathname`, `query` (search params), `data` (history state), and parsed `params`.",
+                        "use_exact_false_to_subscribe_to_a_layout_path_and": "Use `exact = false` to subscribe to a layout path and its descendants:",
+                        "subscribes_to_all_global_location_transitions_triggered_after_any_navigation": "Subscribes to all global location transitions. Triggered after any navigation event, regardless of which paths are active.",
+                        "helper_to_verify_if_a_specific_path_matches_the_current": "Helper to verify if a specific path matches the current browser location.",
+                        "exact_if_false_evaluates_to_true_if_the_browser_location": "**`exact`:** If `false`, evaluates to `true` if the browser location starts with the specified path (treating subpaths as matches).",
+                        "examples": "Examples",
+                        "search_query_matches_inside_isonpage_are_order_sensitive_parameters_must": "Search query matches inside `isOnPage` are order-sensitive. Parameters must appear in the exact order specified."
+                    }
+                }
+            },
+            "web_components": {
+                "page_data": {
+                    "meta": {
+                        "page_data": "Page Data",
+                        "page_data_component_router_by_before_semicolon": "Page Data Component - Router by Before Semicolon",
+                        "learn_how_to_display_pathname_params_search_query_values_and": "Learn how to display pathname params, search query values, and history state payload values in HTML using `<page-data>`."
+                    },
+                    "content": {
+                        "the_component_allows_you_to_print_current_routing_parameters_search": "The `<page-data>` component allows you to print current routing parameters, search queries, or history state directly in HTML without writing JavaScript selectors.",
+                        "attribute_type_default_description": "| Attribute      | Type     | Default     | Description                                                                          |",
+                        "line_22": "| :------------- | :------- | :---------- | :----------------------------------------------------------------------------------- |",
+                        "param_string_undefined_the_name_of_the_path_parameter_to": "| `param`        | `string` | `undefined` | The name of the path parameter to render (e.g. `userId` from `/users/:userId`).      |",
+                        "search_param_string_undefined_the_name_of_the_url_query": "| `search-param` | `string` | `undefined` | The name of the URL query parameter to render (e.g. `filter` from `?filter=active`). |",
+                        "key_string_undefined_the_dot_notation_key_path_to_display": "| `key`          | `string` | `undefined` | The dot-notation key path to display from the history state payload.                 |",
+                        "fallback_values": "Fallback Values",
+                        "any_content_wrapped_between_tags_is_treated_as_a_default": "Any content wrapped between `<page-data>` tags is treated as a default fallback value. It is rendered only if the requested property is `undefined` or unavailable:",
+                        "deep_key_resolution": "Deep Key Resolution",
+                        "when_passing_complex_history_payloads_via_use_dot_notation_in": "When passing complex history payloads via `<page-link>`, use dot-notation in the `key` attribute to traverse nested objects:"
+                    }
+                },
+                "page_link": {
+                    "meta": {
+                        "page_link": "Page Link",
+                        "page_link_component_router_by_before_semicolon": "Page Link Component - Router by Before Semicolon",
+                        "learn_how_to_manage_active_states_relative_path_resolution_and": "Learn how to manage active states, relative path resolution, and pass history payload data using `<page-link>`."
+                    },
+                    "content": {
+                        "the_component_renders_a_standard_html_anchor_tag_wrapper_that": "The `<page-link>` component renders a standard HTML anchor (`<a>`) tag wrapper that intercepts click events, updates browser history, and highlights itself with an `active` attribute when matching the current location.",
+                        "attribute_type_default_description": "| Attribute             | Type      | Default      | Description                                                              |",
+                        "line_22": "| :-------------------- | :-------- | :----------- | :----------------------------------------------------------------------- |",
+                        "path_string_current_path_the_destination_pathname_e_g_home": "| `path`                | `string`  | Current Path | The destination pathname (e.g. `/home` or query-relative parameters).    |",
+                        "search_string_undefined_appends_or_updates_search_parameters_e_g": "| `search`              | `string`  | `undefined`  | Appends or updates search parameters (e.g. `tab=settings`).              |",
+                        "keep_current_search_boolean_false_retains_existing_url_search_parameters": "| `keep-current-search` | `boolean` | `false`      | Retains existing URL search parameters when navigating to a new path.    |",
+                        "exact_boolean_true_when_true_links_are_marked_active_only": "| `exact`               | `boolean` | `true`       | When `true`, links are marked active only on an exact pathname match.    |",
+                        "title_string_undefined_the_document_title_to_set_upon_successful": "| `title`               | `string`  | `undefined`  | The document title to set upon successful navigation.                    |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload`             | `object`  | `{}`         | History state payload. In HTML, provide a JSON-serialized object string. |",
+                        "relative_path_resolution": "Relative Path Resolution",
+                        "to_make_page_layout_structures_reusable_automatically_resolves_shorthand_prefixes": "To make page layout structures reusable, `<page-link>` automatically resolves shorthand prefixes:",
+                        "no_path_attribute_evaluates_to_the_current_browser_pathname_ideal": "**No `path` attribute:** Evaluates to the current browser pathname. Ideal when you only need to modify query parameters.",
+                        "dollar_prefix_replaced_by_the_path_of_the_closest_parent": "**Dollar Prefix `$`:** Replaced by the path of the closest parent `<page-route>` element in the DOM tree.",
+                        "tilde_prefix_replaced_by_the_current_browser_pathname_useful_for": "**Tilde Prefix `~`:** Replaced by the current browser pathname. Useful for appending child sections.",
+                        "active_state_styling": "Active State Styling",
+                        "when_the_browser_location_matches_the_link_s_target_the": "When the browser location matches the link's target, the component gains a native `active` attribute:",
+                        "you_can_target_this_state_in_css_using_standard_attributes": "You can target this state in CSS using standard attributes or CSS shadow parts:",
+                        "passing_payloads": "Passing Payloads",
+                        "use_payload_to_pass_history_state_data_to_the_next": "Use `payload` to pass history state data to the next page.",
+                        "in_plain_html_attributes_are_strings_so_payload_must_be": "In plain HTML, attributes are strings, so `payload` must be a valid JSON-serialized object:",
+                        "when_rendering_through_markup_pass_the_value_as_an_object": "When rendering `<page-link>` through Markup, pass the value as an object property:",
+                        "the_payload_is_available_on_the_destination_route_through_getpagedata": "The payload is available on the destination route through `getPageData()`, `onPage()`, `onPageChange()`, or `<page-data key=\"...\">`."
+                    }
+                },
+                "page_redirect": {
+                    "meta": {
+                        "page_redirect": "Page Redirect",
+                        "page_redirect_component_router_by_before_semicolon": "Page Redirect Component - Router by Before Semicolon",
+                        "learn_how_to_manage_default_paths_and_handle_404_fallbacks": "Learn how to manage default paths and handle 404 fallbacks using `<page-redirect>`."
+                    },
+                    "content": {
+                        "the_component_triggers_programmatic_redirection_it_is_used_to_handle": "The `<page-redirect>` component triggers programmatic redirection. It is used to handle unknown URLs (404 errors) or to route parent index paths to a default sub-route.",
+                        "attribute_type_default_description": "| Attribute | Type                      | Default     | Description                                                              |",
+                        "line_22": "| :-------- | :------------------------ | :---------- | :----------------------------------------------------------------------- |",
+                        "type_unknown_always_unknown_condition_under_which_redirection_triggers": "| `type`    | `\"unknown\"` \\| `\"always\"` | `\"unknown\"` | Condition under which redirection triggers.                              |",
+                        "path_string_destination_path_supports_parent_prefixes_like_and": "| `path`    | `string`                  | `\"/\"`       | Destination path (supports parent prefixes like `$` and `~`).            |",
+                        "title_string_undefined_the_document_title_to_set_after_redirecting": "| `title`   | `string`                  | `undefined` | The document title to set after redirecting.                             |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload` | `object`                  | `{}`        | History state payload. In HTML, provide a JSON-serialized object string. |",
+                        "redirection_types": "Redirection Types",
+                        "text_1_unknown_default": "1. `unknown` (Default)",
+                        "redirection_triggers_only_when_the_current_browser_path_is_not": "Redirection triggers only when the current browser path is not matched by any registered route. This is primarily used for defining global or local 404 fallbacks:",
+                        "the_order_of_tags_in_html_matters_make_sure_to": "The order of tags in HTML matters. Make sure to define `<page-redirect>` elements **after** your `<page-route>` tags so all valid routes are registered first.",
+                        "redirection_triggers_immediately_when_the_parent_route_is_matched_exactly": "Redirection triggers immediately when the parent route is matched exactly. This is helpful for assigning a default view or tab when visiting a parent layout:",
+                        "scoped_redirection": "Scoped Redirection",
+                        "because_is_aware_of_its_placement_in_the_dom_tree": "Because `<page-redirect>` is aware of its placement in the DOM tree:",
+                        "placing_it_inside_a_parent_means_it_will_only_handle": "Placing it inside a parent `<page-route>` means it will only handle redirections for child paths within that route.",
+                        "unrelated_root_level_paths_will_not_trigger_the_child_redirect": "Unrelated root-level paths will not trigger the child redirect."
+                    }
+                },
+                "page_route_query": {
+                    "meta": {
+                        "page_route_query": "Page Route Query",
+                        "page_route_query_component_router_by_before_semicolon": "Page Route Query Component - Router by Before Semicolon",
+                        "learn_how_to_render_views_conditionally_based_on_search_queries": "Learn how to render views conditionally based on search queries using `<page-route-query>`."
+                    },
+                    "content": {
+                        "the_component_mounts_content_conditionally_based_on_url_search_query": "The `<page-route-query>` component mounts content conditionally based on URL search query parameter values (`?key=value`) instead of the URL pathname.",
+                        "this_component_is_ideal_for_creating_tabbed_navigation_filters_or": "This component is ideal for creating tabbed navigation, filters, or modular modals without writing JavaScript state logic.",
+                        "attribute_type_default_description": "| Attribute | Type     | Default     | Description                                                          |",
+                        "line_29": "| :-------- | :------- | :---------- | :------------------------------------------------------------------- |",
+                        "key_string_undefined_the_search_parameter_name_to_watch_e": "| `key`     | `string` | `undefined` | The search parameter name to watch (e.g. `\"tab\"`).                   |",
+                        "value_string_undefined_the_exact_parameter_value_that_triggers_a": "| `value`   | `string` | `undefined` | The exact parameter value that triggers a match.                     |",
+                        "src_string_undefined_relative_path_to_an_external_file_html": "| `src`     | `string` | `undefined` | Relative path to an external file (HTML, JS, TXT) to load on-demand. |",
+                        "name_string_undefined_mutually_exclusive_query_route_group_identifier": "| `name`    | `string` | `undefined` | Mutually exclusive query-route group identifier.                     |",
+                        "example_tabbed_layout": "Example: Tabbed Layout",
+                        "combine_with_to_create_fully_declarative_active_state_aware_tabs": "Combine `<page-route-query>` with `<page-link>` to create fully declarative, active-state-aware tabs:",
+                        "behavior_and_caching": "Behavior and Caching",
+                        "just_like_the_query_matcher_detaches_template_views_when_the": "Just like `<page-route>`, the query matcher detaches template views when the parameter doesn't match and caches them.",
+                        "when_the_query_matches_again_the_cached_template_is_restored": "When the query matches again, the cached template is restored instantly.",
+                        "loader_slots_loading_and_fallbacks_fallback_are_fully_supported_when": "Loader slots (`loading`) and fallbacks (`fallback`) are fully supported when using the `src` attribute."
+                    }
+                },
+                "page_route": {
+                    "meta": {
+                        "page_route": "Page Route",
+                        "page_route_component_router_by_before_semicolon": "Page Route Component - Router by Before Semicolon",
+                        "learn_how_to_render_pathname_routes_dynamic_params_nested_layouts": "Learn how to render pathname routes, dynamic params, nested layouts, lazy route files, component props, loading slots, fallbacks, and route groups."
+                    },
+                    "content": {
+                        "the_component_is_the_main_route_container_it_mounts_slotted": "The `<page-route>` component is the main route container. It mounts slotted content, a lazy `src` file, or a JavaScript-provided component only when the current pathname matches its route pattern.",
+                        "attribute_type_default_description": "| Attribute | Type      | Default     | Description                                                                                    |",
+                        "line_24": "| :-------- | :-------- | :---------- | :--------------------------------------------------------------------------------------------- |",
+                        "path_string_the_pathname_pattern_to_match_supports_parameters_like": "| `path`    | `string`  | `\"/\"`       | The pathname pattern to match (supports parameters like `/:id`).                               |",
+                        "exact_boolean_true_when_true_matches_the_path_strictly_when": "| `exact`   | `boolean` | `true`      | When `true`, matches the path strictly. When `false`, matches paths starting with the pattern. |",
+                        "src_string_undefined_relative_path_to_an_html_text_or": "| `src`     | `string`  | `undefined` | Relative path to an HTML, text, or JavaScript module file to lazy load.                        |",
+                        "title_string_undefined_updates_the_document_title_when_this_route": "| `title`   | `string`  | `undefined` | Updates the document title when this route becomes active.                                     |",
+                        "name_string_undefined_mutually_exclusive_route_group_identifier_similar_to": "| `name`    | `string`  | `undefined` | Mutually exclusive route group identifier (similar to a Switch statement).                     |",
+                        "dynamic_parameters": "Dynamic Parameters",
+                        "use_a_colon_to_define_path_parameters_you_can_retrieve": "Use a colon `:` to define path parameters. You can retrieve these values in nested HTML via `<page-data>` or in JavaScript:",
+                        "nested_layouts": "Nested Layouts",
+                        "set_exact_false_on_a_parent_route_that_should_stay": "Set `exact=\"false\"` on a parent route that should stay active while child routes match. Child `path` values are appended to the closest parent route path.",
+                        "switch_like_grouping_name": "Switch-Like Grouping (`name`)",
+                        "to_ensure_only_one_route_in_a_group_renders_at": "To ensure only one route in a group renders at a time (preventing overlapping matches), assign them the same `name` attribute. The router will evaluate them in order and mount only the _first_ match:",
+                        "lazy_loading_src": "Lazy Loading (`src`)",
+                        "instead_of_embedding_all_views_in_the_main_document_load": "Instead of embedding all views in the main document, load them on-demand by specifying a file in the `src` attribute.",
+                        "you_can_define_a_loading_state_and_a_fallback_ui": "You can define a loading state and a fallback UI (shown if the request fails) using the `loading` and `fallback` slots:",
+                        "supported_lazy_loaded_formats": "Supported Lazy-Loaded Formats",
+                        "when_loading_a_javascript_file_the_module_must_default_export": "When loading a JavaScript file, the module must default-export one of the following:",
+                        "a_plain_html_text_string": "A plain HTML/text string.",
+                        "a_native_dom_node_e_g_element_documentfragment": "A native DOM `Node` (e.g. `Element`, `DocumentFragment`).",
+                        "an_htmltemplate_generated_by_the_markup_html_tagged_literal": "An `HtmlTemplate` generated by the Markup `html` tagged literal.",
+                        "a_function_that_receives_locationstate_pathparams_searchparams_and_returns_any": "A function that receives `(locationState, pathParams, searchParams)` and returns any of the above.",
+                        "caching_and_lifecycle": "Caching and Lifecycle",
+                        "to_prevent_memory_leaks_and_optimize_performance": "To prevent memory leaks and optimize performance:",
+                        "inactive_routes_receive_the_hidden_attribute": "Inactive routes receive the `hidden` attribute.",
+                        "when_a_loaded_route_becomes_inactive_the_engine_detaches_the": "When a loaded route becomes inactive, the engine detaches the DOM tree and caches it in memory.",
+                        "if_the_route_matches_again_the_cached_dom_tree_is": "If the route matches again, the cached DOM tree is re-inserted without repeating calculations or requests."
+                    }
+                }
+            }
+        },
+        "home": {
+            "meta": {
+                "router": "Router",
+                "router_by_before_semicolon": "Router by Before Semicolon",
+                "a_tiny_web_component_router_for_html_first_apps_declare": "A tiny Web Component router for HTML-first apps. Declare links, routes, redirects, query routes, lazy pages, guards, and route data without framework lock-in."
+            },
+            "content": {
+                "routing": "Routing",
+                "in_plain_html": "in plain HTML.",
+                "a_tiny_web_component_router_for_html_first_apps_route": "A tiny Web Component router for HTML-first apps. Route by pathname or search query, lazy-load HTML/JS/TXT pages, nest route layouts, guard protected screens, and keep framework lock-in out of your navigation layer.",
+                "config": "CONFIG",
+                "js_txt_pages": "JS - TXT PAGES",
+                "the_ecosystem": "`// THE ECOSYSTEM`",
+                "built_on_web_component_markup": "Built on Web Component & Markup.",
+                "router_is_built_on_top_of_web_component_and_markup": "Router is built on top of Web Component and Markup. Same engine, modular packages, zero lock-in.",
+                "the_9kb_reactive_templating_system_that_powers_everything_tagged_templates": "The 9Kb reactive templating system that powers everything. Tagged templates, state, effects, repeat, suspense.",
+                "a_reactive_layer_over_native_custom_elements_the_foundation_router": "A reactive layer over native Custom Elements — the foundation Router is built on. Props, state, scoped styles, lifecycles.",
+                "why_this_router": "`// WHY THIS ROUTER`",
+                "routing_that_disappears_into_html": "Routing that disappears into HTML.",
+                "five_web_components_one_central_matcher_and_a_clean_js": "Five web components, one central matcher, and a clean JS API for everything you can't express in markup.",
+                "plug_play": "Plug & play",
+                "drop_in_two_script_tags_and_route_with_html_no": "Drop in two script tags and route with HTML. No build step, no router config, no JavaScript required.",
+                "tiny_focused": "Tiny & focused",
+                "a_small_surface_area_five_web_components_and_a_js": "A small surface area: five web components and a JS API. Built on Markup + Web Component, with zero extra deps.",
+                "lazy_loaded_pages": "Lazy-loaded pages",
+                "point_page_route_at_an_html_txt_or_js_file": "Point page-route at an HTML, txt or JS file. Modules load once, cache between visits, mount and unmount cleanly.",
+                "nested_named_routes": "Nested & named routes",
+                "children_extend_their_parent_s_path_use_the_name_attribute": "Children extend their parent's path. Use the name attribute for switch-like, mutually exclusive matching.",
+                "search_query_routing": "Search-query routing",
+                "page_route_query_renders_content_based_on_key_value_tabs": "page-route-query renders content based on ?key=value — tabs, filters and modals without a single line of state.",
+                "smart_redirects": "Smart redirects",
+                "page_redirect_targets_unknown_paths_only_or_always_scoped_to": "page-redirect targets unknown paths only — or always, scoped to its parent route. Perfect for 404s and defaults.",
+                "one_match_one_render": "One match, one render",
+                "a_central_matcher_resolves_each_navigation_once_guards_run_once": "A central matcher resolves each navigation once. Guards run once. Subscribers only fire when they're relevant.",
+                "cached_remounts": "Cached remounts",
+                "inactive_routes_are_detached_from_the_dom_but_kept_warm": "Inactive routes are detached from the DOM but kept warm. Coming back is an instant remount, not a rebuild.",
+                "works_with_any_builder": "Works with any builder",
+                "vite_webpack_esbuild_plain_html_or_a_cdn_script_tag": "Vite, Webpack, esbuild, plain HTML, or a CDN script tag — it's just web components, so it slots in anywhere.",
+                "see_it_in_action": "`// SEE IT IN ACTION`",
+                "five_examples_infinite_sitemaps": "Five examples. Infinite sitemaps.",
+                "compose_page_route_page_link_page_route_query_page_redirect": "Compose page-route, page-link, page-route-query, page-redirect, page-data and the small JS API around them.",
+                "nested_routes_params": "Nested routes & params",
+                "search_query_routes": "Search-query routes",
+                "page_metadata": "Page metadata",
+                "protected_routes": "Protected routes",
+                "bundler_friendly_pages": "Bundler-friendly pages",
+                "quick_start": "`// quick start`",
+                "install_in_seconds": "Install in seconds.",
+                "choose_your_preferred_installation_method_works_everywhere_javascript_runs": "Choose your preferred installation method. Works everywhere JavaScript runs.",
+                "build_single_and_multi_page_apps": "Build single and multi-page apps,",
+                "your_way": "your way.",
+                "combine_the_simplicity_of_vanilla_web_standards_with_the_power": "Combine the simplicity of vanilla Web Standards with the power of declarative routing."
+            }
+        }
+    }
+}

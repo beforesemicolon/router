@@ -9,9 +9,7 @@ initPageLink(WB)
 iniWithRoute(WB)
 
 const flushMicrotasks = () =>
-	new Promise<void>((resolve) =>
-		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
-	);
+	new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe('PageLink', () => {
     beforeAll(() => {

@@ -1,18 +1,18 @@
 ---
-name: Installation
+name: "{{t.common.pageTitles.installation}}"
 order: 3
-title: Install Router - Before Semicolon
-description: Install @beforesemicolon/router with npm, yarn, pnpm, or direct browser script tags for HTML-first Web Component routing.
+title: "{{t.pages.documentation.installation.meta.install_router_before_semicolon}}"
+description: "{{t.pages.documentation.installation.meta.install_beforesemicolon_router_with_npm_yarn_pnpm_or_direct_browser}}"
 layout: document
 ---
 
-## Installation
+## {{t.common.pageTitles.installation}}
 
-`@beforesemicolon/router` works in bundled applications and directly in modern browsers through CDN script tags.
+{{t.pages.documentation.installation.content.beforesemicolon_router_works_in_bundled_applications_and_directly_in_modern}}
 
-## Package Managers
+## {{t.pages.documentation.installation.content.package_managers}}
 
-Install the package via your preferred package manager to bundle it with Vite, Webpack, or Esbuild:
+{{t.pages.documentation.installation.content.install_the_package_via_your_preferred_package_manager_to_bundle}}
 
 ## npm
 
@@ -34,9 +34,9 @@ pnpm add @beforesemicolon/router
 
 ---
 
-## Direct CDN (Zero-Build)
+## {{t.pages.documentation.installation.content.direct_cdn_zero_build}}
 
-For simple HTML prototypes or build-less applications, load the compiled browser bundles directly from `unpkg.com` or `jsDelivr`:
+{{t.pages.documentation.installation.content.for_simple_html_prototypes_or_build_less_applications_load_the}}
 
 ```html
 <!-- 1. Import the base web component library (Required dependency) -->
@@ -46,9 +46,9 @@ For simple HTML prototypes or build-less applications, load the compiled browser
 <script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
 ```
 
-## Locking Versions
+## {{t.pages.documentation.installation.content.locking_versions}}
 
-It is highly recommended to lock the version in production environments to avoid breaking changes when new updates are published:
+{{t.pages.documentation.installation.content.it_is_highly_recommended_to_lock_the_version_in_production}}
 
 ```html
 <script src="https://unpkg.com/@beforesemicolon/router@1.2.0/dist/client.js"></script>
@@ -56,9 +56,9 @@ It is highly recommended to lock the version in production environments to avoid
 
 ---
 
-## Global Namespace
+## {{t.pages.documentation.installation.content.global_namespace}}
 
-When loaded via a script tag, all exported classes, routing functions, and utilities are available under the global `BFS` window object:
+{{t.pages.documentation.installation.content.when_loaded_via_a_script_tag_all_exported_classes_routing}}
 
 ```javascript
 // Access router components and APIs

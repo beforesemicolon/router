@@ -1,22 +1,22 @@
 ---
-name: Route Metadata
+name: "{{t.common.pageTitles.routeMetadata}}"
 order: 8.4
-title: Route Metadata - Router by Before Semicolon
-description: Learn how to attach permissions, layouts, or custom page properties to routes.
+title: "{{t.pages.documentation.advanced_features.route_metadata.meta.route_metadata_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.advanced_features.route_metadata.meta.learn_how_to_attach_permissions_layouts_or_custom_page_properties}}"
 layout: document
 ---
 
-## Route Metadata
+## {{t.common.pageTitles.routeMetadata}}
 
-You can attach custom metadata (such as page layouts, breadcrumbs, permissions, or access roles) when registering routes.
+{{t.pages.documentation.advanced_features.route_metadata.content.you_can_attach_custom_metadata_such_as_page_layouts_breadcrumbs}}
 
-Metadata is stored by the registered route pattern. Use the same pattern when calling `getRouteMeta`.
+{{t.pages.documentation.advanced_features.route_metadata.content.metadata_is_stored_by_the_registered_route_pattern_use_the}}
 
 ---
 
-### Attaching Metadata
+### {{t.pages.documentation.advanced_features.route_metadata.content.attaching_metadata}}
 
-Pass metadata inside the options configuration of `registerRoute`:
+{{t.pages.documentation.advanced_features.route_metadata.content.pass_metadata_inside_the_options_configuration_of_registerroute}}
 
 ```javascript
 import { registerRoute } from '@beforesemicolon/router'
@@ -34,15 +34,15 @@ registerRoute('/admin/:section', {
 
 ---
 
-### Retrieving Metadata (`getRouteMeta`)
+### {{t.pages.documentation.advanced_features.route_metadata.content.retrieving_metadata_getroutemeta}}
 
-Retrieves the metadata object associated with a registered path pattern.
+{{t.pages.documentation.advanced_features.route_metadata.content.retrieves_the_metadata_object_associated_with_a_registered_path_pattern}}
 
 ```typescript
 function getRouteMeta(pattern: string): RouteMeta | undefined
 ```
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { getRouteMeta } from '@beforesemicolon/router'
@@ -54,11 +54,11 @@ console.log(meta.requiresAuth) // true
 
 ---
 
-### Common Use Cases
+### {{t.pages.documentation.advanced_features.route_metadata.content.common_use_cases}}
 
-#### 1. Dynamic Document Titles
+#### {{t.pages.documentation.advanced_features.route_metadata.content.text_1_dynamic_document_titles}}
 
-Update the browser document title dynamically upon page transitions:
+{{t.pages.documentation.advanced_features.route_metadata.content.update_the_browser_document_title_dynamically_upon_page_transitions}}
 
 ```javascript
 import { onPage, getRouteMeta } from '@beforesemicolon/router'
@@ -73,9 +73,9 @@ onPage('/admin/:section', (active) => {
 })
 ```
 
-#### 2. Guarding Permissions
+#### {{t.pages.documentation.advanced_features.route_metadata.content.text_2_guarding_permissions}}
 
-Check permissions dynamically inside a route guard:
+{{t.pages.documentation.advanced_features.route_metadata.content.check_permissions_dynamically_inside_a_route_guard}}
 
 ```javascript
 import { registerRouteGuard, getRouteMeta } from '@beforesemicolon/router'

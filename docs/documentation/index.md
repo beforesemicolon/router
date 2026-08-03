@@ -1,31 +1,31 @@
 ---
-name: What is Router?
+name: "{{t.common.pageTitles.overview}}"
 order: 1
-title: What is Router? - HTML-First Web Component Routing
-description: Learn how Before Semicolon Router brings declarative, lazy, guarded, framework-agnostic routing to HTML, Web Components, SPAs, MPAs, and hybrid apps.
+title: "{{t.pages.documentation.overview.meta.what_is_router_html_first_web_component_routing}}"
+description: "{{t.pages.documentation.overview.meta.learn_how_before_semicolon_router_brings_declarative_lazy_guarded_framework}}"
 layout: document
 ---
 
-## What is Router?
+## {{t.common.pageTitles.overview}}
 
-`@beforesemicolon/router` is a Web Component based routing solution for single-page apps, multi-page apps, and hybrid sites that want client-side navigation without adopting a framework router.
+{{t.pages.documentation.overview.content.beforesemicolon_router_is_a_web_component_based_routing_solution_for}}
 
-It uses custom elements, so routes live in the same HTML structure as the views they control. You can start with static markup, add lazy route files as the app grows, and reach for JavaScript APIs only when you need guards, analytics, programmatic navigation, or bundler integration.
+{{t.pages.documentation.overview.content.it_uses_custom_elements_so_routes_live_in_the_same}}
 
-## Execution Model
+## {{t.pages.documentation.overview.content.execution_model}}
 
-The router resolves page activations through a central matching engine:
+{{t.pages.documentation.overview.content.the_router_resolves_page_activations_through_a_central_matching_engine}}
 
--   **Single Matcher:** The URL is parsed and matched once per navigation event.
--   **Unified Guards:** Global and route-specific guards run exactly once for each transition, avoiding redundant checks.
--   **Surgical Notifications:** Only route-aware elements affected by the URL change are notified, preventing unnecessary re-renders.
--   **Cached Remounts:** When a route becomes inactive, its DOM nodes are detached and kept in memory. Navigating back remounts the cached content instantly instead of recreating it.
+-   {{t.pages.documentation.overview.content.single_matcher_the_url_is_parsed_and_matched_once_per}}
+-   {{t.pages.documentation.overview.content.unified_guards_global_and_route_specific_guards_run_exactly_once}}
+-   {{t.pages.documentation.overview.content.surgical_notifications_only_route_aware_elements_affected_by_the_url}}
+-   {{t.pages.documentation.overview.content.cached_remounts_when_a_route_becomes_inactive_its_dom_nodes}}
 
-## Key Features
+## {{t.pages.documentation.overview.content.key_features}}
 
--   **Declarative Navigation:** Change pages and update document titles via the `<page-link>` tag.
--   **Path Matching:** Load inline views or external route files using `<page-route>` with dynamic parameters (e.g., `:id`).
--   **Search Parameter Rendering:** React to URL query strings cleanly using `<page-route-query>`.
--   **Intelligent Fallbacks:** Set up default locations or catch-all 404 pages using `<page-redirect>`.
--   **Metadata Accessibility:** Access pathname params, query values, or state payload details instantly using `<page-data>`.
--   **Advanced Control:** Secure routes with async Route Guards, swap between History and Hash routing modes, and integrate with module bundlers.
+-   {{t.pages.documentation.overview.content.declarative_navigation_change_pages_and_update_document_titles_via_the}}
+-   {{t.pages.documentation.overview.content.path_matching_load_inline_views_or_external_route_files_using}}
+-   {{t.pages.documentation.overview.content.search_parameter_rendering_react_to_url_query_strings_cleanly_using}}
+-   {{t.pages.documentation.overview.content.intelligent_fallbacks_set_up_default_locations_or_catch_all_404}}
+-   {{t.pages.documentation.overview.content.metadata_accessibility_access_pathname_params_query_values_or_state_payload}}
+-   {{t.pages.documentation.overview.content.advanced_control_secure_routes_with_async_route_guards_swap_between}}

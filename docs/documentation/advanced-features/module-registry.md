@@ -1,22 +1,22 @@
 ---
-name: Module Registry
+name: "{{t.common.pageTitles.moduleRegistry}}"
 order: 8.3
-title: Module Registry - Router by Before Semicolon
-description: Learn how to pre-register page modules for code splitting and bundler integration.
+title: "{{t.pages.documentation.advanced_features.module_registry.meta.module_registry_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.advanced_features.module_registry.meta.learn_how_to_pre_register_page_modules_for_code_splitting}}"
 layout: document
 ---
 
-## Module Registry
+## {{t.common.pageTitles.moduleRegistry}}
 
-When building large-scale applications with modern asset bundlers (like Vite or Webpack), dynamic string imports in the `src` attribute (e.g. `<page-route src="./pages/home.js">`) are difficult for bundlers to trace during static analysis.
+{{t.pages.documentation.advanced_features.module_registry.content.when_building_large_scale_applications_with_modern_asset_bundlers_like}}
 
-The **Module Registry** allows you to pre-register a map of page paths to their loader functions, enabling proper code-splitting and asset tracing in your build pipeline.
+{{t.pages.documentation.advanced_features.module_registry.content.the_module_registry_allows_you_to_pre_register_a_map}}
 
 ---
 
 ### `registerRouteModules`
 
-Registers a map of paths to their module loader functions.
+{{t.pages.documentation.advanced_features.module_registry.content.registers_a_map_of_paths_to_their_module_loader_functions}}
 
 ```typescript
 type ModuleLoader = () => Promise<any>
@@ -26,11 +26,11 @@ function registerRouteModules(modules: Record<string, ModuleLoader>): void
 
 ---
 
-### Integration Examples
+### {{t.pages.documentation.advanced_features.module_registry.content.integration_examples}}
 
 #### 1. Vite (`import.meta.glob`)
 
-Vite supports importing multiple files matching a glob pattern automatically:
+{{t.pages.documentation.advanced_features.module_registry.content.vite_supports_importing_multiple_files_matching_a_glob_pattern_automatically}}
 
 ```javascript
 import { registerRouteModules } from '@beforesemicolon/router'
@@ -44,7 +44,7 @@ registerRouteModules(modules)
 
 #### 2. Webpack (`require.context`)
 
-Webpack uses `require.context` to trace directory structures:
+{{t.pages.documentation.advanced_features.module_registry.content.webpack_uses_require_context_to_trace_directory_structures}}
 
 ```javascript
 import { registerRouteModules } from '@beforesemicolon/router'
@@ -60,9 +60,9 @@ context.keys().forEach((key) => {
 registerRouteModules(modules)
 ```
 
-#### 3. Manual Registration
+#### {{t.pages.documentation.advanced_features.module_registry.content.text_3_manual_registration}}
 
-You can also manually map imports:
+{{t.pages.documentation.advanced_features.module_registry.content.you_can_also_manually_map_imports}}
 
 ```javascript
 import { registerRouteModules } from '@beforesemicolon/router'
@@ -75,9 +75,9 @@ registerRouteModules({
 
 ---
 
-### Usage in HTML
+### {{t.pages.documentation.advanced_features.module_registry.content.usage_in_html}}
 
-Once modules are registered, define your `<page-route>` tags as normal. The router will intercept the `src` string and resolve it using the pre-registered loader instead of triggering a generic browser fetch request:
+{{t.pages.documentation.advanced_features.module_registry.content.once_modules_are_registered_define_your_tags_as_normal_the}}
 
 ```html
 <!-- Uses the registered bundler import loader automatically -->
@@ -88,15 +88,15 @@ Once modules are registered, define your `<page-route>` tags as normal. The rout
 
 ### `getRouteModule`
 
-Retrieves a registered module loader by its path.
+{{t.pages.documentation.advanced_features.module_registry.content.retrieves_a_registered_module_loader_by_its_path}}
 
 ```typescript
 function getRouteModule(path: string): ModuleLoader | undefined
 ```
 
-### Preloading Registered Modules
+### {{t.pages.documentation.advanced_features.module_registry.content.preloading_registered_modules}}
 
-Registered modules can be preloaded before the user navigates to them.
+{{t.pages.documentation.advanced_features.module_registry.content.registered_modules_can_be_preloaded_before_the_user_navigates_to}}
 
 ```typescript
 function preloadRouteModule(path: string): Promise<void>

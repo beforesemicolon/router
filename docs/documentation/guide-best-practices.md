@@ -1,18 +1,18 @@
 ---
-name: Guide & Best Practices
+name: "{{t.common.pageTitles.guideBestPractices}}"
 order: 4
-title: Router Guide & Best Practices - Router by Before Semicolon
-description: Practical guidance for building maintainable HTML-first routing with Before Semicolon Router, including route structure, redirects, guards, links, and lazy loading.
+title: "{{t.pages.documentation.guide_best_practices.meta.router_guide_best_practices_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.guide_best_practices.meta.practical_guidance_for_building_maintainable_html_first_routing_with_before}}"
 layout: document
 ---
 
-## Guide & Best Practices
+## {{t.common.pageTitles.guideBestPractices}}
 
-Router works best when the URL is treated as the source of truth for navigation, filters, tabs, and shareable UI state. Keep route declarations close to the layout they control, then use the JavaScript API only for behavior that cannot be expressed cleanly in HTML.
+{{t.pages.documentation.guide_best_practices.content.router_works_best_when_the_url_is_treated_as_the}}
 
-## Start With Declarative Routes
+## {{t.pages.documentation.guide_best_practices.content.start_with_declarative_routes}}
 
-For most pages, use `<page-route>`, `<page-link>`, and `<page-redirect>` directly in the document. This keeps the app understandable from the HTML structure alone.
+{{t.pages.documentation.guide_best_practices.content.for_most_pages_use_and_directly_in_the_document_this}}
 
 ```html
 <nav>
@@ -34,9 +34,9 @@ For most pages, use `<page-route>`, `<page-link>`, and `<page-redirect>` directl
 </main>
 ```
 
-## Use Nested Routes For Layouts
+## {{t.pages.documentation.guide_best_practices.content.use_nested_routes_for_layouts}}
 
-Parent routes are useful for sections that share navigation, headings, or route data. Child paths extend the nearest parent route.
+{{t.pages.documentation.guide_best_practices.content.parent_routes_are_useful_for_sections_that_share_navigation_headings}}
 
 ```html
 <page-route path="/projects/:projectId" exact="false">
@@ -54,9 +54,9 @@ Parent routes are useful for sections that share navigation, headings, or route 
 </page-route>
 ```
 
-## Use Query Routes For UI State
+## {{t.pages.documentation.guide_best_practices.content.use_query_routes_for_ui_state}}
 
-Use `<page-route-query>` when the view is still the same page but a query value should choose a tab, drawer, filter, or modal.
+{{t.pages.documentation.guide_best_practices.content.use_when_the_view_is_still_the_same_page_but}}
 
 ```html
 <page-link search="panel=details" keep-current-search>Details</page-link>
@@ -71,9 +71,9 @@ Use `<page-route-query>` when the view is still the same page but a query value 
 </page-route-query>
 ```
 
-## Prefer `component` For Typed Apps
+## {{t.pages.documentation.guide_best_practices.content.prefer_component_for_typed_apps}}
 
-If you are rendering routes from Markup or Web Component code, the `component` property avoids string-based dynamic imports and gives bundlers a direct reference.
+{{t.pages.documentation.guide_best_practices.content.if_you_are_rendering_routes_from_markup_or_web_component}}
 
 ```javascript
 import { html } from '@beforesemicolon/web-component'
@@ -89,9 +89,9 @@ export const routes = html`
 `
 ```
 
-## Register Guards Before Navigation
+## {{t.pages.documentation.guide_best_practices.content.register_guards_before_navigation}}
 
-Guards run before route listeners and route components are notified. Register them during application startup, before rendering protected routes or triggering navigation.
+{{t.pages.documentation.guide_best_practices.content.guards_run_before_route_listeners_and_route_components_are_notified}}
 
 ```javascript
 import {
@@ -112,9 +112,9 @@ registerRouteGuard('/admin/:section', async () => {
 })
 ```
 
-## Keep 404s Last
+## {{t.pages.documentation.guide_best_practices.content.keep_404s_last}}
 
-`<page-redirect>` checks the routes that have been registered. Put fallback redirects after the valid `<page-route>` declarations they depend on.
+{{t.pages.documentation.guide_best_practices.content.checks_the_routes_that_have_been_registered_put_fallback_redirects}}
 
 ```html
 <page-route path="/">Home</page-route>
@@ -124,9 +124,9 @@ registerRouteGuard('/admin/:section', async () => {
 <page-redirect path="/404"></page-redirect>
 ```
 
-## Choose History Or Hash Routing Early
+## {{t.pages.documentation.guide_best_practices.content.choose_history_or_hash_routing_early}}
 
-History routing gives clean URLs and is the default. Hash routing is useful when your host cannot rewrite unknown paths back to `index.html`.
+{{t.pages.documentation.guide_best_practices.content.history_routing_gives_clean_urls_and_is_the_default_hash}}
 
 ```javascript
 import { setRoutingMode } from '@beforesemicolon/router'
@@ -134,10 +134,10 @@ import { setRoutingMode } from '@beforesemicolon/router'
 setRoutingMode('hash')
 ```
 
-## Production Checklist
+## {{t.pages.documentation.guide_best_practices.content.production_checklist}}
 
--   Give every meaningful route a document `title` through `<page-link>`, `<page-route>`, or your own `onPageChange` handler.
--   Use route params for resource identity and search params for shareable view state.
--   Keep route modules small and lazy-load secondary screens.
--   Use `name` on overlapping route groups so only the first matching route renders.
--   Use `payload` only for transient navigation state. Persist important state in the URL or application data store.
+-   {{t.pages.documentation.guide_best_practices.content.give_every_meaningful_route_a_document_title_through_or_your}}
+-   {{t.pages.documentation.guide_best_practices.content.use_route_params_for_resource_identity_and_search_params_for}}
+-   {{t.pages.documentation.guide_best_practices.content.keep_route_modules_small_and_lazy_load_secondary_screens}}
+-   {{t.pages.documentation.guide_best_practices.content.use_name_on_overlapping_route_groups_so_only_the_first}}
+-   {{t.pages.documentation.guide_best_practices.content.use_payload_only_for_transient_navigation_state_persist_important_state}}

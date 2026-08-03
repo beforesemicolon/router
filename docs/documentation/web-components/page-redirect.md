@@ -1,14 +1,14 @@
 ---
-name: Page Redirect
+name: "{{t.pages.documentation.web_components.page_redirect.meta.page_redirect}}"
 order: 6.4
-title: Page Redirect Component - Router by Before Semicolon
-description: Learn how to manage default paths and handle 404 fallbacks using `<page-redirect>`.
+title: "{{t.pages.documentation.web_components.page_redirect.meta.page_redirect_component_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.web_components.page_redirect.meta.learn_how_to_manage_default_paths_and_handle_404_fallbacks}}"
 layout: document
 ---
 
 ## `<page-redirect>`
 
-The `<page-redirect>` component triggers programmatic redirection. It is used to handle unknown URLs (404 errors) or to route parent index paths to a default sub-route.
+{{t.pages.documentation.web_components.page_redirect.content.the_component_triggers_programmatic_redirection_it_is_used_to_handle}}
 
 ```html
 <page-redirect path="/dashboard" type="always"></page-redirect>
@@ -16,22 +16,22 @@ The `<page-redirect>` component triggers programmatic redirection. It is used to
 
 ---
 
-### Attributes
+### {{t.common.labels.attributes}}
 
-| Attribute | Type                      | Default     | Description                                                              |
-| :-------- | :------------------------ | :---------- | :----------------------------------------------------------------------- |
-| `type`    | `"unknown"` \| `"always"` | `"unknown"` | Condition under which redirection triggers.                              |
-| `path`    | `string`                  | `"/"`       | Destination path (supports parent prefixes like `$` and `~`).            |
-| `title`   | `string`                  | `undefined` | The document title to set after redirecting.                             |
-| `payload` | `object`                  | `{}`        | History state payload. In HTML, provide a JSON-serialized object string. |
+{{t.pages.documentation.web_components.page_redirect.content.attribute_type_default_description}}
+{{t.pages.documentation.web_components.page_redirect.content.line_22}}
+{{t.pages.documentation.web_components.page_redirect.content.type_unknown_always_unknown_condition_under_which_redirection_triggers}}
+{{t.pages.documentation.web_components.page_redirect.content.path_string_destination_path_supports_parent_prefixes_like_and}}
+{{t.pages.documentation.web_components.page_redirect.content.title_string_undefined_the_document_title_to_set_after_redirecting}}
+{{t.pages.documentation.web_components.page_redirect.content.payload_object_history_state_payload_in_html_provide_a_json}}
 
 ---
 
-### Redirection Types
+### {{t.pages.documentation.web_components.page_redirect.content.redirection_types}}
 
-#### 1. `unknown` (Default)
+#### {{t.pages.documentation.web_components.page_redirect.content.text_1_unknown_default}}
 
-Redirection triggers only when the current browser path is not matched by any registered route. This is primarily used for defining global or local 404 fallbacks:
+{{t.pages.documentation.web_components.page_redirect.content.redirection_triggers_only_when_the_current_browser_path_is_not}}
 
 ```html
 <!-- Register valid routes first -->
@@ -44,11 +44,11 @@ Redirection triggers only when the current browser path is not matched by any re
 ```
 
 > [!IMPORTANT]
-> The order of tags in HTML matters. Make sure to define `<page-redirect>` elements **after** your `<page-route>` tags so all valid routes are registered first.
+> {{t.pages.documentation.web_components.page_redirect.content.the_order_of_tags_in_html_matters_make_sure_to}}
 
 #### 2. `always`
 
-Redirection triggers immediately when the parent route is matched exactly. This is helpful for assigning a default view or tab when visiting a parent layout:
+{{t.pages.documentation.web_components.page_redirect.content.redirection_triggers_immediately_when_the_parent_route_is_matched_exactly}}
 
 ```html
 <page-route path="/projects/:projectId" exact="false">
@@ -70,12 +70,12 @@ Redirection triggers immediately when the parent route is matched exactly. This 
 
 ---
 
-### Scoped Redirection
+### {{t.pages.documentation.web_components.page_redirect.content.scoped_redirection}}
 
-Because `<page-redirect>` is aware of its placement in the DOM tree:
+{{t.pages.documentation.web_components.page_redirect.content.because_is_aware_of_its_placement_in_the_dom_tree}}
 
--   Placing it inside a parent `<page-route>` means it will only handle redirections for child paths within that route.
--   Unrelated root-level paths will not trigger the child redirect.
+-   {{t.pages.documentation.web_components.page_redirect.content.placing_it_inside_a_parent_means_it_will_only_handle}}
+-   {{t.pages.documentation.web_components.page_redirect.content.unrelated_root_level_paths_will_not_trigger_the_child_redirect}}
 
 ```html
 <page-route path="/admin" exact="false">

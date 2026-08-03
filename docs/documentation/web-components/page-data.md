@@ -1,14 +1,14 @@
 ---
-name: Page Data
+name: "{{t.pages.documentation.web_components.page_data.meta.page_data}}"
 order: 6.5
-title: Page Data Component - Router by Before Semicolon
-description: Learn how to display pathname params, search query values, and history state payload values in HTML using `<page-data>`.
+title: "{{t.pages.documentation.web_components.page_data.meta.page_data_component_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.web_components.page_data.meta.learn_how_to_display_pathname_params_search_query_values_and}}"
 layout: document
 ---
 
 ## `<page-data>`
 
-The `<page-data>` component allows you to print current routing parameters, search queries, or history state directly in HTML without writing JavaScript selectors.
+{{t.pages.documentation.web_components.page_data.content.the_component_allows_you_to_print_current_routing_parameters_search}}
 
 ```html
 <p>Viewing user ID: <page-data param="userId">unknown</page-data></p>
@@ -16,19 +16,19 @@ The `<page-data>` component allows you to print current routing parameters, sear
 
 ---
 
-### Attributes
+### {{t.common.labels.attributes}}
 
-| Attribute      | Type     | Default     | Description                                                                          |
-| :------------- | :------- | :---------- | :----------------------------------------------------------------------------------- |
-| `param`        | `string` | `undefined` | The name of the path parameter to render (e.g. `userId` from `/users/:userId`).      |
-| `search-param` | `string` | `undefined` | The name of the URL query parameter to render (e.g. `filter` from `?filter=active`). |
-| `key`          | `string` | `undefined` | The dot-notation key path to display from the history state payload.                 |
+{{t.pages.documentation.web_components.page_data.content.attribute_type_default_description}}
+{{t.pages.documentation.web_components.page_data.content.line_22}}
+{{t.pages.documentation.web_components.page_data.content.param_string_undefined_the_name_of_the_path_parameter_to}}
+{{t.pages.documentation.web_components.page_data.content.search_param_string_undefined_the_name_of_the_url_query}}
+{{t.pages.documentation.web_components.page_data.content.key_string_undefined_the_dot_notation_key_path_to_display}}
 
 ---
 
-### Fallback Values
+### {{t.pages.documentation.web_components.page_data.content.fallback_values}}
 
-Any content wrapped between `<page-data>` tags is treated as a default fallback value. It is rendered only if the requested property is `undefined` or unavailable:
+{{t.pages.documentation.web_components.page_data.content.any_content_wrapped_between_tags_is_treated_as_a_default}}
 
 ```html
 <!-- Renders: "Guest" if role is empty -->
@@ -37,9 +37,9 @@ Any content wrapped between `<page-data>` tags is treated as a default fallback 
 
 ---
 
-### Deep Key Resolution
+### {{t.pages.documentation.web_components.page_data.content.deep_key_resolution}}
 
-When passing complex history payloads via `<page-link>`, use dot-notation in the `key` attribute to traverse nested objects:
+{{t.pages.documentation.web_components.page_data.content.when_passing_complex_history_payloads_via_use_dot_notation_in}}
 
 ```html
 <!-- Navigation link -->

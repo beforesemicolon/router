@@ -6,9 +6,7 @@ import { goToPage, registerRoute, setRoutingMode } from '../pages'
 iniPageRoute(WB)
 
 const flushMicrotasks = () =>
-	new Promise<void>((resolve) =>
-		(typeof setImmediate === 'function' ? setImmediate : setTimeout)(resolve, 0)
-	);
+	new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe('PageData', () => {
 	beforeAll(() => {

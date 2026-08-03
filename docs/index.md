@@ -1,16 +1,16 @@
 ---
-name: Router
+name: "{{t.pages.home.meta.router}}"
 order: 0
-title: Router by Before Semicolon
-description: A tiny Web Component router for HTML-first apps. Declare links, routes, redirects, query routes, lazy pages, guards, and route data without framework lock-in.
+title: "{{t.pages.home.meta.router_by_before_semicolon}}"
+description: "{{t.pages.home.meta.a_tiny_web_component_router_for_html_first_apps_declare}}"
 layout: landing
 ---
 
-::: layout landing-hero version="v1.2.0" title="Routing" title2="in plain HTML." primaryLabel="Get Started" secondaryLabel="$ npm i @beforesemicolon/router"
+::: layout landing-hero version="v1.2.0" title="{{t.pages.home.content.routing}}" title2="{{t.pages.home.content.in_plain_html}}" primaryLabel="{{t.common.actions.getStarted}}" secondaryLabel="$ npm i @beforesemicolon/router"
 
 === copy
 
-A tiny Web Component router for HTML-first apps. Route by pathname or search query, lazy-load HTML/JS/TXT pages, nest route layouts, guard protected screens, and keep framework lock-in out of your navigation layer.
+{{t.pages.home.content.a_tiny_web_component_router_for_html_first_apps_route}}
 
 === stat
 
@@ -22,13 +22,13 @@ WEB COMPONENTS
 
 ## 0
 
-CONFIG
+{{t.pages.home.content.config}}
 
 === stat
 
 ## HTML
 
-JS - TXT PAGES
+{{t.pages.home.content.js_txt_pages}}
 
 === code filename=index.html lang=html
 
@@ -58,19 +58,19 @@ JS - TXT PAGES
 
 === header
 
-`// THE ECOSYSTEM`
+{{t.pages.home.content.the_ecosystem}}
 
-## Built on Web Component & Markup.
+## {{t.pages.home.content.built_on_web_component_markup}}
 
-Router is built on top of Web Component and Markup. Same engine, modular packages, zero lock-in.
+{{t.pages.home.content.router_is_built_on_top_of_web_component_and_markup}}
 
 === product title="Markup" package="@beforesemicolon/markup" color=orange icon=reactive href="https://markup.beforesemicolon.com"
 
-The 9Kb reactive templating system that powers everything. Tagged templates, state, effects, repeat, suspense.
+{{t.pages.home.content.the_9kb_reactive_templating_system_that_powers_everything_tagged_templates}}
 
 === product title="Web Component" package="@beforesemicolon/web-component" color=cyan icon=webComponents href="https://web-component.beforesemicolon.com"
 
-A reactive layer over native Custom Elements — the foundation Router is built on. Props, state, scoped styles, lifecycles.
+{{t.pages.home.content.a_reactive_layer_over_native_custom_elements_the_foundation_router}}
 
 :::
 
@@ -78,65 +78,65 @@ A reactive layer over native Custom Elements — the foundation Router is built 
 
 === header
 
-`// WHY THIS ROUTER`
+{{t.pages.home.content.why_this_router}}
 
-## Routing that disappears into HTML.
+## {{t.pages.home.content.routing_that_disappears_into_html}}
 
-Five web components, one central matcher, and a clean JS API for everything you can't express in markup.
+{{t.pages.home.content.five_web_components_one_central_matcher_and_a_clean_js}}
 
 === feature icon=plug
 
-### Plug & play
+### {{t.pages.home.content.plug_play}}
 
-Drop in two script tags and route with HTML. No build step, no router config, no JavaScript required.
+{{t.pages.home.content.drop_in_two_script_tags_and_route_with_html_no}}
 
 === feature icon=tiny
 
-### Tiny & focused
+### {{t.pages.home.content.tiny_focused}}
 
-A small surface area: five web components and a JS API. Built on Markup + Web Component, with zero extra deps.
+{{t.pages.home.content.a_small_surface_area_five_web_components_and_a_js}}
 
 === feature icon=sparkles
 
-### Lazy-loaded pages
+### {{t.pages.home.content.lazy_loaded_pages}}
 
-Point page-route at an HTML, txt or JS file. Modules load once, cache between visits, mount and unmount cleanly.
+{{t.pages.home.content.point_page_route_at_an_html_txt_or_js_file}}
 
 === feature icon=webComponents
 
-### Nested & named routes
+### {{t.pages.home.content.nested_named_routes}}
 
-Children extend their parent's path. Use the name attribute for switch-like, mutually exclusive matching.
+{{t.pages.home.content.children_extend_their_parent_s_path_use_the_name_attribute}}
 
 === feature icon=router
 
-### Search-query routing
+### {{t.pages.home.content.search_query_routing}}
 
-page-route-query renders content based on ?key=value — tabs, filters and modals without a single line of state.
+{{t.pages.home.content.page_route_query_renders_content_based_on_key_value_tabs}}
 
 === feature icon=standards
 
-### Smart redirects
+### {{t.pages.home.content.smart_redirects}}
 
-page-redirect targets unknown paths only — or always, scoped to its parent route. Perfect for 404s and defaults.
+{{t.pages.home.content.page_redirect_targets_unknown_paths_only_or_always_scoped_to}}
 
 === feature icon=surgical
 
-### One match, one render
+### {{t.pages.home.content.one_match_one_render}}
 
-A central matcher resolves each navigation once. Guards run once. Subscribers only fire when they're relevant.
+{{t.pages.home.content.a_central_matcher_resolves_each_navigation_once_guards_run_once}}
 
 === feature icon=sparkles
 
-### Cached remounts
+### {{t.pages.home.content.cached_remounts}}
 
-Inactive routes are detached from the DOM but kept warm. Coming back is an instant remount, not a rebuild.
+{{t.pages.home.content.inactive_routes_are_detached_from_the_dom_but_kept_warm}}
 
 === feature icon=plug
 
-### Works with any builder
+### {{t.pages.home.content.works_with_any_builder}}
 
-Vite, Webpack, esbuild, plain HTML, or a CDN script tag — it's just web components, so it slots in anywhere.
+{{t.pages.home.content.vite_webpack_esbuild_plain_html_or_a_cdn_script_tag}}
 
 :::
 
@@ -144,13 +144,13 @@ Vite, Webpack, esbuild, plain HTML, or a CDN script tag — it's just web compon
 
 === header
 
-`// SEE IT IN ACTION`
+{{t.pages.home.content.see_it_in_action}}
 
-## Five examples. Infinite sitemaps.
+## {{t.pages.home.content.five_examples_infinite_sitemaps}}
 
-Compose page-route, page-link, page-route-query, page-redirect, page-data and the small JS API around them.
+{{t.pages.home.content.compose_page_route_page_link_page_route_query_page_redirect}}
 
-=== example label="Nested routes & params" color=cyan filename=app.html lang=html
+=== example label="{{t.pages.home.content.nested_routes_params}}" color=cyan filename=app.html lang=html
 
 ```html
 <!-- nested routes — child paths extend the parent -->
@@ -171,7 +171,7 @@ Compose page-route, page-link, page-route-query, page-redirect, page-data and th
 </page-route>
 ```
 
-=== example label="Search-query routes" color=orange filename=tabs.html lang=html
+=== example label="{{t.pages.home.content.search_query_routes}}" color=orange filename=tabs.html lang=html
 
 ```html
 <!-- routing by ?tab= — perfect for tabs, filters, modals -->
@@ -193,7 +193,7 @@ Compose page-route, page-link, page-route-query, page-redirect, page-data and th
 </div>
 ```
 
-=== example label="Page metadata" color=cyan filename=user.html lang=html
+=== example label="{{t.pages.home.content.page_metadata}}" color=cyan filename=user.html lang=html
 
 ```html
 <!-- render location metadata: payload, params and search queries -->
@@ -212,7 +212,7 @@ Compose page-route, page-link, page-route-query, page-redirect, page-data and th
 </page-route>
 ```
 
-=== example label="Protected routes" color=green filename=guards.js lang=javascript
+=== example label="{{t.pages.home.content.protected_routes}}" color=green filename=guards.js lang=javascript
 
 ```javascript
 import {
@@ -235,7 +235,7 @@ registerRouteGuard('/admin/:section', async () => {
 })
 ```
 
-=== example label="Bundler-friendly pages" color=orange filename=routes.js lang=javascript
+=== example label="{{t.pages.home.content.bundler_friendly_pages}}" color=orange filename=routes.js lang=javascript
 
 ```javascript
 import { registerRouteModules } from '@beforesemicolon/router'
@@ -259,11 +259,11 @@ registerRouteModules(
 
 === header
 
-`// quick start`
+{{t.pages.home.content.quick_start}}
 
-## Install in seconds.
+## {{t.pages.home.content.install_in_seconds}}
 
-Choose your preferred installation method. Works everywhere JavaScript runs.
+{{t.pages.home.content.choose_your_preferred_installation_method_works_everywhere_javascript_runs}}
 
 === tab key=cdn label=CDN command="<script src=&quot;https://unpkg.com/@beforesemicolon/router/dist/client.js&quot;></script>"
 
@@ -275,10 +275,10 @@ Choose your preferred installation method. Works everywhere JavaScript runs.
 
 :::
 
-::: layout landing-cta title="Build single and multi-page apps," title2="your way."
+::: layout landing-cta title="{{t.pages.home.content.build_single_and_multi_page_apps}}" title2="{{t.pages.home.content.your_way}}"
 
 === copy
 
-Combine the simplicity of vanilla Web Standards with the power of declarative routing.
+{{t.pages.home.content.combine_the_simplicity_of_vanilla_web_standards_with_the_power}}
 
 :::

@@ -28,25 +28,38 @@ export default {
         footerGroups: [
             {
                 title: 'Learning Resources',
-                links: [{ label: 'Documentation', href: '/documentation' }],
+                i18n: 'common.navigation.learningResources',
+                links: [
+                    {
+                        label: 'Documentation',
+                        i18n: 'common.navigation.documentation',
+                        routeId: 'documentation/index',
+                        href: '/documentation',
+                    },
+                ],
             },
             {
                 title: 'About Before Semicolon',
+                i18n: 'common.navigation.aboutBeforeSemicolon',
                 links: [
                     {
                         label: 'Open Source',
+                        i18n: 'common.navigation.openSource',
                         href: 'https://github.com/beforesemicolon',
                     },
                     {
                         label: 'Website',
+                        i18n: 'common.navigation.website',
                         href: 'https://beforesemicolon.com/',
                     },
                     {
                         label: 'Blog',
+                        i18n: 'common.navigation.blog',
                         href: 'https://medium.com/before-semicolon',
                     },
                     {
                         label: 'YouTube Channel',
+                        i18n: 'common.navigation.youtubeChannel',
                         href: 'https://www.youtube.com/channel/UCrU33aw1k9BqTIq2yKXrmBw',
                     },
                 ],

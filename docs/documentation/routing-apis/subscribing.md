@@ -1,20 +1,20 @@
 ---
-name: Subscribing APIs
+name: "{{t.common.pageTitles.subscribingApis}}"
 order: 7.2
-title: Subscription Observers - Router by Before Semicolon
-description: Learn how to observe route patterns or listen to global navigation events.
+title: "{{t.pages.documentation.routing_apis.subscribing.meta.subscription_observers_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.routing_apis.subscribing.meta.learn_how_to_observe_route_patterns_or_listen_to_global}}"
 layout: document
 ---
 
-## Subscribing APIs
+## {{t.common.pageTitles.subscribingApis}}
 
-These APIs notify your JavaScript code when URL modifications or navigation events occur.
+{{t.pages.documentation.routing_apis.subscribing.content.these_apis_notify_your_javascript_code_when_url_modifications_or}}
 
 ---
 
 ### `onPage`
 
-Subscribes to a specific route pattern. The callback triggers whenever the matched state transitions (e.g., active to inactive, or parameters change).
+{{t.pages.documentation.routing_apis.subscribing.content.subscribes_to_a_specific_route_pattern_the_callback_triggers_whenever}}
 
 ```typescript
 function onPage(
@@ -25,11 +25,11 @@ function onPage(
 ): () => void
 ```
 
--   Returns a **cleanup function** to unsubscribe.
--   **`active`:** `true` if the current location matches the pattern.
--   **`location`:** Object containing `pathname`, `query` (search params), `data` (history state), and parsed `params`.
+-   {{t.common.messages.unsubscribeCleanup}}
+-   {{t.pages.documentation.routing_apis.subscribing.content.active_true_if_the_current_location_matches_the_pattern}}
+-   {{t.pages.documentation.routing_apis.subscribing.content.location_object_containing_pathname_query_search_params_data_history_state}}
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { onPage } from '@beforesemicolon/router'
@@ -47,7 +47,7 @@ const unsubscribe = onPage('/users/:userId', (active, location) => {
 // unsubscribe();
 ```
 
-Use `exact = false` to subscribe to a layout path and its descendants:
+{{t.pages.documentation.routing_apis.subscribing.content.use_exact_false_to_subscribe_to_a_layout_path_and}}
 
 ```javascript
 onPage(
@@ -63,7 +63,7 @@ onPage(
 
 ### `onPageChange`
 
-Subscribes to all global location transitions. Triggered after any navigation event, regardless of which paths are active.
+{{t.pages.documentation.routing_apis.subscribing.content.subscribes_to_all_global_location_transitions_triggered_after_any_navigation}}
 
 ```typescript
 type PageChangeCallback = (
@@ -75,9 +75,9 @@ type PageChangeCallback = (
 function onPageChange(callback: PageChangeCallback): () => void
 ```
 
--   Returns a **cleanup function** to unsubscribe.
+-   {{t.common.messages.unsubscribeCleanup}}
 
-#### Example
+#### {{t.common.labels.example}}
 
 ```javascript
 import { onPageChange } from '@beforesemicolon/router'
@@ -92,15 +92,15 @@ onPageChange((pathname, query, state) => {
 
 ### `isOnPage`
 
-Helper to verify if a specific path matches the current browser location.
+{{t.pages.documentation.routing_apis.subscribing.content.helper_to_verify_if_a_specific_path_matches_the_current}}
 
 ```typescript
 function isOnPage(pathname: string, exact: boolean = true): boolean
 ```
 
--   **`exact`:** If `false`, evaluates to `true` if the browser location starts with the specified path (treating subpaths as matches).
+-   {{t.pages.documentation.routing_apis.subscribing.content.exact_if_false_evaluates_to_true_if_the_browser_location}}
 
-#### Examples
+#### {{t.pages.documentation.routing_apis.subscribing.content.examples}}
 
 ```javascript
 // Browser is at: /todos/123?filter=all
@@ -112,4 +112,4 @@ isOnPage('/todos/123?filter=all') // true  (exact match including queries)
 ```
 
 > [!NOTE]
-> Search query matches inside `isOnPage` are order-sensitive. Parameters must appear in the exact order specified.
+> {{t.pages.documentation.routing_apis.subscribing.content.search_query_matches_inside_isonpage_are_order_sensitive_parameters_must}}

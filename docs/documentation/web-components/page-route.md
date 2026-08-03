@@ -1,14 +1,14 @@
 ---
-name: Page Route
+name: "{{t.pages.documentation.web_components.page_route.meta.page_route}}"
 order: 6.1
-title: Page Route Component - Router by Before Semicolon
-description: Learn how to render pathname routes, dynamic params, nested layouts, lazy route files, component props, loading slots, fallbacks, and route groups.
+title: "{{t.pages.documentation.web_components.page_route.meta.page_route_component_router_by_before_semicolon}}"
+description: "{{t.pages.documentation.web_components.page_route.meta.learn_how_to_render_pathname_routes_dynamic_params_nested_layouts}}"
 layout: document
 ---
 
 ## `<page-route>`
 
-The `<page-route>` component is the main route container. It mounts slotted content, a lazy `src` file, or a JavaScript-provided component only when the current pathname matches its route pattern.
+{{t.pages.documentation.web_components.page_route.content.the_component_is_the_main_route_container_it_mounts_slotted}}
 
 ```html
 <page-route path="/dashboard">
@@ -18,21 +18,21 @@ The `<page-route>` component is the main route container. It mounts slotted cont
 
 ---
 
-### Attributes
+### {{t.common.labels.attributes}}
 
-| Attribute | Type      | Default     | Description                                                                                    |
-| :-------- | :-------- | :---------- | :--------------------------------------------------------------------------------------------- |
-| `path`    | `string`  | `"/"`       | The pathname pattern to match (supports parameters like `/:id`).                               |
-| `exact`   | `boolean` | `true`      | When `true`, matches the path strictly. When `false`, matches paths starting with the pattern. |
-| `src`     | `string`  | `undefined` | Relative path to an HTML, text, or JavaScript module file to lazy load.                        |
-| `title`   | `string`  | `undefined` | Updates the document title when this route becomes active.                                     |
-| `name`    | `string`  | `undefined` | Mutually exclusive route group identifier (similar to a Switch statement).                     |
+{{t.pages.documentation.web_components.page_route.content.attribute_type_default_description}}
+{{t.pages.documentation.web_components.page_route.content.line_24}}
+{{t.pages.documentation.web_components.page_route.content.path_string_the_pathname_pattern_to_match_supports_parameters_like}}
+{{t.pages.documentation.web_components.page_route.content.exact_boolean_true_when_true_matches_the_path_strictly_when}}
+{{t.pages.documentation.web_components.page_route.content.src_string_undefined_relative_path_to_an_html_text_or}}
+{{t.pages.documentation.web_components.page_route.content.title_string_undefined_updates_the_document_title_when_this_route}}
+{{t.pages.documentation.web_components.page_route.content.name_string_undefined_mutually_exclusive_route_group_identifier_similar_to}}
 
 ---
 
-### Dynamic Parameters
+### {{t.pages.documentation.web_components.page_route.content.dynamic_parameters}}
 
-Use a colon `:` to define path parameters. You can retrieve these values in nested HTML via `<page-data>` or in JavaScript:
+{{t.pages.documentation.web_components.page_route.content.use_a_colon_to_define_path_parameters_you_can_retrieve}}
 
 ```html
 <page-route path="/users/:userId">
@@ -40,9 +40,9 @@ Use a colon `:` to define path parameters. You can retrieve these values in nest
 </page-route>
 ```
 
-### Nested Layouts
+### {{t.pages.documentation.web_components.page_route.content.nested_layouts}}
 
-Set `exact="false"` on a parent route that should stay active while child routes match. Child `path` values are appended to the closest parent route path.
+{{t.pages.documentation.web_components.page_route.content.set_exact_false_on_a_parent_route_that_should_stay}}
 
 ```html
 <page-route path="/teams/:teamId" exact="false">
@@ -60,9 +60,9 @@ Set `exact="false"` on a parent route that should stay active while child routes
 
 ---
 
-### Switch-Like Grouping (`name`)
+### {{t.pages.documentation.web_components.page_route.content.switch_like_grouping_name}}
 
-To ensure only one route in a group renders at a time (preventing overlapping matches), assign them the same `name` attribute. The router will evaluate them in order and mount only the _first_ match:
+{{t.pages.documentation.web_components.page_route.content.to_ensure_only_one_route_in_a_group_renders_at}}
 
 ```html
 <!-- Mutually exclusive routing -->
@@ -77,11 +77,11 @@ To ensure only one route in a group renders at a time (preventing overlapping ma
 
 ---
 
-### Lazy Loading (`src`)
+### {{t.pages.documentation.web_components.page_route.content.lazy_loading_src}}
 
-Instead of embedding all views in the main document, load them on-demand by specifying a file in the `src` attribute.
+{{t.pages.documentation.web_components.page_route.content.instead_of_embedding_all_views_in_the_main_document_load}}
 
-You can define a loading state and a fallback UI (shown if the request fails) using the `loading` and `fallback` slots:
+{{t.pages.documentation.web_components.page_route.content.you_can_define_a_loading_state_and_a_fallback_ui}}
 
 ```html
 <page-route path="/about" src="./pages/about-page.html">
@@ -90,14 +90,14 @@ You can define a loading state and a fallback UI (shown if the request fails) us
 </page-route>
 ```
 
-#### Supported Lazy-Loaded Formats
+#### {{t.pages.documentation.web_components.page_route.content.supported_lazy_loaded_formats}}
 
-When loading a JavaScript file, the module must default-export one of the following:
+{{t.pages.documentation.web_components.page_route.content.when_loading_a_javascript_file_the_module_must_default_export}}
 
--   A plain HTML/text string.
--   A native DOM `Node` (e.g. `Element`, `DocumentFragment`).
--   An `HtmlTemplate` generated by the Markup `html` tagged literal.
--   A function that receives `(locationState, pathParams, searchParams)` and returns any of the above.
+-   {{t.pages.documentation.web_components.page_route.content.a_plain_html_text_string}}
+-   {{t.pages.documentation.web_components.page_route.content.a_native_dom_node_e_g_element_documentfragment}}
+-   {{t.pages.documentation.web_components.page_route.content.an_htmltemplate_generated_by_the_markup_html_tagged_literal}}
+-   {{t.pages.documentation.web_components.page_route.content.a_function_that_receives_locationstate_pathparams_searchparams_and_returns_any}}
 
 ```javascript
 // ./pages/user-details.js
@@ -112,10 +112,10 @@ export default (data, params, query) => html`
 
 ---
 
-### Caching and Lifecycle
+### {{t.pages.documentation.web_components.page_route.content.caching_and_lifecycle}}
 
-To prevent memory leaks and optimize performance:
+{{t.pages.documentation.web_components.page_route.content.to_prevent_memory_leaks_and_optimize_performance}}
 
--   Inactive routes receive the `hidden` attribute.
--   When a loaded route becomes inactive, the engine detaches the DOM tree and caches it in memory.
--   If the route matches again, the cached DOM tree is re-inserted without repeating calculations or requests.
+-   {{t.pages.documentation.web_components.page_route.content.inactive_routes_receive_the_hidden_attribute}}
+-   {{t.pages.documentation.web_components.page_route.content.when_a_loaded_route_becomes_inactive_the_engine_detaches_the}}
+-   {{t.pages.documentation.web_components.page_route.content.if_the_route_matches_again_the_cached_dom_tree_is}}

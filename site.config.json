@@ -1,0 +1,15 @@
+{
+    "schemaVersion": "1.0",
+    "mode": "static",
+    "siteUrl": "https://router.beforesemicolon.com",
+    "defaultLocale": "en",
+    "locales": ["en", "pt"],
+    "docs": {
+        "sourceDir": "docs",
+        "outputDir": "website",
+        "template": "fading-citrus",
+        "generatedFiles": {
+            "netlify": true
+        }
+    }
+}
