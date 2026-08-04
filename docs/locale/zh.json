@@ -1,0 +1,586 @@
+{
+    "_routes": {
+        "index": "/",
+        "documentation/index": "/文档/",
+        "documentation/get-started": "/文档/快速开始",
+        "documentation/installation": "/文档/安装",
+        "documentation/guide-best-practices": "/文档/指南和最佳实践",
+        "documentation/ai": "/文档/ai",
+        "documentation/advanced-features/route-guards": "/文档/高级功能/路由守卫",
+        "documentation/advanced-features/hash-routing": "/文档/高级功能/哈希路由",
+        "documentation/advanced-features/module-registry": "/文档/高级功能/模块注册表",
+        "documentation/advanced-features/route-metadata": "/文档/高级功能/路由元数据",
+        "documentation/advanced-features/component-prop": "/文档/高级功能/组件属性",
+        "documentation/routing-apis/navigation": "/文档/路由-api/导航",
+        "documentation/routing-apis/subscribing": "/文档/路由-api/订阅",
+        "documentation/routing-apis/params-queries": "/文档/路由-api/参数和查询",
+        "documentation/routing-apis/registration": "/文档/路由-api/注册",
+        "documentation/web-components/page-route": "/文档/web-components/页面路由",
+        "documentation/web-components/page-route-query": "/文档/web-components/页面路由查询",
+        "documentation/web-components/page-link": "/文档/web-components/页面链接",
+        "documentation/web-components/page-redirect": "/文档/web-components/页面重定向",
+        "documentation/web-components/page-data": "/文档/web-components/页面数据"
+    },
+    "common": {
+        "navigation": {
+            "home": "首页",
+            "content": "内容",
+            "features": "功能",
+            "code": "代码",
+            "install": "安装",
+            "documentation": "文档",
+            "docs": "文档",
+            "learningResources": "学习资源",
+            "aboutBeforeSemicolon": "关于 Before Semicolon",
+            "openSource": "开源",
+            "website": "网站",
+            "blog": "博客",
+            "youtubeChannel": "YouTube 频道"
+        },
+        "actions": {
+            "editDoc": "编辑此文档",
+            "getStarted": "开始使用",
+            "readDocs": "阅读文档",
+            "copy": "复制",
+            "copied": "已复制",
+            "copyCode": "复制代码",
+            "codeCopied": "复制代码",
+            "commandCopied": "命令已复制",
+            "copyInstallCommand": "复制 {{manager}} 安装命令",
+            "previousExample": "前面的例子",
+            "nextExample": "下一个例子"
+        },
+        "accessibility": {
+            "installationPackageManager": "安装包管理器",
+            "goToSlide": "转到幻灯片 {{number}}",
+            "mobileMenu": {
+                "open": "打开文档菜单",
+                "close": "关闭文档菜单"
+            }
+        },
+        "labels": {
+            "example": "示例",
+            "exampleUppercase": "示例",
+            "attributes": "属性"
+        },
+        "pageTitles": {
+            "componentProp": "组件props",
+            "hashRouting": "哈希路由",
+            "moduleRegistry": "模块注册表",
+            "routeGuards": "路线守卫",
+            "routeMetadata": "路由元数据",
+            "aiGuide": "人工智能指南",
+            "guideBestPractices": "指南和最佳实践",
+            "overview": "什么是Router？",
+            "installation": "安装",
+            "navigationApis": "导航API",
+            "subscribingApis": "订阅API"
+        },
+        "messages": {
+            "unsubscribeCleanup": "返回一个**清理函数**以取消订阅。"
+        },
+        "footer": {
+            "description": "一款微型即插即用路由器，用于路径名、查询和混合导航，支持 Web Component。",
+            "copyright": "版权所有 © 2026 Before Semicolon。版权所有。"
+        }
+    },
+    "pages": {
+        "documentation": {
+            "advanced_features": {
+                "component_prop": {
+                    "meta": {
+                        "component_prop_router_by_before_semicolon": "组件props - Router by Before Semicolon",
+                        "learn_how_to_pass_component_references_directly_to_routes_for": "了解如何将组件引用直接传递到路由以实现类型安全和捆绑器编译。"
+                    },
+                    "content": {
+                        "instead_of_using_the_src_attribute_with_file_path_strings": "`<page-route>` 允许您直接使用 `component` 属性传递组件构造函数/类引用，而不是使用带有文件路径字符串的 `src` 属性。",
+                        "this_approach_is_highly_recommended_when_bundling_applications_as_it": "捆绑应用程序时强烈建议使用这种方法，因为它提供编译时类型检查和强大的源映射。",
+                        "benefits_of_the_component_prop": "`component` props的优点",
+                        "type_safety_typescript_validates_class_references_at_compile_time": "**类型安全：** TypeScript 在编译时验证类引用。",
+                        "ide_assistance_autocomplete_and_symbol_renaming_work_natively": "**IDE 帮助：** 自动完成和符号重命名本身即可工作。",
+                        "tree_shaking_static_imports_allow_bundlers_to_shake_out_unused": "**Tree-Shaking：** 静态导入允许捆绑器淘汰未使用的代码。",
+                        "hmr_support_faster_hot_module_replacements_during_development": "**HMR 支持：** 开发过程中更快的热模块更换。",
+                        "component_formats": "组件格式",
+                        "the_value_passed_to_the_component_property_can_be": "传递给 `component` 属性的值可以是：",
+                        "text_1_plain_html_string": "1. 普通 HTML 字符串",
+                        "text_2_markup_template_literal": "2.Markup 模板文字",
+                        "text_3_native_dom_node": "3. 原生DOM节点",
+                        "text_4_contextual_loader_function": "4. 上下文加载函数",
+                        "a_function_that_receives_navigation_data_path_params_and_search": "接收导航数据、路径参数和搜索查询并返回上述任何格式的函数："
+                    }
+                },
+                "hash_routing": {
+                    "meta": {
+                        "hash_routing_router_by_before_semicolon": "哈希路由 - Router by Before Semicolon",
+                        "learn_how_to_set_up_url_hash_based_routing_path": "了解如何为静态托管环境设置基于 URL 哈希的路由 (#/path)。"
+                    },
+                    "content": {
+                        "the_router_supports_both_standard_html5_history_api_routing_pathnames": "该路由器支持标准 HTML5 历史 API 路由（路径名）和基于哈希的路由 (`#/path`)。",
+                        "hash_routing_is_perfect_for_static_file_hosting_environments_like": "哈希路由非常适合静态文件托管环境（例如 GitHub 页面或 Netlify 静态部署），因为它无需服务器端重定向回退配置。",
+                        "configures_the_router_s_active_mode_accepts_history_default_or": "配置路由器的主动模式。接受 `\"history\"`（默认）或 `\"hash\"`。",
+                        "retrieves_the_currently_active_routing_mode": "检索当前活动的路由模式。",
+                        "benefits_of_hash_routing": "哈希路由的好处",
+                        "zero_server_config_standard_servers_return_a_404_error_when": "**零服务器配置：** 标准服务器在页面刷新时访问直接路径（如 `/about`）时会返回 404 错误，除非配置为重写为 `index.html`。哈希路由完全是客户端的，不需要服务器端后备规则。",
+                        "static_hosting_highly_compatible_with_static_environments_like_aws_s3": "**静态托管：** 与 AWS S3 存储桶、GitHub 页面或 Netlify 等静态环境高度兼容。",
+                        "legacy_compatibility_works_flawlessly_in_older_web_browser_engines": "**旧版兼容性：** 在旧版 Web 浏览器引擎中完美运行。"
+                    }
+                },
+                "module_registry": {
+                    "meta": {
+                        "module_registry_router_by_before_semicolon": "模块注册表 - Router by Before Semicolon",
+                        "learn_how_to_pre_register_page_modules_for_code_splitting": "了解如何预先注册页面模块以进行代码分割和捆绑器集成。"
+                    },
+                    "content": {
+                        "when_building_large_scale_applications_with_modern_asset_bundlers_like": "当使用现代资产捆绑器（例如 Vite 或 Webpack）构建大型应用程序时，捆绑器在静态分析期间很难跟踪 `src` 属性（例如 `<page-route src=\"./pages/home.js\">`）中的动态字符串导入。",
+                        "the_module_registry_allows_you_to_pre_register_a_map": "**模块注册表**允许您预先注册其加载器函数的页面路径映射，从而在构建管道中实现正确的代码分割和资产跟踪。",
+                        "registers_a_map_of_paths_to_their_module_loader_functions": "注册其模块加载器函数的路径映射。",
+                        "integration_examples": "集成示例",
+                        "vite_supports_importing_multiple_files_matching_a_glob_pattern_automatically": "Vite 支持自动导入匹配 glob 模式的多个文件：",
+                        "webpack_uses_require_context_to_trace_directory_structures": "Webpack 使用 `require.context` 来跟踪目录结构：",
+                        "text_3_manual_registration": "3. 手动注册",
+                        "you_can_also_manually_map_imports": "您还可以手动映射导入：",
+                        "usage_in_html": "HTML 中的用法",
+                        "once_modules_are_registered_define_your_tags_as_normal_the": "注册模块后，请像平常一样定义 `<page-route>` 标签。路由器将拦截 `src` 字符串并使用预先注册的加载程序解析它，而不是触发通用浏览器获取请求：",
+                        "retrieves_a_registered_module_loader_by_its_path": "通过其路径检索已注册的模块加载器。",
+                        "preloading_registered_modules": "预加载注册模块",
+                        "registered_modules_can_be_preloaded_before_the_user_navigates_to": "注册的模块可以在用户导航到它们之前预加载。"
+                    }
+                },
+                "route_guards": {
+                    "meta": {
+                        "route_guards_router_by_before_semicolon": "路由守卫 - Router by Before Semicolon",
+                        "learn_how_to_secure_paths_and_perform_checks_before_transitioning": "了解如何在使用路由防护进行转换之前保护路径并执行检查。"
+                    },
+                    "content": {
+                        "route_guards_allow_you_to_protect_routes_with_authentication_checks": "路由防护允许您通过身份验证检查、授权或其他自定义逻辑来保护路由。",
+                        "guards_can_block_navigation_entirely_or_redirect_the_user_to": "警卫可以完全阻止导航或将用户重定向到不同的位置。",
+                        "guard_return_values": "保护返回值",
+                        "a_guard_function_can_return": "保护函数可以返回：",
+                        "true_allow_the_navigation": "`true`：允许导航。",
+                        "false_block_the_navigation_remains_on_the_current_page": "`false`：阻止导航（保留在当前页面）。",
+                        "string_redirects_the_user_to_the_specified_path_string": "`string`：将用户重定向到指定的路径字符串。",
+                        "promise_async_checks_e_g_database_fetches_are_fully_supported": "`Promise<boolean | string>`：完全支持异步检查（例如数据库获取）。",
+                        "global_guards": "全球卫士",
+                        "global_guards_execute_on_every_navigation_event_before_any_route": "全局守卫在任何特定于路线的守卫之前在_每个_导航事件上执行。",
+                        "route_specific_guards": "特定路线的守卫",
+                        "route_specific_guards_run_only_when_navigating_to_a_path": "仅当导航到与注册模式匹配的路径时，特定于路线的防护才会运行。",
+                        "guard_execution_order": "警卫处决令",
+                        "global_guards_executed_in_the_order_they_were_registered": "**全局守卫：** 按照注册顺序执行。",
+                        "route_specific_guards_executed_in_the_order_they_were_registered": "**特定于路线的守卫：** 按照注册的顺序执行。",
+                        "the_first_guard_that_returns_false_or_a_redirect_string": "返回 `false` 或重定向 `string` 的_first_守卫立即停止执行；随后的守卫将被跳过。"
+                    }
+                },
+                "route_metadata": {
+                    "meta": {
+                        "route_metadata_router_by_before_semicolon": "路线元数据 - Router by Before Semicolon",
+                        "learn_how_to_attach_permissions_layouts_or_custom_page_properties": "了解如何将权限、布局或自定义页面属性附加到路由。"
+                    },
+                    "content": {
+                        "you_can_attach_custom_metadata_such_as_page_layouts_breadcrumbs": "您可以在注册路由时附加自定义元数据（例如页面布局、面包屑、权限或访问角色）。",
+                        "metadata_is_stored_by_the_registered_route_pattern_use_the": "元数据按照注册的路线模式存储。调用 `getRouteMeta` 时使用相同的模式。",
+                        "attaching_metadata": "附加元数据",
+                        "pass_metadata_inside_the_options_configuration_of_registerroute": "在 `registerRoute` 的选项配置中传递元数据：",
+                        "retrieving_metadata_getroutemeta": "检索元数据 (`getRouteMeta`)",
+                        "retrieves_the_metadata_object_associated_with_a_registered_path_pattern": "检索与已注册路径模式关联的元数据对象。",
+                        "common_use_cases": "常见用例",
+                        "text_1_dynamic_document_titles": "1. 动态文档标题",
+                        "update_the_browser_document_title_dynamically_upon_page_transitions": "在页面转换时动态更新浏览器文档标题：",
+                        "text_2_guarding_permissions": "2. 权限守护",
+                        "check_permissions_dynamically_inside_a_route_guard": "动态检查路由防护内的权限："
+                    }
+                }
+            },
+            "ai": {
+                "meta": {
+                    "ai_guide_for_before_semicolon_router": "Before Semicolon 人工智能指南 Router",
+                    "a_compact_reference_for_ai_assistants_and_developers_generating_router": "为 AI 助手和开发人员生成 Router 代码提供的紧凑参考，包含准确的组件、API、模式和约束。"
+                },
+                "content": {
+                    "use_this_page_as_the_compact_reference_when_generating_examples": "为 `@beforesemicolon/router` 生成示例、教程、迁移或应用程序代码时，请使用此页面作为紧凑参考。",
+                    "package_purpose": "套餐用途",
+                    "beforesemicolon_router_is_an_html_first_routing_library_built_with": "`@beforesemicolon/router` 是使用 Web Components 构建的 HTML 优先路由库。它提供用于导航和路线渲染的自定义元素，以及用于编程导航、订阅、防护、路线模块、元数据、查询更新和哈希路由的小型 JavaScript API。",
+                    "required_imports": "所需进口",
+                    "for_bundled_apps": "对于捆绑应用程序：",
+                    "when_using_exported_apis": "使用导出的 API 时：",
+                    "for_direct_browser_use_load_web_component_first": "对于直接浏览器使用，请先加载 Web Component：",
+                    "cdn_apis_are_available_at_bfs_router": "CDN API 可从 `BFS.ROUTER` 获取。",
+                    "custom_elements": "自定义元素",
+                    "use_these_elements_exactly": "准确地使用这些元素：",
+                    "route_patterns": "路线模式",
+                    "use_name_for_dynamic_params": "使用 `:name` 作为动态参数：",
+                    "set_exact_false_for_layout_routes_that_should_remain_active": "为布局路由设置 `exact=\"false\"`，该布局路由应对嵌套路径保持活动状态：",
+                    "link_rules": "链接规则",
+                    "use_path_for_path_navigation_and_search_for_query_updates": "使用 `path` 进行路径导航，使用 `search` 进行查询更新。更新一个查询键同时保留其他查询键时，请使用 `keep-current-search`。",
+                    "use_inside_a_nested_route_to_reference_the_closest_parent": "在嵌套路由中使用 `$` 来引用最近的父路由路径：",
+                    "use_to_reference_the_current_browser_pathname": "使用 `~` 引用当前浏览器路径名：",
+                    "lazy_route_content": "惰性路由内容",
+                    "src_can_load_html_text_or_javascript_modules_javascript_modules": "`src` 可以加载 HTML、文本或 JavaScript 模块。 JavaScript 模块必须默认导出字符串、DOM `Node`、Markup `HtmlTemplate` 或接收 `(data, params, query)` 的函数。",
+                    "programmatic_navigation": "程序化导航",
+                    "gotopage_and_replacepage_are_async_and_accept_an_object_literal": "`goToPage` 和 `replacePage` 是异步的，接受对象字面量状态负载。",
+                    "guards": "卫兵",
+                    "registerglobalguard_and_registerrouteguard_register_guards_and_do_not_return_cleanup": "`registerGlobalGuard` 和 `registerRouteGuard` 寄存器保护并且不返回清理函数。一名警卫回来：",
+                    "true_to_allow_navigation": "`true` 允许导航。",
+                    "false_to_block_navigation": "`false` 阻止导航。",
+                    "a_path_string_to_redirect": "要重定向的路径字符串。",
+                    "a_promise_resolving_to_one_of_those_values": "解决这些价值观之一的承诺。",
+                    "query_data": "查询数据",
+                    "getsearchparams_parses_search_values_with_the_router_json_parser_values": "`getSearchParams` 使用路由器 JSON 解析器解析搜索值。通过 JSON 字符串化使用 `updateSearchQuery` 往返写入的值。",
+                    "avoid_these_mistakes": "避免这些错误",
+                    "do_not_use_react_router_syntax_such_as_or_usenavigate": "请勿使用 React Router 语法，例如 `<Route>` 或 `useNavigate`。",
+                    "do_not_claim_route_guard_registration_returns_an_unsubscribe_function": "不要声称路由防护注册返回取消订阅功能。",
+                    "do_not_use_href_on_use_path_and_search": "不要在 `<page-link>` 上使用 `href`；使用 `path` 和 `search`。",
+                    "do_not_use_component_as_a_string_in_html_component": "请勿将 `component=\"...\"` 用作 HTML 中的字符串。 `component` 是 JavaScript 渲染路线的属性。",
+                    "do_not_use_route_state_for_permanent_data_prefer_params": "不要将路由状态用于永久数据。首选参数、查询字符串或应用程序存储。"
+                }
+            },
+            "get_started": {
+                "meta": {
+                    "get_started_with_router_before_semicolon": "开始使用 Router - Before Semicolon",
+                    "build_your_first_html_first_router_app_with_page_link": "使用页面链接、页面路由、页面数据、延迟路由文件和 404 重定向构建您的第一个 HTML-first Router 应用程序。"
+                },
+                "content": {
+                    "setting_up_routing_does_not_require_a_route_config_file": "设置路由不需要路由配置文件、包装框架或构建工具。小型应用程序可以使用 HTML 标签进行完全路由，较大的应用程序可以将每个视图移动到惰性 HTML 或 JavaScript 路由文件中。",
+                    "let_s_build_a_simple_multi_tab_dashboard_step_by": "让我们逐步构建一个简单的多选项卡仪表板：",
+                    "step_1_add_the_scripts": "第 1 步：添加脚本",
+                    "import_the_required_scripts_the_router_relies_on_beforesemicolon_web": "导入所需的脚本。 Router 依赖 `@beforesemicolon/web-component` 来实现底层自定义元素行为：",
+                    "step_2_declare_navigation_links": "第 2 步：声明导航链接",
+                    "create_navigation_links_using_the_tag_use_the_path_attribute": "使用 `<page-link>` 标签创建导航链接。使用 `path` 属性指向特定 URL，并使用 `title` 指定文档标题：",
+                    "step_3_define_page_routes": "第 3 步：定义页面路由",
+                    "wrap_your_page_views_inside_tags_the_contents_of_these": "将您的页面视图包含在 `<page-route>` 标记内。仅当浏览器路径名与其 `path` 属性匹配时，这些元素的内容才会呈现：",
+                    "step_4_handle_404s_and_redirects": "第 4 步：处理 404 和重定向",
+                    "to_redirect_users_when_they_navigate_to_an_unregistered_or": "要在用户导航到未注册或无效 URL 时重定向用户，请在路由列表底部定义 `404` 路由和 `<page-redirect>`：",
+                    "next_steps": "下一步",
+                    "now_that_you_have_a_basic_routing_layout_you_can": "现在您已经有了基本的路由布局，您可以探索：",
+                    "guide_best_practices_for_route_structure_redirects_guards_and_production": "**[指南和最佳实践](./guide-best-practices/)** 用于路由结构、重定向、防护和生产约定。",
+                    "page_route_to_render_params_nested_views_loading_states_and": "**[页面路由](./web-components/page-route/)** 用于渲染参数、嵌套视图、加载状态和延迟路由文件。",
+                    "navigation_apis_to_navigate_programmatically_inside_javascript": "**[导航 API](./routing-apis/navigation/)** 在 JavaScript 内以编程方式导航。",
+                    "route_guards_to_secure_pages_with_sync_or_async_checks": "**[Route Guards](./advanced-features/route-guards/)** 通过同步或异步检查来保护页面。"
+                }
+            },
+            "guide_best_practices": {
+                "meta": {
+                    "router_guide_best_practices_router_by_before_semicolon": "Router 指南和最佳实践 - Router by Before Semicolon",
+                    "practical_guidance_for_building_maintainable_html_first_routing_with_before": "使用 Before Semicolon Router 构建可维护的 HTML 优先路由的实用指南，包括路由结构、重定向、防护、链接和延迟加载。"
+                },
+                "content": {
+                    "router_works_best_when_the_url_is_treated_as_the": "当 URL 被视为导航、过滤器、选项卡和可共享 UI 状态的真实来源时，Router 效果最佳。保持路由声明接近它们控制的布局，然后仅将 JavaScript API 用于无法在 HTML 中清晰表达的行为。",
+                    "start_with_declarative_routes": "从声明式路由开始",
+                    "for_most_pages_use_and_directly_in_the_document_this": "对于大多数页面，直接在文档中使用 `<page-route>`、`<page-link>` 和 `<page-redirect>`。这使得应用程序可以仅从 HTML 结构来理解。",
+                    "use_nested_routes_for_layouts": "使用嵌套路由进行布局",
+                    "parent_routes_are_useful_for_sections_that_share_navigation_headings": "父路线对于共享导航、标题或路线数据的部分非常有用。子路径延伸最近的父路径。",
+                    "use_query_routes_for_ui_state": "使用查询路由获取 UI 状态",
+                    "use_when_the_view_is_still_the_same_page_but": "当视图仍然是同一页面但查询值应选择选项卡、抽屉、筛选器或模式时，请使用 `<page-route-query>`。",
+                    "prefer_component_for_typed_apps": "对于类型化应用程序，首选 `component`",
+                    "if_you_are_rendering_routes_from_markup_or_web_component": "如果您从 Markup 或 Web Component 代码渲染路由，则 `component` 属性可避免基于字符串的动态导入，并为捆绑程序提供直接引用。",
+                    "register_guards_before_navigation": "导航前注册守卫",
+                    "guards_run_before_route_listeners_and_route_components_are_notified": "防护在路由侦听器和路由组件收到通知之前运行。在应用程序启动期间、渲染受保护的路线或触发导航之前注册它们。",
+                    "keep_404s_last": "将 404 保留在最后",
+                    "checks_the_routes_that_have_been_registered_put_fallback_redirects": "`<page-redirect>` 检查已注册的路由。将后备重定向放在它们所依赖的有效 `<page-route>` 声明之后。",
+                    "choose_history_or_hash_routing_early": "尽早选择历史或哈希路由",
+                    "history_routing_gives_clean_urls_and_is_the_default_hash": "历史路由提供干净的 URL，并且是默认路由。当您的主机无法将未知路径重写回 `index.html` 时，哈希路由非常有用。",
+                    "production_checklist": "生产清单",
+                    "give_every_meaningful_route_a_document_title_through_or_your": "通过 `<page-link>`、`<page-route>` 或您自己的 `onPageChange` 处理程序为每个有意义的路由提供一个文档 `title`。",
+                    "use_route_params_for_resource_identity_and_search_params_for": "使用路由参数来获取资源标识，使用搜索参数来获取可共享的视图状态。",
+                    "keep_route_modules_small_and_lazy_load_secondary_screens": "保持路由模块较小并延迟加载辅助屏幕。",
+                    "use_name_on_overlapping_route_groups_so_only_the_first": "在重叠的路由组上使用 `name`，以便仅渲染第一个匹配的路由。",
+                    "use_payload_only_for_transient_navigation_state_persist_important_state": "仅将 `payload` 用于瞬时导航状态。在 URL 或应用程序数据存储中保留重要状态。"
+                }
+            },
+            "overview": {
+                "meta": {
+                    "what_is_router_html_first_web_component_routing": "什么是Router？ - HTML-第一个 Web Component 路由",
+                    "learn_how_before_semicolon_router_brings_declarative_lazy_guarded_framework": "了解 Before Semicolon Router 如何为 HTML、Web Components、SPA、MPA 和混合应用程序带来声明式、惰性、受保护、与框架无关的路由。"
+                },
+                "content": {
+                    "beforesemicolon_router_is_a_web_component_based_routing_solution_for": "`@beforesemicolon/router` 是基于 Web Component 的路由解决方案，适用于需要客户端导航而不采用框架路由器的单页面应用程序、多页面应用程序和混合站点。",
+                    "it_uses_custom_elements_so_routes_live_in_the_same": "它使用自定义元素，因此路由与其控制的视图位于相同的 HTML 结构中。您可以从静态标记开始，随着应用程序的增长添加惰性路由文件，并且仅在需要防护、分析、编程导航或捆绑器集成时才使用 JavaScript API。",
+                    "execution_model": "执行模型",
+                    "the_router_resolves_page_activations_through_a_central_matching_engine": "路由器通过中央匹配引擎解析页面激活：",
+                    "single_matcher_the_url_is_parsed_and_matched_once_per": "**单一匹配器：** 每个导航事件都会解析和匹配 URL 一次。",
+                    "unified_guards_global_and_route_specific_guards_run_exactly_once": "**统一守卫：** 全局和特定于路线的守卫每次转换只运行一次，避免冗余检查。",
+                    "surgical_notifications_only_route_aware_elements_affected_by_the_url": "**外科手术通知：** 仅通知受 URL 更改影响的路由感知元素，从而防止不必要的重新渲染。",
+                    "cached_remounts_when_a_route_becomes_inactive_its_dom_nodes": "**缓存重新安装：** 当路由变为非活动状态时，其 DOM 节点将被分离并保留在内存中。向后导航会立即重新装载缓存的内容，而不是重新创建它。",
+                    "key_features": "主要特点",
+                    "declarative_navigation_change_pages_and_update_document_titles_via_the": "**声明式导航：** 通过 `<page-link>` 标签更改页面并更新文档标题。",
+                    "path_matching_load_inline_views_or_external_route_files_using": "**路径匹配：** 使用 `<page-route>` 和动态参数（例如 `:id`）加载内联视图或外部路径文件。",
+                    "search_parameter_rendering_react_to_url_query_strings_cleanly_using": "**搜索参数渲染：** 使用 `<page-route-query>` 干净地响应 URL 查询字符串。",
+                    "intelligent_fallbacks_set_up_default_locations_or_catch_all_404": "**智能回退：** 使用 `<page-redirect>` 设置默认位置或捕获所有 404 页面。",
+                    "metadata_accessibility_access_pathname_params_query_values_or_state_payload": "**元数据可访问性：** 使用 `<page-data>` 立即访问路径名参数、查询值或状态负载详细信息。",
+                    "advanced_control_secure_routes_with_async_route_guards_swap_between": "**高级控制：** 使用异步路由防护保护路由，在历史和哈希路由模式之间交换，并与模块捆绑器集成。"
+                }
+            },
+            "installation": {
+                "meta": {
+                    "install_router_before_semicolon": "安装 Router - Before Semicolon",
+                    "install_beforesemicolon_router_with_npm_yarn_pnpm_or_direct_browser": "使用 npm、yarn、pnpm 或直接浏览器脚本标记安装 @beforesemicolon/router，以实现 HTML-first Web Component 路由。"
+                },
+                "content": {
+                    "beforesemicolon_router_works_in_bundled_applications_and_directly_in_modern": "`@beforesemicolon/router` 可在捆绑应用程序中工作，并通过 CDN 脚本标签直接在现代浏览器中工作。",
+                    "package_managers": "包管理器",
+                    "install_the_package_via_your_preferred_package_manager_to_bundle": "通过您首选的包管理器安装包，将其与 Vite、Webpack 或 Esbuild 捆绑在一起：",
+                    "direct_cdn_zero_build": "直接 CDN（零构建）",
+                    "for_simple_html_prototypes_or_build_less_applications_load_the": "对于简单的 HTML 原型或无构建应用程序，请直接从 `unpkg.com` 或 `jsDelivr` 加载已编译的浏览器捆绑包：",
+                    "locking_versions": "锁定版本",
+                    "it_is_highly_recommended_to_lock_the_version_in_production": "强烈建议在生产环境中锁定版本，以避免发布新更新时发生重大更改：",
+                    "global_namespace": "全局命名空间",
+                    "when_loaded_via_a_script_tag_all_exported_classes_routing": "通过脚本标记加载时，所有导出的类、路由函数和实用程序都在全局 `BFS` 窗口对象下可用："
+                }
+            },
+            "routing_apis": {
+                "navigation": {
+                    "meta": {
+                        "programmatic_navigation_router_by_before_semicolon": "程序化导航 - Router by Before Semicolon",
+                        "learn_how_to_transition_paths_pass_payloads_and_go_back": "了解如何使用 JavaScript 转换路径、传递有效负载以及在历史记录中后退/前进。"
+                    },
+                    "content": {
+                        "these_functions_trigger_state_updates_in_the_browser_s_history": "这些函数会触发浏览器历史会话中的状态更新，从而允许您以编程方式在页面之间进行转换。",
+                        "adds_a_new_entry_to_the_browser_s_history_stack": "将新条目添加到浏览器的历史记录堆栈中。",
+                        "updates_the_current_entry_in_the_history_stack_instead_of": "更新历史堆栈中的当前条目，而不是创建新条目。这对于重定向来说是理想的选择，因此单击浏览器的后退按钮不会使用户陷入重定向循环。",
+                        "navigates_back_to_the_previous_entry_in_the_browser_session": "导航回浏览器会话中的上一个条目。与单击浏览器的后退按钮相同。",
+                        "navigates_forward_to_the_next_entry_in_the_browser_session": "向前导航到浏览器会话中的下一个条目。与单击浏览器的前进按钮相同。"
+                    }
+                },
+                "params_queries": {
+                    "meta": {
+                        "params_queries": "参数和查询",
+                        "params_queries_apis_router_by_before_semicolon": "参数和查询 API - Router by Before Semicolon",
+                        "learn_how_to_retrieve_pathname_parameters_read_search_queries_and": "了解如何检索路径名参数、读取搜索查询和更新搜索查询。"
+                    },
+                    "content": {
+                        "params_queries_apis": "参数和查询 API",
+                        "these_functions_allow_you_to_read_and_write_parameters_or": "这些函数允许您以编程方式读取和写入参数或历史状态。",
+                        "retrieves_an_object_containing_all_parameters_parsed_from_the_current": "检索包含从当前 URL 路径名解析的所有参数的对象。",
+                        "retrieves_parsed_url_query_parameters_as_a_key_value_object": "以键值对象形式检索已解析的 URL 查询参数。支持复杂查询对象的自动JSON解析。",
+                        "updates_or_clears_url_search_parameters_updates_are_made_in": "更新或清除 URL 搜索参数。使用历史记录替换就地进行更新（不会向浏览器后堆栈添加新条目）。",
+                        "pass_null_to_clear_all_query_parameters_from_the_url": "通过 `null` 清除 URL 中的所有查询参数。",
+                        "retrieves_the_current_history_state_payload_object": "检索当前历史状态有效负载对象。"
+                    }
+                },
+                "registration": {
+                    "meta": {
+                        "route_registration": "路线登记",
+                        "route_registration_apis_router_by_before_semicolon": "路由注册 API - Router by Before Semicolon",
+                        "learn_how_to_register_pathname_patterns_and_compile_paths_using": "了解如何使用 JavaScript 注册路径名模式并编译路径。"
+                    },
+                    "content": {
+                        "route_registration_apis": "路由注册API",
+                        "these_utilities_allow_you_to_manage_registered_route_patterns_and": "这些实用程序允许您管理注册的路由模式并动态编译参数化路径。",
+                        "manually_registers_a_route_pattern_with_the_central_matching_engine": "向中央匹配引擎手动注册路线模式。这是由 `<page-route>` 标签自动执行的，但可以在 JS 中强制执行。",
+                        "if_a_boolean_is_passed_as_the_second_argument_it": "如果将布尔值作为第二个参数传递，则将其视为 `exact` 配置。",
+                        "checks_whether_a_concrete_pathname_matches_any_registered_route_pattern": "检查具体路径名是否与任何注册的路由模式匹配。",
+                        "takes_a_path_pattern_containing_parameters_and_compiles_it_into": "获取包含参数的路径模式，并使用当前活动位置中的值将其编译为完整的 URL 路径。"
+                    }
+                },
+                "subscribing": {
+                    "meta": {
+                        "subscription_observers_router_by_before_semicolon": "订阅观察者 - Router by Before Semicolon",
+                        "learn_how_to_observe_route_patterns_or_listen_to_global": "了解如何观察路线模式或收听全球导航事件。"
+                    },
+                    "content": {
+                        "these_apis_notify_your_javascript_code_when_url_modifications_or": "当 URL 修改或导航事件发生时，这些 API 会通知您的 JavaScript 代码。",
+                        "subscribes_to_a_specific_route_pattern_the_callback_triggers_whenever": "订阅特定的路由模式。每当匹配的状态转换（例如，从活动到非活动，或参数更改）时，回调就会触发。",
+                        "active_true_if_the_current_location_matches_the_pattern": "**`active`：** `true`（如果当前位置与模式匹配）。",
+                        "location_object_containing_pathname_query_search_params_data_history_state": "**`location`：** 包含 `pathname`、`query`（搜索参数）、`data`（历史状态）和解析的 `params` 的对象。",
+                        "use_exact_false_to_subscribe_to_a_layout_path_and": "使用 `exact = false` 订阅布局路径及其后代：",
+                        "subscribes_to_all_global_location_transitions_triggered_after_any_navigation": "订阅所有全球位置转换。在任何导航事件后触发，无论哪些路径处于活动状态。",
+                        "helper_to_verify_if_a_specific_path_matches_the_current": "帮助程序验证特定路径是否与当前浏览器位置匹配。",
+                        "exact_if_false_evaluates_to_true_if_the_browser_location": "**`exact`：** 如果是 `false`，且浏览器位置以指定路径开头（将子路径视为匹配），则计算结果为 `true`。",
+                        "examples": "示例",
+                        "search_query_matches_inside_isonpage_are_order_sensitive_parameters_must": "`isOnPage` 内的搜索查询匹配是顺序敏感的。参数必须按照指定的确切顺序出现。"
+                    }
+                }
+            },
+            "web_components": {
+                "page_data": {
+                    "meta": {
+                        "page_data": "页面数据",
+                        "page_data_component_router_by_before_semicolon": "页面数据组件 - Router by Before Semicolon",
+                        "learn_how_to_display_pathname_params_search_query_values_and": "了解如何使用 `<page-data>` 在 HTML 中显示路径名参数、搜索查询值和历史状态负载值。"
+                    },
+                    "content": {
+                        "the_component_allows_you_to_print_current_routing_parameters_search": "`<page-data>` 组件允许您直接在 HTML 中打印当前路由参数、搜索查询或历史状态，而无需编写 JavaScript 选择器。",
+                        "attribute_type_default_description": "|属性|类型 |默认 |描述 |",
+                        "line_22": "| :------------- | :------- | :---------- | :----------------------------------------------------------------------------------- |",
+                        "param_string_undefined_the_name_of_the_path_parameter_to": "| `param` | `string` | `undefined` |要渲染的路径参数的名称（例如 `/users/:userId` 中的 `userId`）。      |",
+                        "search_param_string_undefined_the_name_of_the_url_query": "| `search-param` | `string` | `undefined` |要呈现的 URL 查询参数的名称（例如 `?filter=active` 中的 `filter`）。 |",
+                        "key_string_undefined_the_dot_notation_key_path_to_display": "| `key` | `string` | `undefined` |从历史状态有效负载显示的点符号键路径。                 |",
+                        "fallback_values": "后备值",
+                        "any_content_wrapped_between_tags_is_treated_as_a_default": "`<page-data>` 标记之间包含的任何内容都被视为默认后备值。仅当请求的属性为 `undefined` 或不可用时才会呈现：",
+                        "deep_key_resolution": "深键分辨率",
+                        "when_passing_complex_history_payloads_via_use_dot_notation_in": "通过 `<page-link>` 传递复杂历史负载时，请在 `key` 属性中使用点表示法来遍历嵌套对象："
+                    }
+                },
+                "page_link": {
+                    "meta": {
+                        "page_link": "页面链接",
+                        "page_link_component_router_by_before_semicolon": "页面链接组件 - Router by Before Semicolon",
+                        "learn_how_to_manage_active_states_relative_path_resolution_and": "了解如何使用 `<page-link>` 管理活动状态、相对路径解析以及传递历史有效负载数据。"
+                    },
+                    "content": {
+                        "the_component_renders_a_standard_html_anchor_tag_wrapper_that": "`<page-link>` 组件呈现标准 HTML 锚点 (`<a>`) 标记包装器，该包装器拦截单击事件、更新浏览器历史记录，并在匹配当前位置时使用 `active` 属性突出显示自身。",
+                        "attribute_type_default_description": "|属性 |类型 |默认 |描述 |",
+                        "line_22": "| :-------------------- | :-------- | :----------- | :----------------------------------------------------------------------- |",
+                        "path_string_current_path_the_destination_pathname_e_g_home": "| `path` | `string` |当前路径|目标路径名（例如 `/home` 或查询相关参数）。    |",
+                        "search_string_undefined_appends_or_updates_search_parameters_e_g": "| `search` | `string` | `undefined` |附加或更新搜索参数（例如 `tab=settings`）。              |",
+                        "keep_current_search_boolean_false_retains_existing_url_search_parameters": "| `keep-current-search` | `boolean` | `false` |导航到新路径时保留现有 URL 搜索参数。    |",
+                        "exact_boolean_true_when_true_links_are_marked_active_only": "| `exact` | `boolean` | `true` |当 `true` 时，仅在路径名完全匹配时链接才会被标记为活动状态。    |",
+                        "title_string_undefined_the_document_title_to_set_upon_successful": "| `title` | `string` | `undefined` |成功导航时设置的文档标题。                    |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload` | `object` | `{}` |历史状态有效负载。在 HTML 中，提供 JSON 序列化对象字符串。 |",
+                        "relative_path_resolution": "相对路径分辨率",
+                        "to_make_page_layout_structures_reusable_automatically_resolves_shorthand_prefixes": "为了使页面布局结构可重用，`<page-link>` 自动解析速记前缀：",
+                        "no_path_attribute_evaluates_to_the_current_browser_pathname_ideal": "**无 `path` 属性：** 计算当前浏览器路径名。当您只需要修改查询参数时是理想的选择。",
+                        "dollar_prefix_replaced_by_the_path_of_the_closest_parent": "**美元前缀 `$`：** 替换为 DOM 树中最近的父 `<page-route>` 元素的路径。",
+                        "tilde_prefix_replaced_by_the_current_browser_pathname_useful_for": "**波形符前缀 `~`：** 替换为当前浏览器路径名。对于附加子部分很有用。",
+                        "active_state_styling": "活动状态样式",
+                        "when_the_browser_location_matches_the_link_s_target_the": "当浏览器位置与链接的目标匹配时，组件将获得本机 `active` 属性：",
+                        "you_can_target_this_state_in_css_using_standard_attributes": "您可以使用标准属性或 CSS 影子部分在 CSS 中定位此状态：",
+                        "passing_payloads": "传递有效负载",
+                        "use_payload_to_pass_history_state_data_to_the_next": "使用 `payload` 将历史状态数据传递到下一页。",
+                        "in_plain_html_attributes_are_strings_so_payload_must_be": "在普通 HTML 中，属性是字符串，因此 `payload` 必须是有效的 JSON 序列化对象：",
+                        "when_rendering_through_markup_pass_the_value_as_an_object": "通过 Markup 渲染 `<page-link>` 时，将该值作为对象属性传递：",
+                        "the_payload_is_available_on_the_destination_route_through_getpagedata": "有效负载可通过 `getPageData()`、`onPage()`、`onPageChange()` 或 `<page-data key=\"...\">` 在目标路由上获得。"
+                    }
+                },
+                "page_redirect": {
+                    "meta": {
+                        "page_redirect": "页面重定向",
+                        "page_redirect_component_router_by_before_semicolon": "页面重定向组件 - Router by Before Semicolon",
+                        "learn_how_to_manage_default_paths_and_handle_404_fallbacks": "了解如何使用 `<page-redirect>` 管理默认路径并处理 404 回退。"
+                    },
+                    "content": {
+                        "the_component_triggers_programmatic_redirection_it_is_used_to_handle": "`<page-redirect>` 组件触发编程重定向。它用于处理未知 URL（404 错误）或将父索引路径路由到默认子路由。",
+                        "attribute_type_default_description": "|属性|类型 |默认 |描述 |",
+                        "line_22": "| :-------- | :------------------------ | :---------- | :----------------------------------------------------------------------- |",
+                        "type_unknown_always_unknown_condition_under_which_redirection_triggers": "| `type` | `\"unknown\"` \\| `\"always\"` | `\"unknown\"` |触发重定向的条件。                              |",
+                        "path_string_destination_path_supports_parent_prefixes_like_and": "| `path` | `string` | `\"/\"` |目标路径（支持 `$` 和 `~` 等父前缀）。            |",
+                        "title_string_undefined_the_document_title_to_set_after_redirecting": "| `title` | `string` | `undefined` |重定向后要设置的文档标题。                             |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload` | `object` | `{}` |历史状态有效负载。在 HTML 中，提供 JSON 序列化对象字符串。 |",
+                        "redirection_types": "重定向类型",
+                        "text_1_unknown_default": "1.`unknown`（默认）",
+                        "redirection_triggers_only_when_the_current_browser_path_is_not": "仅当当前浏览器路径与任何注册的路由都不匹配时才会触发重定向。这主要用于定义全局或本地 404 回退：",
+                        "the_order_of_tags_in_html_matters_make_sure_to": "HTML 中标签的顺序很重要。确保在 `<page-route>` 标签**之后**定义 `<page-redirect>` 元素，以便首先注册所有有效路由。",
+                        "redirection_triggers_immediately_when_the_parent_route_is_matched_exactly": "当父路由完全匹配时，重定向立即触发。这对于在访问父布局时分配默认视图或选项卡很有帮助：",
+                        "scoped_redirection": "范围重定向",
+                        "because_is_aware_of_its_placement_in_the_dom_tree": "因为 `<page-redirect>` 知道它在 DOM 树中的位置：",
+                        "placing_it_inside_a_parent_means_it_will_only_handle": "将其放置在父 `<page-route>` 中意味着它将仅处理该路由内子路径的重定向。",
+                        "unrelated_root_level_paths_will_not_trigger_the_child_redirect": "不相关的根级路径不会触发子重定向。"
+                    }
+                },
+                "page_route_query": {
+                    "meta": {
+                        "page_route_query": "页面路由查询",
+                        "page_route_query_component_router_by_before_semicolon": "页面路由查询组件 - Router by Before Semicolon",
+                        "learn_how_to_render_views_conditionally_based_on_search_queries": "了解如何使用 `<page-route-query>` 根据搜索查询有条件地呈现视图。"
+                    },
+                    "content": {
+                        "the_component_mounts_content_conditionally_based_on_url_search_query": "`<page-route-query>` 组件根据 URL 搜索查询参数值 (`?key=value`) 而不是 URL 路径名有条件地装载内容。",
+                        "this_component_is_ideal_for_creating_tabbed_navigation_filters_or": "该组件非常适合创建选项卡式导航、过滤器或模块化模式，而无需编写 JavaScript 状态逻辑。",
+                        "attribute_type_default_description": "|属性|类型 |默认 |描述 |",
+                        "line_29": "| :-------- | :------- | :---------- | :------------------------------------------------------------------- |",
+                        "key_string_undefined_the_search_parameter_name_to_watch_e": "| `key` | `string` | `undefined` |要监视的搜索参数名称（例如 `\"tab\"`）。                   |",
+                        "value_string_undefined_the_exact_parameter_value_that_triggers_a": "| `value` | `string` | `undefined` |触发匹配的确切参数值。                     |",
+                        "src_string_undefined_relative_path_to_an_external_file_html": "| `src` | `string` | `undefined` |要按需加载的外部文件（HTML、JS、TXT）的相对路径。 |",
+                        "name_string_undefined_mutually_exclusive_query_route_group_identifier": "| `name` | `string` | `undefined` |互斥的查询路由组标识符。                     |",
+                        "example_tabbed_layout": "示例：选项卡式布局",
+                        "combine_with_to_create_fully_declarative_active_state_aware_tabs": "将 `<page-route-query>` 与 `<page-link>` 结合起来创建完全声明性的、活动状态感知的选项卡：",
+                        "behavior_and_caching": "行为和缓存",
+                        "just_like_the_query_matcher_detaches_template_views_when_the": "就像 `<page-route>` 一样，查询匹配器在参数不匹配时分离模板视图并缓存它们。",
+                        "when_the_query_matches_again_the_cached_template_is_restored": "当查询再次匹配时，缓存的模板会立即恢复。",
+                        "loader_slots_loading_and_fallbacks_fallback_are_fully_supported_when": "使用 `src` 属性时，完全支持加载程序插槽 (`loading`) 和回退 (`fallback`)。"
+                    }
+                },
+                "page_route": {
+                    "meta": {
+                        "page_route": "页面路由",
+                        "page_route_component_router_by_before_semicolon": "页面路由组件 - Router by Before Semicolon",
+                        "learn_how_to_render_pathname_routes_dynamic_params_nested_layouts": "了解如何渲染路径名路由、动态参数、嵌套布局、延迟路由文件、组件props、加载槽、后备和路由组。"
+                    },
+                    "content": {
+                        "the_component_is_the_main_route_container_it_mounts_slotted": "`<page-route>` 组件是主路由容器。仅当当前路径名与其路由模式匹配时，它才会安装开槽内容、惰性 `src` 文件或 JavaScript 提供的组件。",
+                        "attribute_type_default_description": "|属性|类型 |默认 |描述 |",
+                        "line_24": "| :-------- | :-------- | :---------- | :--------------------------------------------------------------------------------------------- |",
+                        "path_string_the_pathname_pattern_to_match_supports_parameters_like": "| `path` | `string` | `\"/\"` |要匹配的路径名模式（支持 `/:id` 等参数）。                               |",
+                        "exact_boolean_true_when_true_matches_the_path_strictly_when": "| `exact` | `boolean` | `true` |当`true`时，严格匹配路径。当 `false` 时，匹配以该模式开头的路径。 |",
+                        "src_string_undefined_relative_path_to_an_html_text_or": "| `src` | `string` | `undefined` |要延迟加载的 HTML、文本或 JavaScript 模块文件的相对路径。                        |",
+                        "title_string_undefined_updates_the_document_title_when_this_route": "| `title` | `string` | `undefined` |当此路径变为活动状态时更新文档标题。                                     |",
+                        "name_string_undefined_mutually_exclusive_route_group_identifier_similar_to": "| `name` | `string` | `undefined` |互斥的路由组标识符（类似于 Switch 语句）。                     |",
+                        "dynamic_parameters": "动态参数",
+                        "use_a_colon_to_define_path_parameters_you_can_retrieve": "使用冒号 `:` 定义路径参数。您可以通过 `<page-data>` 或 JavaScript 在嵌套的 HTML 中检索这些值：",
+                        "nested_layouts": "嵌套布局",
+                        "set_exact_false_on_a_parent_route_that_should_stay": "在父路由上设置 `exact=\"false\"`，该父路由在子路由匹配时应保持活动状态。子 `path` 值将附加到最近的父路由路径。",
+                        "switch_like_grouping_name": "类似开关的分组 (`name`)",
+                        "to_ensure_only_one_route_in_a_group_renders_at": "为了确保一次仅渲染组中的一个路由（防止重叠匹配），请为它们分配相同的 `name` 属性。路由器将按顺序评估它们并仅安装_first_匹配：",
+                        "lazy_loading_src": "延迟加载 (`src`)",
+                        "instead_of_embedding_all_views_in_the_main_document_load": "不要将所有视图嵌入主文档中，而是通过在 `src` 属性中指定文件来按需加载它们。",
+                        "you_can_define_a_loading_state_and_a_fallback_ui": "您可以使用 `loading` 和 `fallback` 槽定义加载状态和后备 UI（如果请求失败则显示）：",
+                        "supported_lazy_loaded_formats": "支持的延迟加载格式",
+                        "when_loading_a_javascript_file_the_module_must_default_export": "加载 JavaScript 文件时，模块必须默认导出以下内容之一：",
+                        "a_plain_html_text_string": "纯 HTML/文本字符串。",
+                        "a_native_dom_node_e_g_element_documentfragment": "本机 DOM `Node`（例如 `Element`、`DocumentFragment`）。",
+                        "an_htmltemplate_generated_by_the_markup_html_tagged_literal": "由 Markup `html` 标记文字生成的 `HtmlTemplate`。",
+                        "a_function_that_receives_locationstate_pathparams_searchparams_and_returns_any": "接收 `(locationState, pathParams, searchParams)` 并返回上述任何内容的函数。",
+                        "caching_and_lifecycle": "缓存和生命周期",
+                        "to_prevent_memory_leaks_and_optimize_performance": "为了防止内存泄漏并优化性能：",
+                        "inactive_routes_receive_the_hidden_attribute": "非活动路由接收 `hidden` 属性。",
+                        "when_a_loaded_route_becomes_inactive_the_engine_detaches_the": "当加载的路由变为非活动状态时，引擎会分离 DOM 树并将其缓存在内存中。",
+                        "if_the_route_matches_again_the_cached_dom_tree_is": "如果路由再次匹配，则重新插入缓存的DOM树，而无需重复计算或请求。"
+                    }
+                }
+            }
+        },
+        "home": {
+            "meta": {
+                "router": "Router",
+                "router_by_before_semicolon": "Router 由 Before Semicolon",
+                "a_tiny_web_component_router_for_html_first_apps_declare": "适用于 HTML 优先应用程序的小型 Web Component 路由器。声明链接、路由、重定向、查询路由、惰性页面、防护和路由数据，无需框架锁定。"
+            },
+            "content": {
+                "routing": "简单的 HTML ",
+                "in_plain_html": "路由。",
+                "a_tiny_web_component_router_for_html_first_apps_route": "适用于 HTML 优先应用程序的小型 Web Component 路由器。按路径名或搜索查询进行路由、延迟加载 HTML/JS/TXT 页面、嵌套路由布局、保护受保护的屏幕，并使框架锁定在导航层之外。",
+                "config": "配置",
+                "js_txt_pages": "JS - TXT 页",
+                "the_ecosystem": "`// THE ECOSYSTEM`",
+                "built_on_web_component_markup": "基于 Web Component 和 Markup 构建。",
+                "router_is_built_on_top_of_web_component_and_markup": "Router 构建于 Web Component 和 Markup 之上。相同的发动机、模块化套件、零锁定。",
+                "the_9kb_reactive_templating_system_that_powers_everything_tagged_templates": "9Kb 反应式模板系统为一切提供动力。标记模板、状态、效果、重复、悬念。",
+                "a_reactive_layer_over_native_custom_elements_the_foundation_router": "原生自定义元素之上的反应层 — Router 的基础。props、状态、范围样式、生命周期。",
+                "why_this_router": "`// WHY THIS ROUTER`",
+                "routing_that_disappears_into_html": "消失在 HTML 中的路由。",
+                "five_web_components_one_central_matcher_and_a_clean_js": "五个 Web 组件、一个中央匹配器和一个干净的 JS API，可满足您无法用标记表达的所有内容。",
+                "plug_play": "即插即用",
+                "drop_in_two_script_tags_and_route_with_html_no": "放入两个脚本标签并使用 HTML 进行路由。无需构建步骤，无需路由器配置，无需 JavaScript。",
+                "tiny_focused": "微小而专注",
+                "a_small_surface_area_five_web_components_and_a_js": "较小的表面积：五个 Web 组件和一个 JS API。基于 Markup + Web Component 构建，零额外依赖。",
+                "lazy_loaded_pages": "延迟加载页面",
+                "point_page_route_at_an_html_txt_or_js_file": "将页面路由指向 HTML、txt 或 JS 文件。模块加载一次，在访问之间缓存，干净地安装和卸载。",
+                "nested_named_routes": "嵌套和命名路由",
+                "children_extend_their_parent_s_path_use_the_name_attribute": "孩子们延续了父母的道路。使用 name 属性进行类似开关的互斥匹配。",
+                "search_query_routing": "搜索查询路由",
+                "page_route_query_renders_content_based_on_key_value_tabs": "page-route-query 基于 ?key=value 呈现内容 — 选项卡、过滤器和模态，没有一行状态。",
+                "smart_redirects": "智能重定向",
+                "page_redirect_targets_unknown_paths_only_or_always_scoped_to": "页面重定向仅针对未知路径 - 或始终，其范围仅限于其父路由。非常适合 404 和默认值。",
+                "one_match_one_render": "一场比赛，一场渲染",
+                "a_central_matcher_resolves_each_navigation_once_guards_run_once": "中央匹配器解析每个导航一次。卫兵跑一次。订阅者仅在相关时才会触发。",
+                "cached_remounts": "缓存重新安装",
+                "inactive_routes_are_detached_from_the_dom_but_kept_warm": "非活动路由与 DOM 分离，但保持温暖。回来是立即重新安装，而不是重建。",
+                "works_with_any_builder": "与任何建筑商合作",
+                "vite_webpack_esbuild_plain_html_or_a_cdn_script_tag": "Vite、Webpack、esbuild、普通 HTML 或 CDN 脚本标签 - 它只是 Web 组件，因此它可以插入任何地方。",
+                "see_it_in_action": "`// SEE IT IN ACTION`",
+                "five_examples_infinite_sitemaps": "五个例子。无限的站点地图。",
+                "compose_page_route_page_link_page_route_query_page_redirect": "编写页面路由、页面链接、页面路由查询、页面重定向、页面数据以及围绕它们的小型 JS API。",
+                "nested_routes_params": "嵌套路由和参数",
+                "search_query_routes": "搜索查询路线",
+                "page_metadata": "页面元数据",
+                "protected_routes": "受保护的路线",
+                "bundler_friendly_pages": "捆绑器友好的页面",
+                "quick_start": "`// quick start`",
+                "install_in_seconds": "只需几秒钟即可安装。",
+                "choose_your_preferred_installation_method_works_everywhere_javascript_runs": "选择您喜欢的安装方法。适用于 JavaScript 运行的任何地方。",
+                "build_single_and_multi_page_apps": "构建单页和多页应用程序，",
+                "your_way": "你的方式。",
+                "combine_the_simplicity_of_vanilla_web_standards_with_the_power": "将普通 Web 标准的简单性与声明式路由的强大功能相结合。"
+            }
+        }
+    }
+}

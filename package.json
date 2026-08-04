@@ -17,11 +17,15 @@
         "test:watch": "jest --watch",
         "local": "run-p local:watch local:serve",
         "local:watch": "node build-docs.js && nodemon --exec 'node build-docs.js'",
-        "local:serve": "npx http-server ./website/en",
-        "local:serve:pt": "npx http-server ./website/pt -p 8081",
+        "local:serve": "npm run local:serve:en",
+        "local:serve:pt": "npx http-server ./website/pt -p 8083",
         "build": "npm-run-all build:package build:docs",
         "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js",
-        "build:docs": "node build-docs.js"
+        "build:docs": "node build-docs.js",
+        "local:serve:en": "npx http-server ./website/en -p 8080",
+        "local:serve:zh": "npx http-server ./website/zh -p 8081",
+        "local:serve:es": "npx http-server ./website/es -p 8082",
+        "local:serve:fr": "npx http-server ./website/fr -p 8084"
     },
     "keywords": [
         "web-component",
@@ -38,7 +42,7 @@
     },
     "devDependencies": {
         "@beforesemicolon/builder": "^1.8.25",
-        "@beforesemicolon/site-builder": "^1.4.0",
+        "@beforesemicolon/site-builder": "^1.4.1",
         "@types/jest": "^29.5.1",
         "@types/jsdom": "^21.1.1",
         "@typescript-eslint/eslint-plugin": "^6.7.3",

@@ -535,8 +535,8 @@
                 "a_tiny_web_component_router_for_html_first_apps_declare": "Um pequeno roteador com Web Components para aplicações HTML-first. Declare links, rotas, redirecionamentos, rotas por consulta, páginas lazy, guards e dados de rota sem ficar preso a frameworks."
             },
             "content": {
-                "routing": "Roteamento",
-                "in_plain_html": "em HTML puro.",
+                "routing": "Roteamento ",
+                "in_plain_html": "com HTML simples.",
                 "a_tiny_web_component_router_for_html_first_apps_route": "Um pequeno roteador com Web Components para aplicações HTML-first. Navegue por caminho ou consulta, carregue páginas HTML/JS/TXT sob demanda, aninhe layouts de rota, proteja telas e mantenha sua navegação independente de frameworks.",
                 "config": "CONFIGURAÇÃO",
                 "js_txt_pages": "PÁGINAS JS - TXT",

@@ -3,7 +3,7 @@
     "mode": "static",
     "siteUrl": "https://router.beforesemicolon.com",
     "defaultLocale": "en",
-    "locales": ["en", "pt"],
+    "locales": ["en", "zh", "es", "pt", "fr"],
     "docs": {
         "sourceDir": "docs",
         "outputDir": "website",

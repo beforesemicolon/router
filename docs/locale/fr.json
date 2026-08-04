@@ -1,0 +1,586 @@
+{
+    "_routes": {
+        "index": "/",
+        "documentation/index": "/documentation/",
+        "documentation/get-started": "/documentation/premiers-pas",
+        "documentation/installation": "/documentation/installation",
+        "documentation/guide-best-practices": "/documentation/guide-et-bonnes-pratiques",
+        "documentation/ai": "/documentation/ai",
+        "documentation/advanced-features/route-guards": "/documentation/fonctionnalites-avancees/gardes-de-route",
+        "documentation/advanced-features/hash-routing": "/documentation/fonctionnalites-avancees/routage-par-hachage",
+        "documentation/advanced-features/module-registry": "/documentation/fonctionnalites-avancees/registre-de-modules",
+        "documentation/advanced-features/route-metadata": "/documentation/fonctionnalites-avancees/metadonnees-de-route",
+        "documentation/advanced-features/component-prop": "/documentation/fonctionnalites-avancees/propriete-component",
+        "documentation/routing-apis/navigation": "/documentation/apis-de-routage/navigation",
+        "documentation/routing-apis/subscribing": "/documentation/apis-de-routage/abonnements",
+        "documentation/routing-apis/params-queries": "/documentation/apis-de-routage/parametres-et-requetes",
+        "documentation/routing-apis/registration": "/documentation/apis-de-routage/enregistrement",
+        "documentation/web-components/page-route": "/documentation/composants-web/route-de-page",
+        "documentation/web-components/page-route-query": "/documentation/composants-web/requete-de-route",
+        "documentation/web-components/page-link": "/documentation/composants-web/lien-de-page",
+        "documentation/web-components/page-redirect": "/documentation/composants-web/redirection-de-page",
+        "documentation/web-components/page-data": "/documentation/composants-web/donnees-de-page"
+    },
+    "common": {
+        "navigation": {
+            "home": "Accueil",
+            "content": "Contenu",
+            "features": "Fonctionnalités",
+            "code": "Coder",
+            "install": "Installer",
+            "documentation": "Documentation",
+            "docs": "Documentation",
+            "learningResources": "Ressources d'apprentissage",
+            "aboutBeforeSemicolon": "À propos de Before Semicolon",
+            "openSource": "Source ouverte",
+            "website": "Site Web",
+            "blog": "Blog",
+            "youtubeChannel": "Chaîne YouTube"
+        },
+        "actions": {
+            "editDoc": "modifier ce document",
+            "getStarted": "Commencer",
+            "readDocs": "Lire les documents",
+            "copy": "Copier",
+            "copied": "Copié",
+            "copyCode": "Copier le code",
+            "codeCopied": "Code copié",
+            "commandCopied": "Commande copiée",
+            "copyInstallCommand": "Copier la commande d'installation {{manager}}",
+            "previousExample": "Exemple précédent",
+            "nextExample": "Exemple suivant"
+        },
+        "accessibility": {
+            "installationPackageManager": "Gestionnaire de packages d'installation",
+            "goToSlide": "Aller à la diapositive {{number}}",
+            "mobileMenu": {
+                "open": "Ouvrir le menu Documentation",
+                "close": "Fermer le menu Documentation"
+            }
+        },
+        "labels": {
+            "example": "Exemple",
+            "exampleUppercase": "EXEMPLE",
+            "attributes": "Attributs"
+        },
+        "pageTitles": {
+            "componentProp": "Accessoire de composant",
+            "hashRouting": "Routage de hachage",
+            "moduleRegistry": "Registre des modules",
+            "routeGuards": "Gardes de route",
+            "routeMetadata": "Métadonnées d'itinéraire",
+            "aiGuide": "Guide de l'IA",
+            "guideBestPractices": "Guide et bonnes pratiques",
+            "overview": "Qu'est-ce que Router ?",
+            "installation": "Mise en place",
+            "navigationApis": "API de navigation",
+            "subscribingApis": "API d'abonnement"
+        },
+        "messages": {
+            "unsubscribeCleanup": "Renvoie une **fonction de nettoyage** pour se désabonner."
+        },
+        "footer": {
+            "description": "Un petit routeur plug-and-play pour la navigation par nom de chemin, requête et hybride avec prise en charge Web Component.",
+            "copyright": "Copyright © 2026 Before Semicolon. Tous droits réservés."
+        }
+    },
+    "pages": {
+        "documentation": {
+            "advanced_features": {
+                "component_prop": {
+                    "meta": {
+                        "component_prop_router_by_before_semicolon": "Accessoire de composant - Router par Before Semicolon",
+                        "learn_how_to_pass_component_references_directly_to_routes_for": "Découvrez comment transmettre des références de composants directement aux routes pour la sécurité des types et la compilation du bundle."
+                    },
+                    "content": {
+                        "instead_of_using_the_src_attribute_with_file_path_strings": "Au lieu d'utiliser l'attribut `src` avec des chaînes de chemin de fichier, `<page-route>` vous permet de transmettre des références de constructeur/classe de composant directement à l'aide de la propriété `component`.",
+                        "this_approach_is_highly_recommended_when_bundling_applications_as_it": "Cette approche est fortement recommandée lors du regroupement d'applications, car elle fournit une vérification de type au moment de la compilation et un mappage de source robuste.",
+                        "benefits_of_the_component_prop": "Avantages de l'hélice `component`",
+                        "type_safety_typescript_validates_class_references_at_compile_time": "**Sécurité des types :** TypeScript valide les références de classe au moment de la compilation.",
+                        "ide_assistance_autocomplete_and_symbol_renaming_work_natively": "**Assistance IDE :** La saisie semi-automatique et le renommage des symboles fonctionnent de manière native.",
+                        "tree_shaking_static_imports_allow_bundlers_to_shake_out_unused": "**Tree-Shaking :** Les importations statiques permettent aux bundlers d'éliminer le code inutilisé.",
+                        "hmr_support_faster_hot_module_replacements_during_development": "**Support HMR :** Remplacements plus rapides des modules à chaud pendant le développement.",
+                        "component_formats": "Formats de composants",
+                        "the_value_passed_to_the_component_property_can_be": "La valeur passée à la propriété `component` peut être :",
+                        "text_1_plain_html_string": "1. Chaîne HTML simple",
+                        "text_2_markup_template_literal": "2. Littéral de modèle Markup",
+                        "text_3_native_dom_node": "3. Nœud natif DOM",
+                        "text_4_contextual_loader_function": "4. Fonction de chargeur contextuel",
+                        "a_function_that_receives_navigation_data_path_params_and_search": "Une fonction qui reçoit des données de navigation, des paramètres de chemin et des requêtes de recherche, et renvoie l'un des formats ci-dessus :"
+                    }
+                },
+                "hash_routing": {
+                    "meta": {
+                        "hash_routing_router_by_before_semicolon": "Routage de hachage - Router par Before Semicolon",
+                        "learn_how_to_set_up_url_hash_based_routing_path": "Découvrez comment configurer le routage basé sur le hachage d'URL (#/chemin) pour les environnements d'hébergement statiques."
+                    },
+                    "content": {
+                        "the_router_supports_both_standard_html5_history_api_routing_pathnames": "Le routeur prend en charge à la fois le routage standard de l'API d'historique HTML5 (noms de chemin) et le routage basé sur le hachage (`#/path`).",
+                        "hash_routing_is_perfect_for_static_file_hosting_environments_like": "Le routage de hachage est parfait pour les environnements d'hébergement de fichiers statiques (comme les pages GitHub ou les déploiements statiques Netlify) car il évite le besoin de configurations de secours de redirection côté serveur.",
+                        "configures_the_router_s_active_mode_accepts_history_default_or": "Configure le mode actif du routeur. Accepte `\"history\"` (par défaut) ou `\"hash\"`.",
+                        "retrieves_the_currently_active_routing_mode": "Récupère le mode de routage actuellement actif.",
+                        "benefits_of_hash_routing": "Avantages du routage de hachage",
+                        "zero_server_config_standard_servers_return_a_404_error_when": "**Zéro configuration du serveur :** Les serveurs standard renvoient une erreur 404 lors de l'accès à un chemin direct tel que `/about` lors de l'actualisation de la page, à moins qu'ils ne soient configurés pour réécrire sur `index.html`. Le routage de hachage est entièrement côté client et ne nécessite aucune règle de secours côté serveur.",
+                        "static_hosting_highly_compatible_with_static_environments_like_aws_s3": "**Hébergement statique :** Hautement compatible avec les environnements statiques tels que les compartiments AWS S3, les pages GitHub ou Netlify.",
+                        "legacy_compatibility_works_flawlessly_in_older_web_browser_engines": "**Compatibilité héritée :** Fonctionne parfaitement dans les anciens moteurs de navigateur Web."
+                    }
+                },
+                "module_registry": {
+                    "meta": {
+                        "module_registry_router_by_before_semicolon": "Registre des modules - Router par Before Semicolon",
+                        "learn_how_to_pre_register_page_modules_for_code_splitting": "Découvrez comment pré-enregistrer les modules de page pour le fractionnement du code et l'intégration du bundler."
+                    },
+                    "content": {
+                        "when_building_large_scale_applications_with_modern_asset_bundlers_like": "Lors de la création d'applications à grande échelle avec des regroupeurs d'actifs modernes (comme Vite ou Webpack), les importations de chaînes dynamiques dans l'attribut `src` (par exemple `<page-route src=\"./pages/home.js\">`) sont difficiles à tracer pour les regroupeurs lors de l'analyse statique.",
+                        "the_module_registry_allows_you_to_pre_register_a_map": "Le **Module Registry** vous permet de pré-enregistrer une carte des chemins d'accès aux pages vers leurs fonctions de chargeur, permettant ainsi un fractionnement de code et un suivi des actifs appropriés dans votre pipeline de build.",
+                        "registers_a_map_of_paths_to_their_module_loader_functions": "Enregistre une carte des chemins vers leurs fonctions de chargeur de module.",
+                        "integration_examples": "Exemples d'intégration",
+                        "vite_supports_importing_multiple_files_matching_a_glob_pattern_automatically": "Vite prend en charge l'importation automatique de plusieurs fichiers correspondant à un modèle global :",
+                        "webpack_uses_require_context_to_trace_directory_structures": "Webpack utilise `require.context` pour tracer les structures de répertoires :",
+                        "text_3_manual_registration": "3. Inscription manuelle",
+                        "you_can_also_manually_map_imports": "Vous pouvez également mapper manuellement les importations :",
+                        "usage_in_html": "Utilisation dans HTML",
+                        "once_modules_are_registered_define_your_tags_as_normal_the": "Une fois les modules enregistrés, définissez vos balises `<page-route>` comme d'habitude. Le routeur interceptera la chaîne `src` et la résoudra à l'aide du chargeur pré-enregistré au lieu de déclencher une requête de récupération générique du navigateur :",
+                        "retrieves_a_registered_module_loader_by_its_path": "Récupère un chargeur de module enregistré par son chemin.",
+                        "preloading_registered_modules": "Préchargement des modules enregistrés",
+                        "registered_modules_can_be_preloaded_before_the_user_navigates_to": "Les modules enregistrés peuvent être préchargés avant que l'utilisateur n'y accède."
+                    }
+                },
+                "route_guards": {
+                    "meta": {
+                        "route_guards_router_by_before_semicolon": "Gardes de route - Router par Before Semicolon",
+                        "learn_how_to_secure_paths_and_perform_checks_before_transitioning": "Apprenez à sécuriser les chemins et à effectuer des vérifications avant d'effectuer une transition à l'aide de gardes de route."
+                    },
+                    "content": {
+                        "route_guards_allow_you_to_protect_routes_with_authentication_checks": "Route Guards vous permet de protéger les itinéraires avec des contrôles d'authentification, des autorisations ou d'autres logiques personnalisées.",
+                        "guards_can_block_navigation_entirely_or_redirect_the_user_to": "Les gardes peuvent bloquer entièrement la navigation ou rediriger l’utilisateur vers un autre emplacement.",
+                        "guard_return_values": "Valeurs de retour de garde",
+                        "a_guard_function_can_return": "Une fonction de garde peut renvoyer :",
+                        "true_allow_the_navigation": "`true` : Autoriser la navigation.",
+                        "false_block_the_navigation_remains_on_the_current_page": "`false` : Bloquer la navigation (reste sur la page en cours).",
+                        "string_redirects_the_user_to_the_specified_path_string": "`string` : redirige l'utilisateur vers la chaîne de chemin spécifiée.",
+                        "promise_async_checks_e_g_database_fetches_are_fully_supported": "`Promise<boolean | string>` : les vérifications asynchrones (par exemple, les récupérations de base de données) sont entièrement prises en charge.",
+                        "global_guards": "Gardes mondiaux",
+                        "global_guards_execute_on_every_navigation_event_before_any_route": "Les gardes globaux s'exécutent à chaque événement de navigation, avant tout garde spécifique à l'itinéraire.",
+                        "route_specific_guards": "Gardes spécifiques à la route",
+                        "route_specific_guards_run_only_when_navigating_to_a_path": "Les gardes spécifiques à l'itinéraire s'exécutent uniquement lors de la navigation vers un chemin qui correspond au modèle enregistré.",
+                        "guard_execution_order": "Ordre d'exécution de la garde",
+                        "global_guards_executed_in_the_order_they_were_registered": "**Global Guards :** Exécutés dans l'ordre dans lequel ils ont été enregistrés.",
+                        "route_specific_guards_executed_in_the_order_they_were_registered": "**Gardes spécifiques à l'itinéraire :** Exécutés dans l'ordre dans lequel ils ont été enregistrés.",
+                        "the_first_guard_that_returns_false_or_a_redirect_string": "Le _premier_ garde qui renvoie `false` ou une redirection `string` arrête immédiatement l'exécution ; les gardes suivants sont ignorés."
+                    }
+                },
+                "route_metadata": {
+                    "meta": {
+                        "route_metadata_router_by_before_semicolon": "Métadonnées d'itinéraire - Router par Before Semicolon",
+                        "learn_how_to_attach_permissions_layouts_or_custom_page_properties": "Découvrez comment attacher des autorisations, des mises en page ou des propriétés de page personnalisées aux itinéraires."
+                    },
+                    "content": {
+                        "you_can_attach_custom_metadata_such_as_page_layouts_breadcrumbs": "Vous pouvez joindre des métadonnées personnalisées (telles que des mises en page, des fils d'Ariane, des autorisations ou des rôles d'accès) lors de l'enregistrement des itinéraires.",
+                        "metadata_is_stored_by_the_registered_route_pattern_use_the": "Les métadonnées sont stockées par le modèle d'itinéraire enregistré. Utilisez le même modèle lors de l’appel de `getRouteMeta`.",
+                        "attaching_metadata": "Joindre des métadonnées",
+                        "pass_metadata_inside_the_options_configuration_of_registerroute": "Transmettez les métadonnées dans la configuration des options de `registerRoute` :",
+                        "retrieving_metadata_getroutemeta": "Récupération de métadonnées (`getRouteMeta`)",
+                        "retrieves_the_metadata_object_associated_with_a_registered_path_pattern": "Récupère l'objet de métadonnées associé à un modèle de chemin enregistré.",
+                        "common_use_cases": "Cas d'utilisation courants",
+                        "text_1_dynamic_document_titles": "1. Titres de documents dynamiques",
+                        "update_the_browser_document_title_dynamically_upon_page_transitions": "Mettez à jour le titre du document du navigateur de manière dynamique lors des transitions de page :",
+                        "text_2_guarding_permissions": "2. Garder les autorisations",
+                        "check_permissions_dynamically_inside_a_route_guard": "Vérifiez les autorisations de manière dynamique à l'intérieur d'un garde-route :"
+                    }
+                }
+            },
+            "ai": {
+                "meta": {
+                    "ai_guide_for_before_semicolon_router": "Guide IA pour Before Semicolon Router",
+                    "a_compact_reference_for_ai_assistants_and_developers_generating_router": "Une référence compacte pour les assistants IA et les développeurs générant du code Router, avec des composants, des API, des modèles et des contraintes précis."
+                },
+                "content": {
+                    "use_this_page_as_the_compact_reference_when_generating_examples": "Utilisez cette page comme référence compacte lors de la génération d'exemples, de didacticiels, de migrations ou de code d'application pour `@beforesemicolon/router`.",
+                    "package_purpose": "Objectif du package",
+                    "beforesemicolon_router_is_an_html_first_routing_library_built_with": "`@beforesemicolon/router` est une première bibliothèque de routage HTML construite avec Web Components. Il fournit des éléments personnalisés pour la navigation et le rendu des itinéraires, ainsi qu'une petite API JavaScript pour la navigation programmatique, les abonnements, les gardes, les modules d'itinéraire, les métadonnées, les mises à jour de requêtes et le routage de hachage.",
+                    "required_imports": "Importations requises",
+                    "for_bundled_apps": "Pour les applications groupées :",
+                    "when_using_exported_apis": "Lors de l'utilisation d'API exportées :",
+                    "for_direct_browser_use_load_web_component_first": "Pour une utilisation directe dans le navigateur, chargez d'abord Web Component :",
+                    "cdn_apis_are_available_at_bfs_router": "Les API CDN sont disponibles sur `BFS.ROUTER`.",
+                    "custom_elements": "Éléments personnalisés",
+                    "use_these_elements_exactly": "Utilisez ces éléments exactement :",
+                    "route_patterns": "Modèles d'itinéraire",
+                    "use_name_for_dynamic_params": "Utilisez `:name` pour les paramètres dynamiques :",
+                    "set_exact_false_for_layout_routes_that_should_remain_active": "Définissez `exact=\"false\"` pour les itinéraires de mise en page qui doivent rester actifs pour les chemins imbriqués :",
+                    "link_rules": "Règles de lien",
+                    "use_path_for_path_navigation_and_search_for_query_updates": "Utilisez `path` pour la navigation dans le chemin et `search` pour les mises à jour des requêtes. Utilisez `keep-current-search` lors de la mise à jour d’une clé de requête tout en préservant les autres.",
+                    "use_inside_a_nested_route_to_reference_the_closest_parent": "Utilisez `$` dans une route imbriquée pour référencer le chemin de la route parent le plus proche :",
+                    "use_to_reference_the_current_browser_pathname": "Utilisez `~` pour référencer le chemin d'accès actuel du navigateur :",
+                    "lazy_route_content": "Contenu de l'itinéraire paresseux",
+                    "src_can_load_html_text_or_javascript_modules_javascript_modules": "`src` peut charger des modules HTML, texte ou JavaScript. Les modules JavaScript doivent exporter par défaut une chaîne, un DOM `Node`, un Markup `HtmlTemplate` ou une fonction qui reçoit `(data, params, query)`.",
+                    "programmatic_navigation": "Navigation programmatique",
+                    "gotopage_and_replacepage_are_async_and_accept_an_object_literal": "`goToPage` et `replacePage` sont asynchrones et acceptent une charge utile d'état littéral objet.",
+                    "guards": "Gardes",
+                    "registerglobalguard_and_registerrouteguard_register_guards_and_do_not_return_cleanup": "`registerGlobalGuard` et `registerRouteGuard` enregistrent les gardes et ne renvoient pas de fonctions de nettoyage. Un garde revient :",
+                    "true_to_allow_navigation": "`true` pour permettre la navigation.",
+                    "false_to_block_navigation": "`false` pour bloquer la navigation.",
+                    "a_path_string_to_redirect": "Une chaîne de chemin à rediriger.",
+                    "a_promise_resolving_to_one_of_those_values": "Une promesse répondant à l’une de ces valeurs.",
+                    "query_data": "Données de requête",
+                    "getsearchparams_parses_search_values_with_the_router_json_parser_values": "`getSearchParams` analyse les valeurs de recherche avec l'analyseur JSON du routeur. Valeurs écrites avec un aller-retour `updateSearchQuery` via la stringification JSON.",
+                    "avoid_these_mistakes": "Évitez ces erreurs",
+                    "do_not_use_react_router_syntax_such_as_or_usenavigate": "N'utilisez pas la syntaxe React Router telle que `<Route>` ou `useNavigate`.",
+                    "do_not_claim_route_guard_registration_returns_an_unsubscribe_function": "Ne prétendez pas que l'enregistrement de Route Guard renvoie une fonction de désabonnement.",
+                    "do_not_use_href_on_use_path_and_search": "N'utilisez pas `href` sur `<page-link>` ; utilisez `path` et `search`.",
+                    "do_not_use_component_as_a_string_in_html_component": "N'utilisez pas `component=\"...\"` comme chaîne dans HTML. `component` est une propriété pour les itinéraires rendus par JavaScript.",
+                    "do_not_use_route_state_for_permanent_data_prefer_params": "N'utilisez pas l'état de l'itinéraire pour les données permanentes. Préférez les paramètres, les chaînes de requête ou le stockage d’application."
+                }
+            },
+            "get_started": {
+                "meta": {
+                    "get_started_with_router_before_semicolon": "Premiers pas avec Router - Before Semicolon",
+                    "build_your_first_html_first_router_app_with_page_link": "Créez votre première application HTML-first Router avec lien de page, itinéraire de page, données de page, fichiers d'itinéraire paresseux et redirections 404."
+                },
+                "content": {
+                    "setting_up_routing_does_not_require_a_route_config_file": "La configuration du routage ne nécessite pas de fichier de configuration de route, de framework de wrapper ou d'outil de construction. Une petite application peut être entièrement acheminée avec les balises HTML, et une application plus grande peut déplacer chaque vue vers des fichiers de route paresseux HTML ou JavaScript.",
+                    "let_s_build_a_simple_multi_tab_dashboard_step_by": "Créons étape par étape un tableau de bord multi-onglets simple :",
+                    "step_1_add_the_scripts": "Étape 1 : ajouter les scripts",
+                    "import_the_required_scripts_the_router_relies_on_beforesemicolon_web": "Importez les scripts requis. Le Router s'appuie sur `@beforesemicolon/web-component` pour le comportement de l'élément personnalisé sous-jacent :",
+                    "step_2_declare_navigation_links": "Étape 2 : déclarer les liens de navigation",
+                    "create_navigation_links_using_the_tag_use_the_path_attribute": "Créez des liens de navigation à l'aide de la balise `<page-link>`. Utilisez l'attribut `path` pour pointer vers des URL spécifiques et `title` pour spécifier le titre du document :",
+                    "step_3_define_page_routes": "Étape 3 : Définir les itinéraires des pages",
+                    "wrap_your_page_views_inside_tags_the_contents_of_these": "Enveloppez vos pages vues dans les balises `<page-route>`. Le contenu de ces éléments ne sera rendu que lorsque le chemin d'accès du navigateur correspond à leur attribut `path` :",
+                    "step_4_handle_404s_and_redirects": "Étape 4 : Gérer les 404 et les redirections",
+                    "to_redirect_users_when_they_navigate_to_an_unregistered_or": "Pour rediriger les utilisateurs lorsqu'ils accèdent à une URL non enregistrée ou invalide, définissez un itinéraire `404` et un `<page-redirect>` au bas de votre liste de routage :",
+                    "next_steps": "Prochaines étapes",
+                    "now_that_you_have_a_basic_routing_layout_you_can": "Maintenant que vous disposez d’une présentation de routage de base, vous pouvez explorer :",
+                    "guide_best_practices_for_route_structure_redirects_guards_and_production": "**[Guide et bonnes pratiques](./guide-best-practices/)** pour la structure des itinéraires, les redirections, les gardes et les conventions de production.",
+                    "page_route_to_render_params_nested_views_loading_states_and": "**[Page Route](./web-components/page-route/)** pour restituer les paramètres, les vues imbriquées, les états de chargement et les fichiers de route différée.",
+                    "navigation_apis_to_navigate_programmatically_inside_javascript": "**[API de navigation](./routing-apis/navigation/)** pour naviguer par programmation dans JavaScript.",
+                    "route_guards_to_secure_pages_with_sync_or_async_checks": "**[Route Guards](./advanced-features/route-guards/)** pour sécuriser les pages avec des contrôles de synchronisation ou asynchrones."
+                }
+            },
+            "guide_best_practices": {
+                "meta": {
+                    "router_guide_best_practices_router_by_before_semicolon": "Guide et bonnes pratiques Router - Router par Before Semicolon",
+                    "practical_guidance_for_building_maintainable_html_first_routing_with_before": "Conseils pratiques pour créer un routage maintenable de type HTML avec Before Semicolon Router, y compris la structure des itinéraires, les redirections, les gardes, les liens et le chargement paresseux."
+                },
+                "content": {
+                    "router_works_best_when_the_url_is_treated_as_the": "Router fonctionne mieux lorsque l'URL est traitée comme la source de vérité pour la navigation, les filtres, les onglets et l'état de l'interface utilisateur partageable. Conservez les déclarations de route proches de la présentation qu'elles contrôlent, puis utilisez l'API JavaScript uniquement pour les comportements qui ne peuvent pas être exprimés proprement dans HTML.",
+                    "start_with_declarative_routes": "Commencez par des routes déclaratives",
+                    "for_most_pages_use_and_directly_in_the_document_this": "Pour la plupart des pages, utilisez `<page-route>`, `<page-link>` et `<page-redirect>` directement dans le document. Cela permet à l'application de rester compréhensible uniquement à partir de la structure HTML.",
+                    "use_nested_routes_for_layouts": "Utiliser des itinéraires imbriqués pour les mises en page",
+                    "parent_routes_are_useful_for_sections_that_share_navigation_headings": "Les itinéraires parents sont utiles pour les sections qui partagent des données de navigation, de titres ou d'itinéraire. Les chemins enfants prolongent la route parent la plus proche.",
+                    "use_query_routes_for_ui_state": "Utiliser des itinéraires de requête pour l'état de l'interface utilisateur",
+                    "use_when_the_view_is_still_the_same_page_but": "Utilisez `<page-route-query>` lorsque la vue est toujours la même page mais qu'une valeur de requête doit choisir un onglet, un tiroir, un filtre ou un modal.",
+                    "prefer_component_for_typed_apps": "Préférez `component` pour les applications typées",
+                    "if_you_are_rendering_routes_from_markup_or_web_component": "Si vous restituez des itinéraires à partir du code Markup ou Web Component, la propriété `component` évite les importations dynamiques basées sur des chaînes et donne aux bundlers une référence directe.",
+                    "register_guards_before_navigation": "Enregistrez les gardes avant la navigation",
+                    "guards_run_before_route_listeners_and_route_components_are_notified": "Les gardes s'exécutent avant que les auditeurs de route et les composants de route ne soient avertis. Enregistrez-les au démarrage de l'application, avant de restituer les itinéraires protégés ou de déclencher la navigation.",
+                    "keep_404s_last": "Gardez les 404 en dernier",
+                    "checks_the_routes_that_have_been_registered_put_fallback_redirects": "`<page-redirect>` vérifie les itinéraires enregistrés. Placez les redirections de secours après les déclarations `<page-route>` valides dont elles dépendent.",
+                    "choose_history_or_hash_routing_early": "Choisissez l'historique ou le routage de hachage tôt",
+                    "history_routing_gives_clean_urls_and_is_the_default_hash": "Le routage historique donne des URL propres et constitue la valeur par défaut. Le routage de hachage est utile lorsque votre hôte ne peut pas réécrire les chemins inconnus vers `index.html`.",
+                    "production_checklist": "Liste de contrôle de production",
+                    "give_every_meaningful_route_a_document_title_through_or_your": "Attribuez à chaque itinéraire significatif un document `title` via `<page-link>`, `<page-route>` ou votre propre gestionnaire `onPageChange`.",
+                    "use_route_params_for_resource_identity_and_search_params_for": "Utilisez les paramètres de route pour l’identité des ressources et les paramètres de recherche pour l’état d’affichage partageable.",
+                    "keep_route_modules_small_and_lazy_load_secondary_screens": "Gardez les modules d’itinéraire petits et chargez les écrans secondaires paresseusement.",
+                    "use_name_on_overlapping_route_groups_so_only_the_first": "Utilisez `name` sur les groupes de routes qui se chevauchent afin que seule la première route correspondante soit rendue.",
+                    "use_payload_only_for_transient_navigation_state_persist_important_state": "Utilisez `payload` uniquement pour un état de navigation transitoire. Conserver l’état important dans l’URL ou le magasin de données d’application."
+                }
+            },
+            "overview": {
+                "meta": {
+                    "what_is_router_html_first_web_component_routing": "Qu'est-ce que Router ? -HTML-Premier routage Web Component",
+                    "learn_how_before_semicolon_router_brings_declarative_lazy_guarded_framework": "Découvrez comment Before Semicolon Router apporte un routage déclaratif, paresseux, protégé et indépendant du framework aux applications HTML, Web Components, SPA, MPA et hybrides."
+                },
+                "content": {
+                    "beforesemicolon_router_is_a_web_component_based_routing_solution_for": "`@beforesemicolon/router` est une solution de routage basée sur Web Component pour les applications monopage, les applications multipages et les sites hybrides qui souhaitent une navigation côté client sans adopter de routeur-cadre.",
+                    "it_uses_custom_elements_so_routes_live_in_the_same": "Il utilise des éléments personnalisés, de sorte que les routes vivent dans la même structure HTML que les vues qu'elles contrôlent. Vous pouvez commencer avec un balisage statique, ajouter des fichiers d'itinéraire paresseux à mesure que l'application se développe et accéder aux API JavaScript uniquement lorsque vous avez besoin de gardes, d'analyses, de navigation programmatique ou d'intégration de bundle.",
+                    "execution_model": "Modèle d'exécution",
+                    "the_router_resolves_page_activations_through_a_central_matching_engine": "Le routeur résout les activations de pages via un moteur de correspondance central :",
+                    "single_matcher_the_url_is_parsed_and_matched_once_per": "**Single Matcher :** L'URL est analysée et mise en correspondance une fois par événement de navigation.",
+                    "unified_guards_global_and_route_specific_guards_run_exactly_once": "**Gardes unifiées :** Les gardes globales et spécifiques à un itinéraire s'exécutent exactement une fois pour chaque transition, évitant ainsi les contrôles redondants.",
+                    "surgical_notifications_only_route_aware_elements_affected_by_the_url": "**Notifications chirurgicales :** Seuls les éléments sensibles à l'itinéraire affectés par le changement d'URL sont notifiés, évitant ainsi les nouveaux rendus inutiles.",
+                    "cached_remounts_when_a_route_becomes_inactive_its_dom_nodes": "**Remontages en cache :** Lorsqu'une route devient inactive, ses nœuds DOM sont détachés et conservés en mémoire. La navigation en arrière remonte instantanément le contenu mis en cache au lieu de le recréer.",
+                    "key_features": "Principales fonctionnalités",
+                    "declarative_navigation_change_pages_and_update_document_titles_via_the": "**Navigation déclarative :** Modifiez les pages et mettez à jour les titres des documents via la balise `<page-link>`.",
+                    "path_matching_load_inline_views_or_external_route_files_using": "**Correspondance de chemin :** Chargez des vues en ligne ou des fichiers de routage externes à l'aide de `<page-route>` avec des paramètres dynamiques (par exemple, `:id`).",
+                    "search_parameter_rendering_react_to_url_query_strings_cleanly_using": "**Rendu des paramètres de recherche :** Réagissez proprement aux chaînes de requête d'URL à l'aide de `<page-route-query>`.",
+                    "intelligent_fallbacks_set_up_default_locations_or_catch_all_404": "**Résolutions intelligentes :** Configurez des emplacements par défaut ou des pages 404 fourre-tout à l'aide de `<page-redirect>`.",
+                    "metadata_accessibility_access_pathname_params_query_values_or_state_payload": "**Accessibilité des métadonnées :** Accédez instantanément aux paramètres de chemin d'accès, aux valeurs de requête ou aux détails de la charge utile d'état à l'aide de `<page-data>`.",
+                    "advanced_control_secure_routes_with_async_route_guards_swap_between": "**Contrôle avancé :** Sécurisez les itinéraires avec les Route Guards asynchrones, basculez entre les modes de routage History et Hash et intégrez-les aux regroupeurs de modules."
+                }
+            },
+            "installation": {
+                "meta": {
+                    "install_router_before_semicolon": "Installer Router - Before Semicolon",
+                    "install_beforesemicolon_router_with_npm_yarn_pnpm_or_direct_browser": "Installez @beforesemicolon/router avec npm, yarn, pnpm ou des balises de script de navigateur direct pour le routage HTML-first Web Component."
+                },
+                "content": {
+                    "beforesemicolon_router_works_in_bundled_applications_and_directly_in_modern": "`@beforesemicolon/router` fonctionne dans les applications groupées et directement dans les navigateurs modernes via des balises de script CDN.",
+                    "package_managers": "Gestionnaires de paquets",
+                    "install_the_package_via_your_preferred_package_manager_to_bundle": "Installez le package via votre gestionnaire de packages préféré pour le regrouper avec Vite, Webpack ou Esbuild :",
+                    "direct_cdn_zero_build": "CDN direct (Zéro-Build)",
+                    "for_simple_html_prototypes_or_build_less_applications_load_the": "Pour les prototypes HTML simples ou les applications sans build, chargez les bundles de navigateur compilés directement à partir de `unpkg.com` ou `jsDelivr` :",
+                    "locking_versions": "Versions verrouillables",
+                    "it_is_highly_recommended_to_lock_the_version_in_production": "Il est fortement recommandé de verrouiller la version dans les environnements de production pour éviter de rompre les modifications lors de la publication de nouvelles mises à jour :",
+                    "global_namespace": "Espace de noms global",
+                    "when_loaded_via_a_script_tag_all_exported_classes_routing": "Lorsqu'ils sont chargés via une balise de script, toutes les classes, fonctions de routage et utilitaires exportés sont disponibles sous l'objet fenêtre global `BFS` :"
+                }
+            },
+            "routing_apis": {
+                "navigation": {
+                    "meta": {
+                        "programmatic_navigation_router_by_before_semicolon": "Navigation programmatique - Router par Before Semicolon",
+                        "learn_how_to_transition_paths_pass_payloads_and_go_back": "Apprenez à effectuer des transitions de chemins, à transmettre des charges utiles et à revenir en arrière/avancer dans l'historique à l'aide de JavaScript."
+                    },
+                    "content": {
+                        "these_functions_trigger_state_updates_in_the_browser_s_history": "Ces fonctions déclenchent des mises à jour d'état dans la session d'historique du navigateur, vous permettant de passer d'une page à l'autre par programmation.",
+                        "adds_a_new_entry_to_the_browser_s_history_stack": "Ajoute une nouvelle entrée à la pile d'historique du navigateur.",
+                        "updates_the_current_entry_in_the_history_stack_instead_of": "Met à jour l'entrée actuelle dans la pile d'historique au lieu d'en créer une nouvelle. C'est idéal pour les redirections, donc cliquer sur le bouton Précédent du navigateur ne piège pas l'utilisateur dans une boucle de redirection.",
+                        "navigates_back_to_the_previous_entry_in_the_browser_session": "Revient à l’entrée précédente dans la session du navigateur. Identique à cliquer sur le bouton Précédent du navigateur.",
+                        "navigates_forward_to_the_next_entry_in_the_browser_session": "Navigue vers l'entrée suivante dans la session du navigateur. Identique à cliquer sur le bouton Suivant du navigateur."
+                    }
+                },
+                "params_queries": {
+                    "meta": {
+                        "params_queries": "Paramètres et requêtes",
+                        "params_queries_apis_router_by_before_semicolon": "API de paramètres et de requêtes - Router par Before Semicolon",
+                        "learn_how_to_retrieve_pathname_parameters_read_search_queries_and": "Découvrez comment récupérer les paramètres de chemin d’accès, lire les requêtes de recherche et mettre à jour les requêtes de recherche."
+                    },
+                    "content": {
+                        "params_queries_apis": "API de paramètres et de requêtes",
+                        "these_functions_allow_you_to_read_and_write_parameters_or": "Ces fonctions vous permettent de lire et d'écrire des paramètres ou des états d'historique par programmation.",
+                        "retrieves_an_object_containing_all_parameters_parsed_from_the_current": "Récupère un objet contenant tous les paramètres analysés à partir du chemin d’accès de l’URL actuel.",
+                        "retrieves_parsed_url_query_parameters_as_a_key_value_object": "Récupère les paramètres de requête d’URL analysés en tant qu’objet clé-valeur. Prend en charge l'analyse automatique JSON pour les objets de requête complexes.",
+                        "updates_or_clears_url_search_parameters_updates_are_made_in": "Met à jour ou efface les paramètres de recherche d’URL. Les mises à jour sont effectuées sur place en utilisant le remplacement de l'historique (n'ajoute pas de nouvelle entrée à la pile arrière du navigateur).",
+                        "pass_null_to_clear_all_query_parameters_from_the_url": "Transmettez `null` pour effacer tous les paramètres de requête de l’URL.",
+                        "retrieves_the_current_history_state_payload_object": "Récupère l’objet de charge utile de l’état actuel de l’historique."
+                    }
+                },
+                "registration": {
+                    "meta": {
+                        "route_registration": "Inscription des itinéraires",
+                        "route_registration_apis_router_by_before_semicolon": "API d'enregistrement de route - Router par Before Semicolon",
+                        "learn_how_to_register_pathname_patterns_and_compile_paths_using": "Découvrez comment enregistrer des modèles de nom de chemin et compiler les chemins à l'aide de JavaScript."
+                    },
+                    "content": {
+                        "route_registration_apis": "API d'enregistrement de route",
+                        "these_utilities_allow_you_to_manage_registered_route_patterns_and": "Ces utilitaires vous permettent de gérer les modèles de routage enregistrés et de compiler dynamiquement les chemins paramétrés.",
+                        "manually_registers_a_route_pattern_with_the_central_matching_engine": "Enregistre manuellement un modèle d'itinéraire auprès du moteur de correspondance central. Ceci est effectué automatiquement par les balises `<page-route>` mais peut se faire impérativement en JS.",
+                        "if_a_boolean_is_passed_as_the_second_argument_it": "Si un booléen est passé comme deuxième argument, il est traité comme la configuration `exact`.",
+                        "checks_whether_a_concrete_pathname_matches_any_registered_route_pattern": "Vérifie si un nom de chemin concret correspond à un modèle de route enregistré.",
+                        "takes_a_path_pattern_containing_parameters_and_compiles_it_into": "Prend un modèle de chemin contenant des paramètres et le compile en un chemin d'URL complet en utilisant les valeurs de l'emplacement actif actuel."
+                    }
+                },
+                "subscribing": {
+                    "meta": {
+                        "subscription_observers_router_by_before_semicolon": "Observateurs d'abonnement - Router par Before Semicolon",
+                        "learn_how_to_observe_route_patterns_or_listen_to_global": "Apprenez à observer des modèles d'itinéraire ou à écouter les événements de navigation mondiaux."
+                    },
+                    "content": {
+                        "these_apis_notify_your_javascript_code_when_url_modifications_or": "Ces API notifient votre code JavaScript lorsque des modifications d'URL ou des événements de navigation se produisent.",
+                        "subscribes_to_a_specific_route_pattern_the_callback_triggers_whenever": "S'abonne à un modèle de route spécifique. Le rappel se déclenche chaque fois que l'état correspondant passe (par exemple, actif à inactif ou les paramètres changent).",
+                        "active_true_if_the_current_location_matches_the_pattern": "**`active` :** `true` si l'emplacement actuel correspond au modèle.",
+                        "location_object_containing_pathname_query_search_params_data_history_state": "**`location` :** Objet contenant `pathname`, `query` (paramètres de recherche), `data` (état de l'historique) et `params` analysé.",
+                        "use_exact_false_to_subscribe_to_a_layout_path_and": "Utilisez `exact = false` pour vous abonner à un chemin de mise en page et à ses descendants :",
+                        "subscribes_to_all_global_location_transitions_triggered_after_any_navigation": "Abonne à toutes les transitions de localisation mondiales. Déclenché après tout événement de navigation, quels que soient les chemins actifs.",
+                        "helper_to_verify_if_a_specific_path_matches_the_current": "Aide pour vérifier si un chemin spécifique correspond à l'emplacement actuel du navigateur.",
+                        "exact_if_false_evaluates_to_true_if_the_browser_location": "**`exact` :** Si `false`, est évalué à `true` si l'emplacement du navigateur commence par le chemin spécifié (en traitant les sous-chemins comme des correspondances).",
+                        "examples": "Exemples",
+                        "search_query_matches_inside_isonpage_are_order_sensitive_parameters_must": "Les correspondances de requête de recherche dans `isOnPage` sont sensibles à l’ordre. Les paramètres doivent apparaître dans l'ordre exact spécifié."
+                    }
+                }
+            },
+            "web_components": {
+                "page_data": {
+                    "meta": {
+                        "page_data": "Données de page",
+                        "page_data_component_router_by_before_semicolon": "Composant de données de page - Router par Before Semicolon",
+                        "learn_how_to_display_pathname_params_search_query_values_and": "Découvrez comment afficher les paramètres de chemin d'accès, les valeurs de requête de recherche et les valeurs de charge utile d'état d'historique dans HTML à l'aide de `<page-data>`."
+                    },
+                    "content": {
+                        "the_component_allows_you_to_print_current_routing_parameters_search": "Le composant `<page-data>` vous permet d'imprimer les paramètres de routage actuels, les requêtes de recherche ou l'état de l'historique directement dans HTML sans écrire de sélecteurs JavaScript.",
+                        "attribute_type_default_description": "| Attribut | Tapez | Par défaut | Descriptif |",
+                        "line_22": "| :------------- | :------- | :---------- | :----------------------------------------------------------------------------------- |",
+                        "param_string_undefined_the_name_of_the_path_parameter_to": "| `param` | `string` | `undefined` | Le nom du paramètre de chemin à restituer (par exemple `userId` à partir de `/users/:userId`).      |",
+                        "search_param_string_undefined_the_name_of_the_url_query": "| `search-param` | `string` | `undefined` | Le nom du paramètre de requête URL à restituer (par exemple `filter` à partir de `?filter=active`). |",
+                        "key_string_undefined_the_dot_notation_key_path_to_display": "| `key` | `string` | `undefined` | Chemin d’accès clé de notation par points à afficher à partir de la charge utile de l’état de l’historique.                 |",
+                        "fallback_values": "Valeurs de repli",
+                        "any_content_wrapped_between_tags_is_treated_as_a_default": "Tout contenu encapsulé entre les balises `<page-data>` est traité comme une valeur de secours par défaut. Il est rendu uniquement si la propriété demandée est `undefined` ou indisponible :",
+                        "deep_key_resolution": "Résolution de clé profonde",
+                        "when_passing_complex_history_payloads_via_use_dot_notation_in": "Lors du transfert de charges utiles d'historique complexes via `<page-link>`, utilisez la notation par points dans l'attribut `key` pour parcourir les objets imbriqués :"
+                    }
+                },
+                "page_link": {
+                    "meta": {
+                        "page_link": "Lien vers la page",
+                        "page_link_component_router_by_before_semicolon": "Composant de lien de page - Router par Before Semicolon",
+                        "learn_how_to_manage_active_states_relative_path_resolution_and": "Découvrez comment gérer les états actifs, la résolution de chemin relatif et transmettre les données utiles de l'historique à l'aide de `<page-link>`."
+                    },
+                    "content": {
+                        "the_component_renders_a_standard_html_anchor_tag_wrapper_that": "Le composant `<page-link>` restitue un wrapper de balise d'ancrage HTML standard (`<a>`) qui intercepte les événements de clic, met à jour l'historique du navigateur et se met en surbrillance avec un attribut `active` lorsqu'il correspond à l'emplacement actuel.",
+                        "attribute_type_default_description": "| Attribut | Tapez | Par défaut | Descriptif |",
+                        "line_22": "| :-------------------- | :-------- | :----------- | :----------------------------------------------------------------------- |",
+                        "path_string_current_path_the_destination_pathname_e_g_home": "| `path` | `string` | Chemin actuel | Le chemin d'accès de destination (par exemple `/home` ou paramètres relatifs à la requête).    |",
+                        "search_string_undefined_appends_or_updates_search_parameters_e_g": "| `search` | `string` | `undefined` | Ajoute ou met à jour les paramètres de recherche (par exemple `tab=settings`).              |",
+                        "keep_current_search_boolean_false_retains_existing_url_search_parameters": "| `keep-current-search` | `boolean` | `false` | Conserve les paramètres de recherche d'URL existants lors de la navigation vers un nouveau chemin.    |",
+                        "exact_boolean_true_when_true_links_are_marked_active_only": "| `exact` | `boolean` | `true` | Lorsque `true`, les liens sont marqués actifs uniquement sur une correspondance exacte du nom de chemin.    |",
+                        "title_string_undefined_the_document_title_to_set_upon_successful": "| `title` | `string` | `undefined` | Le titre du document à définir en cas de navigation réussie.                    |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload` | `object` | `{}` | Charge utile de l’état de l’historique. Dans HTML, fournissez une chaîne d'objet sérialisée JSON. |",
+                        "relative_path_resolution": "Résolution de chemin relatif",
+                        "to_make_page_layout_structures_reusable_automatically_resolves_shorthand_prefixes": "Pour rendre les structures de mise en page réutilisables, `<page-link>` résout automatiquement les préfixes abrégés :",
+                        "no_path_attribute_evaluates_to_the_current_browser_pathname_ideal": "**Aucun attribut `path` :** Évalue le chemin d'accès actuel du navigateur. Idéal lorsque vous avez uniquement besoin de modifier les paramètres de la requête.",
+                        "dollar_prefix_replaced_by_the_path_of_the_closest_parent": "**Préfixe dollar `$` :** Remplacé par le chemin de l'élément `<page-route>` parent le plus proche dans l'arborescence DOM.",
+                        "tilde_prefix_replaced_by_the_current_browser_pathname_useful_for": "**Préfixe Tilde `~` :** Remplacé par le chemin d'accès actuel du navigateur. Utile pour ajouter des sections enfants.",
+                        "active_state_styling": "Style d'état actif",
+                        "when_the_browser_location_matches_the_link_s_target_the": "Lorsque l'emplacement du navigateur correspond à la cible du lien, le composant obtient un attribut natif `active` :",
+                        "you_can_target_this_state_in_css_using_standard_attributes": "Vous pouvez cibler cet état dans CSS à l'aide d'attributs standard ou de parties fantômes CSS :",
+                        "passing_payloads": "Passer des charges utiles",
+                        "use_payload_to_pass_history_state_data_to_the_next": "Utilisez `payload` pour transmettre les données d'état de l'historique à la page suivante.",
+                        "in_plain_html_attributes_are_strings_so_payload_must_be": "En clair HTML, les attributs sont des chaînes, donc `payload` doit être un objet sérialisé JSON valide :",
+                        "when_rendering_through_markup_pass_the_value_as_an_object": "Lors du rendu de `<page-link>` via Markup, transmettez la valeur en tant que propriété d'objet :",
+                        "the_payload_is_available_on_the_destination_route_through_getpagedata": "La charge utile est disponible sur l'itinéraire de destination via `getPageData()`, `onPage()`, `onPageChange()` ou `<page-data key=\"...\">`."
+                    }
+                },
+                "page_redirect": {
+                    "meta": {
+                        "page_redirect": "Redirection de page",
+                        "page_redirect_component_router_by_before_semicolon": "Composant de redirection de page - Router par Before Semicolon",
+                        "learn_how_to_manage_default_paths_and_handle_404_fallbacks": "Découvrez comment gérer les chemins par défaut et gérer les solutions de secours 404 à l'aide de `<page-redirect>`."
+                    },
+                    "content": {
+                        "the_component_triggers_programmatic_redirection_it_is_used_to_handle": "Le composant `<page-redirect>` déclenche la redirection programmatique. Il est utilisé pour gérer les URL inconnues (erreurs 404) ou pour acheminer les chemins d'index parents vers une sous-route par défaut.",
+                        "attribute_type_default_description": "| Attribut | Tapez | Par défaut | Descriptif |",
+                        "line_22": "| :-------- | :------------------------ | :---------- | :----------------------------------------------------------------------- |",
+                        "type_unknown_always_unknown_condition_under_which_redirection_triggers": "| `type` | `\"unknown\"` \\| `\"always\"` | `\"unknown\"` | Condition dans laquelle la redirection se déclenche.                              |",
+                        "path_string_destination_path_supports_parent_prefixes_like_and": "| `path` | `string` | `\"/\"` | Chemin de destination (prend en charge les préfixes parents tels que `$` et `~`).            |",
+                        "title_string_undefined_the_document_title_to_set_after_redirecting": "| `title` | `string` | `undefined` | Le titre du document à définir après la redirection.                             |",
+                        "payload_object_history_state_payload_in_html_provide_a_json": "| `payload` | `object` | `{}` | Charge utile de l’état de l’historique. Dans HTML, fournissez une chaîne d'objet sérialisée JSON. |",
+                        "redirection_types": "Types de redirection",
+                        "text_1_unknown_default": "1. `unknown` (par défaut)",
+                        "redirection_triggers_only_when_the_current_browser_path_is_not": "La redirection se déclenche uniquement lorsque le chemin actuel du navigateur ne correspond à aucun itinéraire enregistré. Ceci est principalement utilisé pour définir des solutions de secours 404 globales ou locales :",
+                        "the_order_of_tags_in_html_matters_make_sure_to": "L'ordre des balises dans HTML est important. Assurez-vous de définir les éléments `<page-redirect>` **après** vos balises `<page-route>` afin que toutes les routes valides soient enregistrées en premier.",
+                        "redirection_triggers_immediately_when_the_parent_route_is_matched_exactly": "La redirection se déclenche immédiatement lorsque la route parent correspond exactement. Ceci est utile pour attribuer une vue ou un onglet par défaut lors de la visite d'une mise en page parent :",
+                        "scoped_redirection": "Redirection étendue",
+                        "because_is_aware_of_its_placement_in_the_dom_tree": "Parce que `<page-redirect>` connaît son emplacement dans l'arborescence DOM :",
+                        "placing_it_inside_a_parent_means_it_will_only_handle": "Le placer dans un parent `<page-route>` signifie qu'il ne gérera que les redirections pour les chemins enfants au sein de cette route.",
+                        "unrelated_root_level_paths_will_not_trigger_the_child_redirect": "Les chemins d'accès au niveau racine non liés ne déclencheront pas la redirection enfant."
+                    }
+                },
+                "page_route_query": {
+                    "meta": {
+                        "page_route_query": "Requête d'itinéraire de page",
+                        "page_route_query_component_router_by_before_semicolon": "Composant de requête d'itinéraire de page - Router par Before Semicolon",
+                        "learn_how_to_render_views_conditionally_based_on_search_queries": "Découvrez comment afficher des vues de manière conditionnelle en fonction des requêtes de recherche à l'aide de `<page-route-query>`."
+                    },
+                    "content": {
+                        "the_component_mounts_content_conditionally_based_on_url_search_query": "Le composant `<page-route-query>` monte le contenu de manière conditionnelle en fonction des valeurs des paramètres de requête de recherche d'URL (`?key=value`) au lieu du nom de chemin d'accès de l'URL.",
+                        "this_component_is_ideal_for_creating_tabbed_navigation_filters_or": "Ce composant est idéal pour créer une navigation par onglets, des filtres ou des modaux modulaires sans écrire de logique d'état JavaScript.",
+                        "attribute_type_default_description": "| Attribut | Tapez | Par défaut | Descriptif |",
+                        "line_29": "| :-------- | :------- | :---------- | :------------------------------------------------------------------- |",
+                        "key_string_undefined_the_search_parameter_name_to_watch_e": "| `key` | `string` | `undefined` | Le nom du paramètre de recherche à surveiller (par exemple `\"tab\"`).                   |",
+                        "value_string_undefined_the_exact_parameter_value_that_triggers_a": "| `value` | `string` | `undefined` | La valeur exacte du paramètre qui déclenche une correspondance.                     |",
+                        "src_string_undefined_relative_path_to_an_external_file_html": "| `src` | `string` | `undefined` | Chemin relatif vers un fichier externe (HTML, JS, TXT) à charger à la demande. |",
+                        "name_string_undefined_mutually_exclusive_query_route_group_identifier": "| `name` | `string` | `undefined` | Identificateur de groupe de route de requête mutuellement exclusif.                     |",
+                        "example_tabbed_layout": "Exemple : disposition à onglets",
+                        "combine_with_to_create_fully_declarative_active_state_aware_tabs": "Combinez `<page-route-query>` avec `<page-link>` pour créer des onglets entièrement déclaratifs et sensibles à l'état actif :",
+                        "behavior_and_caching": "Comportement et mise en cache",
+                        "just_like_the_query_matcher_detaches_template_views_when_the": "Tout comme `<page-route>`, l'outil de correspondance de requêtes détache les vues de modèle lorsque le paramètre ne correspond pas et les met en cache.",
+                        "when_the_query_matches_again_the_cached_template_is_restored": "Lorsque la requête correspond à nouveau, le modèle mis en cache est restauré instantanément.",
+                        "loader_slots_loading_and_fallbacks_fallback_are_fully_supported_when": "Les emplacements de chargeur (`loading`) et les solutions de secours (`fallback`) sont entièrement pris en charge lors de l'utilisation de l'attribut `src`."
+                    }
+                },
+                "page_route": {
+                    "meta": {
+                        "page_route": "Itinéraire des pages",
+                        "page_route_component_router_by_before_semicolon": "Composant d'itinéraire de page - Router par Before Semicolon",
+                        "learn_how_to_render_pathname_routes_dynamic_params_nested_layouts": "Découvrez comment restituer les routes de chemin d'accès, les paramètres dynamiques, les mises en page imbriquées, les fichiers de routes différées, les props de composants, les emplacements de chargement, les solutions de secours et les groupes de routes."
+                    },
+                    "content": {
+                        "the_component_is_the_main_route_container_it_mounts_slotted": "Le composant `<page-route>` est le conteneur de route principal. Il monte le contenu à emplacements, un fichier `src` paresseux ou un composant fourni par JavaScript uniquement lorsque le nom de chemin actuel correspond à son modèle de route.",
+                        "attribute_type_default_description": "| Attribut | Tapez | Par défaut | Descriptif |",
+                        "line_24": "| :-------- | :-------- | :---------- | :--------------------------------------------------------------------------------------------- |",
+                        "path_string_the_pathname_pattern_to_match_supports_parameters_like": "| `path` | `string` | `\"/\"` | Le modèle de nom de chemin à correspondre (prend en charge des paramètres tels que `/:id`).                               |",
+                        "exact_boolean_true_when_true_matches_the_path_strictly_when": "| `exact` | `boolean` | `true` | Lorsque `true`, correspond strictement au chemin. Lorsque `false`, correspond aux chemins commençant par le modèle. |",
+                        "src_string_undefined_relative_path_to_an_html_text_or": "| `src` | `string` | `undefined` | Chemin d'accès relatif à un fichier de module HTML, texte ou JavaScript à chargement différé.                        |",
+                        "title_string_undefined_updates_the_document_title_when_this_route": "| `title` | `string` | `undefined` | Met à jour le titre du document lorsque cette route devient active.                                     |",
+                        "name_string_undefined_mutually_exclusive_route_group_identifier_similar_to": "| `name` | `string` | `undefined` | Identificateur de groupe de routes mutuellement exclusif (similaire à une instruction Switch).                     |",
+                        "dynamic_parameters": "Paramètres dynamiques",
+                        "use_a_colon_to_define_path_parameters_you_can_retrieve": "Utilisez deux points `:` pour définir les paramètres de chemin. Vous pouvez récupérer ces valeurs dans HTML imbriqué via `<page-data>` ou dans JavaScript :",
+                        "nested_layouts": "Mises en page imbriquées",
+                        "set_exact_false_on_a_parent_route_that_should_stay": "Définissez `exact=\"false\"` sur une route parent qui doit rester active pendant que les routes enfants correspondent. Les valeurs enfants `path` sont ajoutées au chemin de route parent le plus proche.",
+                        "switch_like_grouping_name": "Regroupement de type commutateur (`name`)",
+                        "to_ensure_only_one_route_in_a_group_renders_at": "Pour garantir qu'un seul itinéraire dans un groupe soit rendu à la fois (en évitant les correspondances qui se chevauchent), attribuez-leur le même attribut `name`. Le routeur les évaluera dans l'ordre et montera uniquement la _première_ correspondance :",
+                        "lazy_loading_src": "Chargement différé (`src`)",
+                        "instead_of_embedding_all_views_in_the_main_document_load": "Au lieu d'incorporer toutes les vues dans le document principal, chargez-les à la demande en spécifiant un fichier dans l'attribut `src`.",
+                        "you_can_define_a_loading_state_and_a_fallback_ui": "Vous pouvez définir un état de chargement et une interface utilisateur de secours (affichée si la requête échoue) à l'aide des emplacements `loading` et `fallback` :",
+                        "supported_lazy_loaded_formats": "Formats à chargement différé pris en charge",
+                        "when_loading_a_javascript_file_the_module_must_default_export": "Lors du chargement d'un fichier JavaScript, le module doit exporter par défaut l'un des éléments suivants :",
+                        "a_plain_html_text_string": "Une simple chaîne HTML/texte.",
+                        "a_native_dom_node_e_g_element_documentfragment": "Un DOM natif `Node` (par exemple `Element`, `DocumentFragment`).",
+                        "an_htmltemplate_generated_by_the_markup_html_tagged_literal": "Un `HtmlTemplate` généré par le littéral balisé Markup `html`.",
+                        "a_function_that_receives_locationstate_pathparams_searchparams_and_returns_any": "Une fonction qui reçoit `(locationState, pathParams, searchParams)` et renvoie l'un des éléments ci-dessus.",
+                        "caching_and_lifecycle": "Mise en cache et cycle de vie",
+                        "to_prevent_memory_leaks_and_optimize_performance": "Pour éviter les fuites de mémoire et optimiser les performances :",
+                        "inactive_routes_receive_the_hidden_attribute": "Les routes inactives reçoivent l'attribut `hidden`.",
+                        "when_a_loaded_route_becomes_inactive_the_engine_detaches_the": "Lorsqu'une route chargée devient inactive, le moteur détache l'arborescence DOM et la met en cache en mémoire.",
+                        "if_the_route_matches_again_the_cached_dom_tree_is": "Si l'itinéraire correspond à nouveau, l'arborescence DOM mise en cache est réinsérée sans répéter les calculs ou les requêtes."
+                    }
+                }
+            }
+        },
+        "home": {
+            "meta": {
+                "router": "Router",
+                "router_by_before_semicolon": "Router par Before Semicolon",
+                "a_tiny_web_component_router_for_html_first_apps_declare": "Un petit routeur Web Component pour les applications HTML-first. Déclarez les liens, les routes, les redirections, les routes de requête, les pages paresseuses, les gardes et les données de route sans verrouillage du framework."
+            },
+            "content": {
+                "routing": "Routage ",
+                "in_plain_html": "en HTML simple.",
+                "a_tiny_web_component_router_for_html_first_apps_route": "Un petit routeur Web Component pour les applications HTML-first. Itinéraire par nom de chemin ou requête de recherche, chargement différé des pages HTML/JS/TXT, imbrication des tracés d'itinéraire, protection des écrans protégés et maintien du verrouillage du cadre hors de votre couche de navigation.",
+                "config": "CONFIGURATION",
+                "js_txt_pages": "JS-PAGES TXT",
+                "the_ecosystem": "`// THE ECOSYSTEM`",
+                "built_on_web_component_markup": "Construit sur Web Component et Markup.",
+                "router_is_built_on_top_of_web_component_and_markup": "Router est construit sur Web Component et Markup. Même moteur, packages modulaires, zéro verrouillage.",
+                "the_9kb_reactive_templating_system_that_powers_everything_tagged_templates": "Le système de modèles réactifs de 9 Ko qui alimente tout. Modèles étiquetés, état, effets, répétition, suspense.",
+                "a_reactive_layer_over_native_custom_elements_the_foundation_router": "Une couche réactive sur les éléments personnalisés natifs – la base sur laquelle repose le Router. Accessoires, état, styles étendus, cycles de vie.",
+                "why_this_router": "`// WHY THIS ROUTER`",
+                "routing_that_disappears_into_html": "Routage qui disparaît dans HTML.",
+                "five_web_components_one_central_matcher_and_a_clean_js": "Cinq composants Web, un comparateur central et une API JS propre pour tout ce que vous ne pouvez pas exprimer dans le balisage.",
+                "plug_play": "Branchez et jouez",
+                "drop_in_two_script_tags_and_route_with_html_no": "Insérez deux balises de script et acheminez avec HTML. Aucune étape de construction, aucune configuration de routeur, aucun JavaScript requis.",
+                "tiny_focused": "Minuscule et concentré",
+                "a_small_surface_area_five_web_components_and_a_js": "Une petite surface : cinq composants web et une API JS. Construit sur Markup + Web Component, sans aucun dépôt supplémentaire.",
+                "lazy_loaded_pages": "Pages chargées paresseusement",
+                "point_page_route_at_an_html_txt_or_js_file": "Pointez la page-route vers un fichier HTML, txt ou JS. Les modules se chargent une fois, mettent en cache entre les visites, se montent et se démontent proprement.",
+                "nested_named_routes": "Itinéraires imbriqués et nommés",
+                "children_extend_their_parent_s_path_use_the_name_attribute": "Les enfants prolongent le chemin de leurs parents. Utilisez l’attribut name pour une correspondance de type commutateur mutuellement exclusive.",
+                "search_query_routing": "Routage des requêtes de recherche",
+                "page_route_query_renders_content_based_on_key_value_tabs": "page-route-query restitue le contenu basé sur ?key=value – onglets, filtres et modaux sans une seule ligne d'état.",
+                "smart_redirects": "Redirections intelligentes",
+                "page_redirect_targets_unknown_paths_only_or_always_scoped_to": "la redirection de page cible uniquement les chemins inconnus – ou toujours, limités à sa route parent. Parfait pour les 404 et les valeurs par défaut.",
+                "one_match_one_render": "Une correspondance, un rendu",
+                "a_central_matcher_resolves_each_navigation_once_guards_run_once": "Un matcher central résout chaque navigation une fois. Les gardes courent une fois. Les abonnés ne se déclenchent que lorsqu'ils sont pertinents.",
+                "cached_remounts": "Remontages en cache",
+                "inactive_routes_are_detached_from_the_dom_but_kept_warm": "Les routes inactives sont détachées du DOM mais maintenues au chaud. Le retour est un remontage instantané, pas une reconstruction.",
+                "works_with_any_builder": "Fonctionne avec n'importe quel constructeur",
+                "vite_webpack_esbuild_plain_html_or_a_cdn_script_tag": "Vite, Webpack, esbuild, plain HTML ou une balise de script CDN - ce ne sont que des composants Web, donc ils s'insèrent n'importe où.",
+                "see_it_in_action": "`// SEE IT IN ACTION`",
+                "five_examples_infinite_sitemaps": "Cinq exemples. Plans de site infinis.",
+                "compose_page_route_page_link_page_route_query_page_redirect": "Composez page-route, page-link, page-route-query, page-redirect, page-data et la petite API JS qui les entoure.",
+                "nested_routes_params": "Itinéraires et paramètres imbriqués",
+                "search_query_routes": "Itinéraires de requête de recherche",
+                "page_metadata": "Métadonnées de la page",
+                "protected_routes": "Itinéraires protégés",
+                "bundler_friendly_pages": "Pages adaptées aux regroupeurs",
+                "quick_start": "`// quick start`",
+                "install_in_seconds": "Installez en quelques secondes.",
+                "choose_your_preferred_installation_method_works_everywhere_javascript_runs": "Choisissez votre méthode d'installation préférée. Fonctionne partout où JavaScript s'exécute.",
+                "build_single_and_multi_page_apps": "Créez des applications monopages et multipages,",
+                "your_way": "à votre façon.",
+                "combine_the_simplicity_of_vanilla_web_standards_with_the_power": "Combinez la simplicité des standards Web Vanilla avec la puissance du routage déclaratif."
+            }
+        }
+    }
+}
