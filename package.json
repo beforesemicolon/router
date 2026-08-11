@@ -21,7 +21,7 @@
         "test:watch": "jest --watch",
         "local": "run-p local:watch local:serve",
         "local:watch": "node build-docs.js && nodemon --exec 'node build-docs.js'",
-        "local:serve": "npm run local:serve:en",
+        "local:serve": "npx netlify dev --offline --no-open --skip-gitignore --dir website --port 8080 --staticServerPort 3998",
         "local:serve:pt": "npx http-server ./website/pt -p 8083",
         "build": "npm-run-all build:package build:docs",
         "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js",
@@ -46,7 +46,7 @@
     },
     "devDependencies": {
         "@beforesemicolon/builder": "^1.8.25",
-        "@beforesemicolon/site-builder": "^1.7.3",
+        "@beforesemicolon/site-builder": "^1.7.4",
         "@types/jest": "^29.5.1",
         "@types/jsdom": "^21.1.1",
         "@typescript-eslint/eslint-plugin": "^6.7.3",
