@@ -1,14 +1,3 @@
-const renderGoogleAnalyticsScript = () => `
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8GPFPFW87C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8GPFPFW87C');
-</script>`
-
 export default {
     meta: {
         siteName: 'Router',
@@ -98,9 +87,6 @@ export default {
             },
         ],
         copyright: `Copyright &copy; ${new Date().getFullYear()} Before Semicolon. All rights reserved.`,
-    },
-    headScripts: {
-        analytics: renderGoogleAnalyticsScript,
     },
     theme: {
         light: {
