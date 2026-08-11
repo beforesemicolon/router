@@ -844,13 +844,12 @@ onPageChange((pathname) => {
 -   Modern browsers (Chrome, Firefox, Safari, Edge)
 -   IE11+ (with polyfills for Web Components)
 
-## Contributing
+## Community
 
-Contributions are welcome! Please read our [contributing guidelines](https://github.com/beforesemicolon/router/blob/main/CONTRIBUTING.md) first.
-
-## License
-
-BSD-3-Clause License - see [LICENSE](LICENSE) file for details
+-   [Contributing guidelines](CONTRIBUTING.md)
+-   [Code of Conduct](CODE_OF_CONDUCT.md)
+-   [Security policy](SECURITY.md)
+-   [BSD 3-Clause License](LICENSE)
 
 ## Links
 
