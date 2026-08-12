@@ -2,6 +2,15 @@
     "schemaVersion": "1.0",
     "mode": "static",
     "siteUrl": "https://router.beforesemicolon.com",
+    "deployment": {
+        "targets": {
+            "netlify": true,
+            "cloudflareWorkers": {
+                "name": "router",
+                "compatibilityDate": "2026-08-11"
+            }
+        }
+    },
     "document": {
         "csp": {
             "style-src": ["'self'", "https://fonts.googleapis.com"],
