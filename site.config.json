@@ -13,6 +13,10 @@
     },
     "document": {
         "csp": {
+            "script-src": [
+                "'self'",
+                "https://static.cloudflareinsights.com"
+            ],
             "style-src": ["'self'", "https://fonts.googleapis.com"],
             "font-src": ["'self'", "data:", "https://fonts.gstatic.com"]
         },
