@@ -67,8 +67,10 @@ export interface PageLinkProps {
     payload: Record<string, unknown>
 }
 
-export interface PageRedirectProps
-    extends Omit<PageLinkProps, 'search' | 'keepCurrentSearch'> {
+export interface PageRedirectProps extends Omit<
+    PageLinkProps,
+    'search' | 'keepCurrentSearch'
+> {
     type: 'unknown' | 'always'
 }
 
