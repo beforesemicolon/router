@@ -1,6 +1,6 @@
 # Web Component based Router
 
-[![Static Badge](https://img.shields.io/badge/documentation-blue)](https://markup.beforesemicolon.com/documentation/capabilities/router)
+[![Static Badge](https://img.shields.io/badge/documentation-blue)](https://router.beforesemicolon.com/)
 [![Test](https://github.com/beforesemicolon/router/actions/workflows/test.yml/badge.svg)](https://github.com/beforesemicolon/router/actions/workflows/test.yml)
 [![npm](https://img.shields.io/npm/v/%40beforesemicolon%2Frouter)](https://www.npmjs.com/package/@beforesemicolon/router)
 ![npm](https://img.shields.io/npm/l/%40beforesemicolon%2Frouter)
@@ -676,7 +676,7 @@ yarn add @beforesemicolon/router
 <script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
 
 <!-- Or use a specific version -->
-<script src="https://unpkg.com/@beforesemicolon/router@1.2.0/dist/client.js"></script>
+<script src="https://unpkg.com/@beforesemicolon/router@1.4.0-next/dist/client.js"></script>
 
 <!-- Access APIs via BFS.ROUTER -->
 <script>
@@ -844,6 +844,17 @@ onPageChange((pathname) => {
 -   Modern browsers (Chrome, Firefox, Safari, Edge)
 -   IE11+ (with polyfills for Web Components)
 
+## AI and ecosystem context
+
+-   [`llms.txt`](https://router.beforesemicolon.com/llms.txt) is the concise,
+    package-owned Router and ecosystem contract for AI tools.
+-   [`llms-full.txt`](https://router.beforesemicolon.com/llms-full.txt) contains
+    the complete resolved documentation and examples.
+
+Router builds on Web Component and Markup. It composes directly with Intl for
+localized route content while keeping navigation and localization as separate
+capabilities.
+
 ## Community
 
 -   [Contributing guidelines](CONTRIBUTING.md)
@@ -853,7 +864,7 @@ onPageChange((pathname) => {
 
 ## Links
 
--   [Documentation](https://markup.beforesemicolon.com/documentation/capabilities/router)
+-   [Documentation](https://router.beforesemicolon.com/)
 -   [GitHub Repository](https://github.com/beforesemicolon/router)
 -   [npm Package](https://www.npmjs.com/package/@beforesemicolon/router)
 -   [Markup Library](https://markup.beforesemicolon.com)

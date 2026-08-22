@@ -1,0 +1,240 @@
+# {{project.name}}
+
+> HTML-first, framework-independent routing built with native Custom Elements and `@beforesemicolon/web-component`.
+
+Package: `{{project.name}}`
+Version: `{{project.version}}`
+Documentation: https://router.beforesemicolon.com/documentation/
+Complete context: https://router.beforesemicolon.com/llms-full.txt
+
+Use this file as the authoritative compact contract when generating Router code. Do not substitute React Router, JSX routes, hooks, or framework-specific navigation APIs.
+
+## Before Semicolon ecosystem
+
+The packages form one composable browser ecosystem:
+
+1. `@beforesemicolon/markup` provides reactive templates, state, effects, refs, and helpers.
+2. `@beforesemicolon/web-component` builds native reactive Custom Elements and re-exports Markup.
+3. `@beforesemicolon/router` provides URL routing, navigation, route guards, route modules, route data, and route-aware elements.
+4. `@beforesemicolon/intl` provides locale scopes, translations, and internationalized formatting inside any route or component.
+
+Router depends on Web Component internally but exports Router APIs, not the Web Component or Markup APIs. Import `html`, `WebComponent`, or `css` from `@beforesemicolon/web-component` when application code needs them.
+
+Canonical ecosystem contracts:
+
+- https://markup.beforesemicolon.com/llms.txt
+- https://web-component.beforesemicolon.com/llms.txt
+- https://intl.beforesemicolon.com/llms.txt
+
+## Installation and registration
+
+```bash
+npm install @beforesemicolon/router
+```
+
+Import the package once to register its Custom Elements:
+
+```javascript
+import '@beforesemicolon/router'
+```
+
+Import programmatic APIs from the same package:
+
+```javascript
+import {
+    goToPage,
+    replacePage,
+    onPage,
+    onPageChange,
+    updateSearchQuery,
+    registerRouteGuard,
+    registerGlobalGuard,
+    registerRouteModules,
+} from '@beforesemicolon/router'
+```
+
+For direct browser use, Web Component must load first:
+
+```html
+<script src="https://unpkg.com/@beforesemicolon/web-component/dist/client.js"></script>
+<script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
+<script>
+    const { goToPage, onPageChange, updateSearchQuery } = BFS.ROUTER
+</script>
+```
+
+## Route elements
+
+Use Router's HTML elements directly:
+
+```html
+<nav>
+    <page-link path="/">Home</page-link>
+    <page-link path="/projects">Projects</page-link>
+</nav>
+
+<page-route path="/">Home page</page-route>
+<page-route path="/projects">Projects page</page-route>
+<page-route path="*">
+    Not found. <page-redirect path="/"></page-redirect>
+</page-route>
+```
+
+Important elements:
+
+- `<page-route>` renders inline, fetched, or module-based content when its path matches.
+- `<page-link>` performs Router navigation using `path` and query updates using `search`.
+- `<page-data>` renders route params, query values, or navigation data.
+- `<page-route-query>` conditionally renders against a query value.
+- `<page-redirect>` redirects an active route.
+
+Use `path`, not React-style `to` or a native `href`, on `<page-link>`.
+
+## Route patterns and nesting
+
+Dynamic parameters begin with `:`:
+
+```html
+<page-route path="/users/:userId">
+    User: <page-data param="userId">unknown</page-data>
+</page-route>
+```
+
+Set `exact="false"` on layout routes that should remain active for descendants:
+
+```html
+<page-route path="/projects/:projectId" exact="false">
+    <aside>
+        <page-link path="$/overview">Overview</page-link>
+        <page-link path="$/settings">Settings</page-link>
+    </aside>
+
+    <page-route path="/overview">Overview</page-route>
+    <page-route path="/settings">Settings</page-route>
+</page-route>
+```
+
+- `$` resolves from the closest ancestor route.
+- `~` resolves from the current browser pathname.
+
+## Lazy route modules
+
+`src` may load HTML, text, or a JavaScript module. A JavaScript route module exports a default rendering function:
+
+```javascript
+import { html } from '@beforesemicolon/web-component'
+
+export default (data, params, query) => html`
+    <h1>Project ${params.projectId}</h1>
+    <p>Filter: ${query.filter || 'all'}</p>
+    <p>Opened from: ${data.from || 'direct visit'}</p>
+`
+```
+
+Keep rendering imports in Web Component. Router does not export `html`.
+
+## Programmatic navigation
+
+Navigation functions are asynchronous:
+
+```javascript
+await goToPage('/users/42', { from: 'search' }, 'User 42')
+await replacePage('/login', { reason: 'expired' }, 'Login')
+```
+
+Use:
+
+- `goToPage` to push a history entry.
+- `replacePage` to replace the current entry.
+- `previousPage` and `nextPage` for history movement.
+- `updateSearchQuery` to update serialized query state.
+- `getPageData`, `getPageParams`, and `getSearchParams` to read current values.
+- `onPage` for a specific route and `onPageChange` for general navigation subscriptions.
+
+```javascript
+const unsubscribe = onPageChange((pathname, searchParams, pageData) => {
+    console.log(pathname, searchParams, pageData)
+})
+
+unsubscribe()
+```
+
+## Guards and metadata
+
+Guards return or resolve to:
+
+- `true` to allow navigation.
+- `false` to block navigation.
+- A path string to redirect.
+
+```javascript
+registerGlobalGuard((pathname) => {
+    if (pathname.startsWith('/account') && !auth.isSignedIn()) {
+        return '/login'
+    }
+
+    return true
+})
+```
+
+Use `registerRouteGuard` for a registered route and `getRouteMeta` for route metadata. Guard registration does not return an unsubscribe function.
+
+## Route modules
+
+Register module loaders centrally by their route source paths when routes should preload or resolve them without an extra dynamic lookup:
+
+```javascript
+registerRouteModules({
+    './pages/dashboard.js': () => import('./pages/dashboard.js'),
+    './pages/settings.js': () => import('./pages/settings.js'),
+})
+```
+
+Use `getRouteModule`, `resolveRouteModule`, `preloadRouteModule`, and `preloadRouteModules` for explicit control.
+
+## Web Component and Intl composition
+
+Router owns navigation; Web Component owns application components; Intl owns localized output. They work in the same DOM tree:
+
+```bash
+npm install @beforesemicolon/router @beforesemicolon/intl
+```
+
+```javascript
+import '@beforesemicolon/router'
+import '@beforesemicolon/intl'
+```
+
+```html
+<page-route path="/products/:productId">
+    <intl-locale locale="en-US" src-dir="/locales">
+        <h1><intl-msg key="products.detail">Product</intl-msg></h1>
+        <intl-number type="currency" currency="USD">49.99</intl-number>
+    </intl-locale>
+</page-route>
+```
+
+For CDN use, load scripts in this order: Web Component, Router, Intl. Router and Intl may be reversed relative to each other, but both must follow Web Component.
+
+## Rules for generated code
+
+- Use Router Custom Elements and APIs exactly as documented.
+- Import `html` and `WebComponent` from `@beforesemicolon/web-component`, never from Router.
+- Use `path` and `search` on `<page-link>`; do not generate React Router props or hooks.
+- Put durable identifiers in path params, filtering and view state in search params, and transient handoff data in navigation data.
+- Await programmatic navigation when subsequent work depends on completion.
+- Register the package entrypoint once before relying on its Custom Elements.
+- Read the Intl contract before adding localized route content.
+
+## Canonical pages
+
+- https://router.beforesemicolon.com/documentation/get-started
+- https://router.beforesemicolon.com/documentation/ai
+- https://router.beforesemicolon.com/documentation/guide-best-practices
+- https://router.beforesemicolon.com/documentation/routing-apis/navigation
+- https://router.beforesemicolon.com/documentation/routing-apis/registration
+- https://router.beforesemicolon.com/documentation/routing-apis/params-queries
+- https://router.beforesemicolon.com/documentation/advanced-features/route-guards
+- https://router.beforesemicolon.com/documentation/advanced-features/module-registry
+- https://router.beforesemicolon.com/documentation/web-components/page-route
+- https://router.beforesemicolon.com/documentation/web-components/page-link
