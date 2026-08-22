@@ -676,7 +676,7 @@ yarn add @beforesemicolon/router
 <script src="https://unpkg.com/@beforesemicolon/router/dist/client.js"></script>
 
 <!-- Or use a specific version -->
-<script src="https://unpkg.com/@beforesemicolon/router@1.4.0/dist/client.js"></script>
+<script src="https://unpkg.com/@beforesemicolon/router@1.4.0-next/dist/client.js"></script>
 
 <!-- Access APIs via BFS.ROUTER -->
 <script>
