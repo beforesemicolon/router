@@ -6,7 +6,7 @@ description: "{{t.pages.home.meta.a_tiny_web_component_router_for_html_first_app
 layout: landing
 ---
 
-::: layout landing-hero version="v1.2.0" title="{{t.pages.home.content.routing}}" title2="{{t.pages.home.content.in_plain_html}}" primaryLabel="{{t.common.actions.getStarted}}" secondaryLabel="$ npm i @beforesemicolon/router"
+::: layout landing-hero title="{{t.pages.home.content.routing}}" title2="{{t.pages.home.content.in_plain_html}}" primaryLabel="{{t.common.actions.getStarted}}" secondaryLabel="$ npm i @beforesemicolon/router"
 
 === copy
 

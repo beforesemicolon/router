@@ -1,6 +1,6 @@
 {
     "name": "@beforesemicolon/router",
-    "version": "1.2.1",
+    "version": "1.4.0",
     "description": "Web component router by Before Semicolon",
     "engines": {
         "node": ">=22.13.0",
@@ -9,10 +9,10 @@
     "type": "module",
     "types": "./dist/types/index.d.ts",
     "exports": {
+        "types": "./dist/types/index.d.ts",
         "import": "./dist/esm/index.js",
         "require": "./dist/cjs/index.js",
-        "default": "./dist/cjs/index.js",
-        "types": "./dist/types/index.d.ts"
+        "default": "./dist/cjs/index.js"
     },
     "scripts": {
         "lint": "eslint ./src && prettier --check ./src",
@@ -45,8 +45,8 @@
         "type": "git"
     },
     "devDependencies": {
-        "@beforesemicolon/builder": "^1.8.25",
-        "@beforesemicolon/site-builder": "^1.7.7",
+        "@beforesemicolon/builder": "^2.0.1",
+        "@beforesemicolon/site-builder": "^1.12.0",
         "@types/jest": "^29.5.1",
         "@types/jsdom": "^21.1.1",
         "@typescript-eslint/eslint-plugin": "^6.7.3",
@@ -70,6 +70,6 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@beforesemicolon/web-component": "^1.19.3"
+        "@beforesemicolon/web-component": "^1.21.0"
     }
 }

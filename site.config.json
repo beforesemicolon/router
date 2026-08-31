@@ -63,6 +63,8 @@
         "outputDir": "website",
         "template": "fading-citrus",
         "generatedFiles": {
+            "llms": true,
+            "llmsFull": true,
             "netlify": true
         }
     }

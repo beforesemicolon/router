@@ -51,7 +51,7 @@ pnpm add @beforesemicolon/router
 {{t.pages.documentation.installation.content.it_is_highly_recommended_to_lock_the_version_in_production}}
 
 ```html
-<script src="https://unpkg.com/@beforesemicolon/router@1.2.0/dist/client.js"></script>
+<script src="https://unpkg.com/@beforesemicolon/router@1.4.0/dist/client.js"></script>
 ```
 
 ---
