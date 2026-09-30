@@ -73,6 +73,7 @@
         "@beforesemicolon/web-component": "^1.21.0"
     },
     "overrides": {
-        "html-minifier": "npm:@keep-lts/html-minifier@4.0.1"
+        "html-minifier": "npm:@keep-lts/html-minifier@4.0.1",
+        "minimatch@9.0.3": "9.0.9"
     }
 }
