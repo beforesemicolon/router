@@ -5,7 +5,7 @@ export function jsonParse<T>(value: T): T {
                 value === 'undefined'
                     ? undefined
                     : JSON.parse(value.replace(/['`]/g, '"'))
-        } catch (e) {
+        } catch {
             /* empty */
         }
     }

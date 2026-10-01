@@ -1,4 +1,4 @@
-import { HtmlTemplate } from '@beforesemicolon/web-component'
+import type { HtmlTemplate } from '@beforesemicolon/web-component'
 import {
     getPageData,
     onPage,
@@ -16,7 +16,6 @@ import { getAncestorPageRoute } from '../utils/get-ancestor-page-route'
 export default ({
     html,
     WebComponent,
-    HtmlTemplate,
     when,
     is,
 }: typeof import('@beforesemicolon/web-component')) => {
