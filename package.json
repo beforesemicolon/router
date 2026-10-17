@@ -53,7 +53,7 @@
         "@typescript-eslint/eslint-plugin": "^8.71.0",
         "@typescript-eslint/parser": "^8.71.0",
         "eslint": "^10.0.0",
-        "eslint-config-prettier": "^9.0.0",
+        "eslint-config-prettier": "^10.0.0",
         "eslint-plugin-n": "^18.4.0",
         "eslint-plugin-promise": "^7.3.0",
         "http-server": "^14.1.1",
