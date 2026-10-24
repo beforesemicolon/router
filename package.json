@@ -65,7 +65,7 @@
         "npm-run-all2": "^5.0.0",
         "prettier": "3.9.10",
         "ts-jest": "^29.1.0",
-        "typescript": "^5.0.4"
+        "typescript": "^7.0.0"
     },
     "dependencies": {
         "@beforesemicolon/web-component": "^1.21.0"
