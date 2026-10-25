@@ -68,7 +68,7 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@beforesemicolon/web-component": "^1.21.0-next"
+        "@beforesemicolon/web-component": "^1.21.1-next"
     },
     "overrides": {
         "html-minifier": "npm:@keep-lts/html-minifier@4.0.1",
