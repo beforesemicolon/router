@@ -1,6 +1,6 @@
 {
     "name": "@beforesemicolon/router",
-    "version": "1.4.0-next",
+    "version": "1.4.2-next",
     "description": "Web component router by Before Semicolon",
     "engines": {
         "node": ">=22.13.0",
