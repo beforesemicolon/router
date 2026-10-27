@@ -1,0 +1,140 @@
+name: Publish maintenance draft PR (Router pilot)
+
+on:
+  workflow_dispatch:
+    inputs:
+      head_branch:
+        description: Existing agent/maintenance/<name> branch
+        required: true
+        type: string
+      head_sha:
+        description: Exact 40-character head commit SHA
+        required: true
+        type: string
+      base_sha:
+        description: Exact current main commit SHA
+        required: true
+        type: string
+      title:
+        description: Focused maintenance PR title
+        required: true
+        type: string
+
+permissions: {}
+concurrency:
+  group: router-maintenance-pr-publisher
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'beforesemicolon/router' && github.ref == 'refs/heads/main' && github.actor == 'ECorreia45' && github.triggering_actor == 'ECorreia45'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Validate refs and publish draft without executing repository code
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          import json
+          import os
+          import re
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          
+          
+          def publish(env, event, api):
+              def require(condition, message):
+                  if not condition:
+                      raise ValueError(message)
+          
+              require(env['GITHUB_REPOSITORY'] == 'beforesemicolon/router', 'Router pilot only')
+              require(env['GITHUB_EVENT_NAME'] == 'workflow_dispatch', 'Manual dispatch only')
+              require(env['GITHUB_REF'] == 'refs/heads/main', 'Run trusted main workflow only')
+              require(env['GITHUB_ACTOR'] == env['GITHUB_TRIGGERING_ACTOR'] == 'ECorreia45',
+                      'Only ECorreia45 may dispatch or rerun this pilot')
+              inputs = event['inputs']
+              head = inputs['head_branch']
+              head_sha, base_sha = inputs['head_sha'], inputs['base_sha']
+              require(re.fullmatch(r'agent/maintenance/[a-z0-9][a-z0-9-]{0,79}', head),
+                      'Use a fresh agent/maintenance/<lowercase-name> branch')
+              require(all(re.fullmatch(r'[0-9a-f]{40}', sha) for sha in (head_sha, base_sha)),
+                      'Both expected SHAs must be full lowercase commit SHAs')
+              require(env['GITHUB_SHA'] == base_sha, 'Dispatch commit differs from expected base')
+              title = inputs['title'].strip()
+              require(1 <= len(title) <= 200 and not any(ord(c) < 32 for c in title), 'Invalid title')
+              repo = api('GET', '')
+              require(repo['full_name'] == 'beforesemicolon/router' and not repo['archived']
+                      and not repo['private'] and repo['default_branch'] == 'main',
+                      'Unexpected repository visibility, archive status or default branch')
+              head_path = '/branches/' + urllib.parse.quote(head, safe='')
+          
+              def verify_refs():
+                  base = api('GET', '/branches/main')
+                  branch = api('GET', head_path)
+                  require(base['commit']['sha'] == base_sha, 'Main moved; inspect and redispatch')
+                  require(branch['commit']['sha'] == head_sha, 'Head moved; inspect and redispatch')
+                  require(not branch['protected'], 'Do not publish from a protected head branch')
+          
+              verify_refs()
+              # Include closed PRs so intentionally closed work is never recreated.
+              query = urllib.parse.urlencode({'state': 'all', 'head': 'beforesemicolon:' + head,
+                                             'per_page': 100})
+              require(not api('GET', '/pulls?' + query), 'Head already has a PR; coordinate existing work')
+              compare = api('GET', '/compare/' + base_sha + '...' + head_sha)
+              require(compare['ahead_by'] > 0 and compare['behind_by'] == 0,
+                      'Head must contain changes and include the exact current main')
+              verify_refs()
+              payload = {'head': head, 'base': 'main', 'title': title, 'draft': True,
+                         'maintainer_can_modify': False,
+                         'body': ('## Summary\n\nPrepared maintenance change; review the complete diff.\n\n'
+                                  '## Verification\n\n'
+                                  f'- Expected head: `{head_sha}`\n- Expected base: `{base_sha}`\n'
+                                  '- This publisher did not execute or validate repository code.\n'
+                                  '- CI and CodeQL results must be checked on the current revision.\n'
+                                  '- Human workflow-run approval may be required separately from code review.\n'
+                                  '- ECorreia45 must review before merge; this workflow does not approve or merge.\n')}
+              # Never retry this POST: a network error may follow successful creation.
+              pr = api('POST', '/pulls', payload)
+              require(pr['draft'] and pr['user']['login'] == 'github-actions[bot]'
+                      and pr['head']['sha'] == head_sha and pr['base']['sha'] == base_sha,
+                      'PR created but state changed unexpectedly; inspect open PRs, do not retry')
+              return pr['html_url']
+          
+          
+          def main():
+              # Fixed host/path, no redirects, no token output, no requests to submitted URLs.
+              class NoRedirect(urllib.request.HTTPRedirectHandler):
+                  def redirect_request(self, req, fp, code, msg, headers, newurl):
+                      return None
+          
+              opener = urllib.request.build_opener(NoRedirect)
+          
+              def api(method, path, payload=None):
+                  data = None if payload is None else json.dumps(payload).encode()
+                  request = urllib.request.Request(
+                      'https://api.github.com/repos/beforesemicolon/router' + path,
+                      data=data, method=method,
+                      headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                               'Accept': 'application/vnd.github+json',
+                               'X-GitHub-Api-Version': '2022-11-28',
+                               'Content-Type': 'application/json'})
+                  try:
+                      with opener.open(request, timeout=30) as response:
+                          return json.load(response)
+                  except urllib.error.HTTPError as error:
+                      raise RuntimeError(f'GitHub API {method} failed: HTTP {error.code}; '
+                                         'inspect existing PRs before retrying') from None
+          
+              with open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8') as stream:
+                  event = json.load(stream)
+              print(publish(os.environ, event, api))
+          
+          
+          if __name__ == '__main__':
+              main()
+          PYTHON
