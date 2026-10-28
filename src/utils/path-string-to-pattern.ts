@@ -4,12 +4,14 @@ export const pathStringToPattern = (path: string, exact = true) => {
     path = cleanPathnameOptionalEnding(path)
     const params: string[] = []
 
-    const rep = path
-        .replace(/:([^/]+)/g, (s, p) => {
+    // Escape literal route text without escaping the generated parameter groups.
+    const rep = path.replace(/:([^/]+)|[.*+?^${}()|[\]\\]/g, (s, p) => {
+        if (p) {
             params.push(p)
             return '([^/]+)'
-        })
-        .replace(/\?/g, '\\?')
+        }
+        return `\\${s}`
+    })
 
     return {
         pattern: new RegExp(`^${rep}${exact ? '$' : '(\\/.*)?$'}`),
