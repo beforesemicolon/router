@@ -1,6 +1,6 @@
 {
     "name": "@beforesemicolon/router",
-    "version": "1.4.3-next",
+    "version": "1.4.1",
     "description": "Web component router by Before Semicolon",
     "engines": {
         "node": ">=22.13.0",
@@ -69,7 +69,7 @@
         "typescript": "^5.0.4"
     },
     "dependencies": {
-        "@beforesemicolon/web-component": "^1.21.2-next"
+        "@beforesemicolon/web-component": "^1.21.1"
     },
     "overrides": {
         "html-minifier": "npm:@keep-lts/html-minifier@4.0.1",
