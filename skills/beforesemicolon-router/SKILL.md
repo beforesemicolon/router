@@ -40,11 +40,62 @@ description: Build or debug URL navigation and route-aware views with @beforesem
   `goToPage('/about')` without the hash prefix. Use history mode for built-in
   query-dependent views on this release.
 - Set `exact="false"` on a parent that must stay mounted for child routes.
-  Use the child's path relative to that parent. Use URL params or queries for
-  state a user needs to bookmark or share, not the navigation payload.
+  Use the child's path relative to that parent. Use URL params or queries, not navigation payload, for state a user needs
+  to bookmark or share.
 - Use `onPage` for a single route. Retain its unsubscribe function and call it
   on teardown. Inactive route content may be detached and reused; route-scoped
   work must not assume one mount for the life of the app.
+
+## Working patterns
+
+**Bundled app with history URLs.** In the browser entry file, import the root
+once. The default mode is history. Serve the same app shell for deep links such
+as `/projects/settings?tab=activity`.
+
+```js
+import '@beforesemicolon/router'
+```
+
+```html
+<nav aria-label="Main">
+  <page-link path="/">Home</page-link>
+  <page-link path="/projects/settings" search="tab=activity">Project settings</page-link>
+</nav>
+<main>
+  <page-route path="/"><h1>Home</h1></page-route>
+  <page-route path="/projects" exact="false">
+    <page-route path="/settings">
+      <h1>Project settings</h1>
+      <page-link search="tab=activity">Activity</page-link>
+      <page-link search="tab=members">Members</page-link>
+      <page-route-query key="tab" value="activity"><h2>Activity</h2></page-route-query>
+      <page-route-query key="tab" value="members"><h2>Members</h2></page-route-query>
+    </page-route>
+  </page-route>
+</main>
+```
+
+**No-build static site.** For Router 1.5.0, load these scripts in order. Keep
+hash mode initialization before the route markup. A native anchor changes the
+URL and creates a browser history entry.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/web-component@1.22.0/dist/client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/dist/client.js"></script>
+<script>BFS.ROUTER.setRoutingMode('hash')</script>
+<nav aria-label="Main">
+  <a href="#/">Home</a>
+  <a href="#/about">About</a>
+</nav>
+<main>
+  <page-route path="/"><h1>Home</h1></page-route>
+  <page-route path="/about"><h1>About</h1></page-route>
+</main>
+```
+
+See the [complete tested HTML](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/ai/examples/two-views.html)
+in `ai/examples/two-views.html` inside the 1.5.0 package. Replace the pins with
+those in your release's records if your version differs.
 
 ## Verify the interaction
 

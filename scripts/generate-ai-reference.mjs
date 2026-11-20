@@ -454,14 +454,19 @@ function expectedFiles() {
         skillText,
         new RegExp(`^---\\nname: ${skill.name}\\ndescription: [^\\n]+\\n---\\n`)
     )
+    for (const [, language, snippet] of skillText.matchAll(
+        /```(html|js)\n([\s\S]*?)\n```/g
+    )) {
+        validateSnippet(skill.name, language, snippet)
+    }
     const index = {
-        skill,
         schemaVersion: 1,
         package: pkg.name,
         version,
         repository,
         sourceRef: version,
         sourceRefStatus: 'expected-release-tag',
+        skill,
         records: output.map((item) => item.index),
         exports: surfaces,
         classic: {
