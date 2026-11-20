@@ -1,6 +1,6 @@
 {
     "name": "@beforesemicolon/router",
-    "version": "1.4.1",
+    "version": "1.5.0",
     "description": "Web component router by Before Semicolon",
     "engines": {
         "node": ">=22.13.0",
@@ -24,12 +24,15 @@
         "local:serve": "npx netlify dev --offline --no-open --skip-gitignore --dir website --port 8080 --staticServerPort 3998",
         "local:serve:pt": "npx http-server ./website/pt -p 8083",
         "build": "npm-run-all build:package build:docs",
-        "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js",
+        "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js && npm run ai:check",
         "build:docs": "node build-docs.js",
         "local:serve:en": "npx http-server ./website/en -p 8080",
         "local:serve:zh": "npx http-server ./website/zh -p 8081",
         "local:serve:es": "npx http-server ./website/es -p 8082",
-        "local:serve:fr": "npx http-server ./website/fr -p 8084"
+        "local:serve:fr": "npx http-server ./website/fr -p 8084",
+        "ai:generate": "node scripts/generate-ai-reference.mjs",
+        "ai:check": "node scripts/generate-ai-reference.mjs --check",
+        "prepack": "npm run ai:check"
     },
     "keywords": [
         "web-component",

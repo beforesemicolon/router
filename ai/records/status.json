@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "router/status",
+  "package": "@beforesemicolon/router",
+  "version": "1.5.0",
+  "name": "Status",
+  "summary": "The emitted npm enum for page route loading state.",
+  "setup": {
+    "npm": {
+      "specifier": "@beforesemicolon/router",
+      "names": [
+        "Status"
+      ],
+      "import": "import { Status } from '@beforesemicolon/router'",
+      "registration": "The npm root registers its custom elements automatically."
+    }
+  },
+  "api": {
+    "signatures": {
+      "Status": "typeof Status"
+    }
+  },
+  "example": {
+    "npm": "import { Status } from '@beforesemicolon/router'\n\nconsole.log(Status.Loaded)"
+  },
+  "links": [
+    {
+      "label": "Documentation",
+      "url": "https://router.beforesemicolon.com/documentation/web-components/page-route.html"
+    },
+    {
+      "label": "router/page-route",
+      "url": "page-route.json"
+    }
+  ],
+  "guidance": [
+    "Use loading and fallback slots in page markup. Status is not exposed in the classic global."
+  ]
+}

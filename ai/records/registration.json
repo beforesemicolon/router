@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "router/registration",
+  "package": "@beforesemicolon/router",
+  "version": "1.5.0",
+  "name": "registerRoute / getRouteMeta",
+  "summary": "Register a route or read its metadata; declarative routes register on mount.",
+  "setup": {
+    "npm": {
+      "specifier": "@beforesemicolon/router",
+      "names": [
+        "registerRoute",
+        "isRegisteredRoute",
+        "getRouteMeta"
+      ],
+      "import": "import { registerRoute, isRegisteredRoute, getRouteMeta } from '@beforesemicolon/router'",
+      "registration": "The npm root registers its custom elements automatically."
+    },
+    "classic": {
+      "scripts": [
+        {
+          "package": "@beforesemicolon/web-component",
+          "version": "1.22.0",
+          "path": "dist/client.js",
+          "global": "BFS.WebComponent"
+        },
+        {
+          "package": "@beforesemicolon/router",
+          "version": "1.5.0",
+          "path": "dist/client.js",
+          "global": "BFS.ROUTER"
+        }
+      ],
+      "globals": [
+        "BFS.ROUTER.registerRoute",
+        "BFS.ROUTER.isRegisteredRoute",
+        "BFS.ROUTER.getRouteMeta"
+      ],
+      "requiredGlobals": [
+        "BFS.WebComponent",
+        "BFS.MARKUP"
+      ],
+      "registration": "The script registers its custom elements automatically."
+    }
+  },
+  "api": {
+    "signatures": {
+      "registerRoute": "(pathname: string, exactOrOptions?: boolean | RouteOptions) => void",
+      "isRegisteredRoute": "(pathname: string) => boolean",
+      "getRouteMeta": "(pathname: string) => RouteMeta | undefined"
+    },
+    "types": {
+      "KnownRoute": "export interface KnownRoute {\n    pathname: string;\n    exact: boolean;\n    meta?: RouteMeta;\n    name?: string;\n}",
+      "RouteMeta": "export interface RouteMeta {\n    title?: string;\n    requiresAuth?: boolean;\n    breadcrumb?: string;\n    [key: string]: unknown;\n}",
+      "RouteOptions": "export interface RouteOptions {\n    exact?: boolean;\n    meta?: RouteMeta;\n    name?: string;\n}"
+    }
+  },
+  "example": {
+    "npm": "import { registerRoute, isRegisteredRoute, getRouteMeta } from '@beforesemicolon/router'\n\nregisterRoute('/about', { meta: { title: 'About' } })\nconsole.log(getRouteMeta('/about'))",
+    "classic": "BFS.ROUTER.registerRoute('/about', { meta: { title: 'About' } })"
+  },
+  "links": [
+    {
+      "label": "Documentation",
+      "url": "https://router.beforesemicolon.com/documentation/routing-apis/registration.html"
+    }
+  ]
+}

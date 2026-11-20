@@ -35,3 +35,25 @@ documentation when public APIs or documented behavior change.
 
 Pull requests require review before merge. By contributing, you agree that your
 contribution is licensed under this project's [BSD 3-Clause License](LICENSE).
+
+## Versioned AI references
+
+Keep judgment and examples in `scripts/ai-guidance.mjs`. The generator reads
+the built declaration, package, and classic entry points. It checks public
+registrations, documented names, and local links. It does not change the
+runtime.
+
+After changing a public API or preparing a new version, refresh the checked-in
+records:
+
+```sh
+npx tsc --emitDeclarationOnly
+node build.js
+npm run ai:generate
+npm run build
+npm pack --dry-run
+```
+
+Update the version-pinned reference link in the README and AI docs. Keep older
+versions available through their published npm tarballs; do not rewrite an
+older index with newer API names.

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id": "router/guards",
+  "package": "@beforesemicolon/router",
+  "version": "1.5.0",
+  "name": "registerGlobalGuard / registerRouteGuard",
+  "summary": "Accept, block, or redirect router navigation, with async support.",
+  "setup": {
+    "npm": {
+      "specifier": "@beforesemicolon/router",
+      "names": [
+        "registerGlobalGuard",
+        "registerRouteGuard"
+      ],
+      "import": "import { registerGlobalGuard, registerRouteGuard } from '@beforesemicolon/router'",
+      "registration": "The npm root registers its custom elements automatically."
+    },
+    "classic": {
+      "scripts": [
+        {
+          "package": "@beforesemicolon/web-component",
+          "version": "1.22.0",
+          "path": "dist/client.js",
+          "global": "BFS.WebComponent"
+        },
+        {
+          "package": "@beforesemicolon/router",
+          "version": "1.5.0",
+          "path": "dist/client.js",
+          "global": "BFS.ROUTER"
+        }
+      ],
+      "globals": [
+        "BFS.ROUTER.registerGlobalGuard",
+        "BFS.ROUTER.registerRouteGuard"
+      ],
+      "requiredGlobals": [
+        "BFS.WebComponent",
+        "BFS.MARKUP"
+      ],
+      "registration": "The script registers its custom elements automatically."
+    }
+  },
+  "api": {
+    "signatures": {
+      "registerGlobalGuard": "(guard: RouteGuard) => void",
+      "registerRouteGuard": "(pathname: string, guard: RouteGuard) => void"
+    },
+    "types": {
+      "RouteGuard": "export type RouteGuard = (pathname: string, query: Record<string, unknown>, data: Record<string, unknown>) => boolean | Promise<boolean> | string | Promise<string>;"
+    }
+  },
+  "example": {
+    "npm": "import { registerGlobalGuard, registerRouteGuard } from '@beforesemicolon/router'\n\nregisterRouteGuard('/retired', () => '/archive')",
+    "classic": "BFS.ROUTER.registerRouteGuard('/retired', () => '/archive')"
+  },
+  "links": [
+    {
+      "label": "Documentation",
+      "url": "https://router.beforesemicolon.com/documentation/advanced-features/route-guards.html"
+    }
+  ],
+  "guidance": [
+    "Return true to allow, false to block, or an internal path to redirect. UI guards do not replace server-side authorization."
+  ]
+}
