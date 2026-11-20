@@ -24,7 +24,7 @@
         "local:serve": "npx netlify dev --offline --no-open --skip-gitignore --dir website --port 8080 --staticServerPort 3998",
         "local:serve:pt": "npx http-server ./website/pt -p 8083",
         "build": "npm-run-all build:package build:docs",
-        "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js && npm run ai:check",
+        "build:package": "rm -rf dist && npm-run-all lint test && tsc --emitDeclarationOnly && node build.js && npm run ai:check && npm run ai:pack:check",
         "build:docs": "node build-docs.js",
         "local:serve:en": "npx http-server ./website/en -p 8080",
         "local:serve:zh": "npx http-server ./website/zh -p 8081",
@@ -32,7 +32,8 @@
         "local:serve:fr": "npx http-server ./website/fr -p 8084",
         "ai:generate": "node scripts/generate-ai-reference.mjs",
         "ai:check": "node scripts/generate-ai-reference.mjs --check",
-        "prepack": "npm run ai:check"
+        "prepack": "npm run ai:check",
+        "ai:pack:check": "node scripts/check-skill-pack.mjs"
     },
     "keywords": [
         "web-component",

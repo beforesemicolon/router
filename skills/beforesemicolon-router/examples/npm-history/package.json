@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "esbuild app.js --bundle --outfile=app.bundle.js --servedir=. --serve=127.0.0.1:8000 --serve-fallback=index.html"
+  },
+  "dependencies": {
+    "@beforesemicolon/markup": "1.22.0",
+    "@beforesemicolon/router": "1.5.0",
+    "@beforesemicolon/web-component": "1.22.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

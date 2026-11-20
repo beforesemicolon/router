@@ -13,6 +13,7 @@ import { createRequire } from 'node:module'
 import ts from 'typescript'
 import { JSDOM } from 'jsdom'
 import { records as guide } from './ai-guidance.mjs'
+import { buildSkillLibrary } from './generate-skill-library.mjs'
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'))
 const short = pkg.name.split('/').at(-1)
@@ -448,6 +449,7 @@ function expectedFiles() {
     const skill = {
         name: 'beforesemicolon-router',
         path: 'skills/beforesemicolon-router/SKILL.md',
+        manifest: 'skills/beforesemicolon-router/manifest.json',
     }
     const skillText = from(skill.path)
     assert.match(
@@ -499,6 +501,13 @@ for (const { record } of output)
             )
     }
 const files = expectedFiles()
+buildSkillLibrary(
+    JSON.parse(files.get('index.json')),
+    output,
+    files,
+    validateSnippet,
+    process.argv.includes('--check')
+)
 if (process.argv.includes('--check')) {
     for (const [file, value] of files)
         assert.equal(

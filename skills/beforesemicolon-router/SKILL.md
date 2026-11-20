@@ -5,6 +5,23 @@ description: Build or debug URL navigation and route-aware views with @beforesem
 
 # Build with Before Semicolon Router
 
+## Read the packaged documentation
+
+This skill includes the complete public Router reference for 1.5.0. It works
+after you copy the whole skill directory; runtime code and examples do not need
+to load this documentation.
+
+- [Offline API reference](references/index.md) maps every public export, type,
+  component, npm entry point, and classic browser global to its versioned page.
+- [Complete practical workflows](references/workflows.md) explains setup choices,
+  composition, failure modes, and testing.
+- [Runnable examples](examples/README.md) includes the full application files,
+  exact dependency versions, and local run instructions.
+
+Choose the smallest section that answers the request. If it needs a different
+installed version, get that release's skill and records instead of mixing APIs
+from several releases.
+
 ## Match the project
 
 1. Determine the installed version from package metadata or the lockfile. In a
@@ -93,9 +110,9 @@ URL and creates a browser history entry.
 </main>
 ```
 
-See the [complete tested HTML](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/ai/examples/two-views.html)
-in `ai/examples/two-views.html` inside the 1.5.0 package. Replace the pins with
-those in your release's records if your version differs.
+Use the [complete tested HTML](examples/classic/two-views.html) for hash routing,
+or copy the [complete bundled history example](examples/npm-history/index.html).
+Replace the pins with those in your exact release if the installation differs.
 
 ## Companion packages
 

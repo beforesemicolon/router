@@ -57,3 +57,7 @@ npm pack --dry-run
 Update the version-pinned reference link in the README and AI docs. Keep older
 versions available through their published npm tarballs; do not rewrite an
 older index with newer API names.
+
+Keep hand-written offline guidance and example sources in
+`scripts/skill-source`. `npm run ai:generate` rebuilds the local skill
+library and its manifest. Keep generated references separate from bundles.

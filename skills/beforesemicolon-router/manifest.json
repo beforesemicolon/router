@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "name": "beforesemicolon-router",
+  "files": [
+    "SKILL.md",
+    "examples/README.md",
+    "examples/classic/two-views.html",
+    "examples/npm-history/app.js",
+    "examples/npm-history/index.html",
+    "examples/npm-history/package.json",
+    "references/apis/guards.md",
+    "references/apis/navigation.md",
+    "references/apis/page-data.md",
+    "references/apis/page-link.md",
+    "references/apis/page-redirect.md",
+    "references/apis/page-route-query.md",
+    "references/apis/page-route.md",
+    "references/apis/path-utils.md",
+    "references/apis/registration.md",
+    "references/apis/route-modules.md",
+    "references/apis/route-state.md",
+    "references/apis/status.md",
+    "references/apis/subscriptions.md",
+    "references/index.md",
+    "references/workflows.md"
+  ],
+  "coverage": {
+    "router/page-route": "references/apis/page-route.md",
+    "router/page-link": "references/apis/page-link.md",
+    "router/page-route-query": "references/apis/page-route-query.md",
+    "router/page-data": "references/apis/page-data.md",
+    "router/page-redirect": "references/apis/page-redirect.md",
+    "router/navigation": "references/apis/navigation.md",
+    "router/route-state": "references/apis/route-state.md",
+    "router/subscriptions": "references/apis/subscriptions.md",
+    "router/registration": "references/apis/registration.md",
+    "router/guards": "references/apis/guards.md",
+    "router/route-modules": "references/apis/route-modules.md",
+    "router/path-utils": "references/apis/path-utils.md",
+    "router/status": "references/apis/status.md"
+  }
+}

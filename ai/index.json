@@ -7,7 +7,8 @@
   "sourceRefStatus": "expected-release-tag",
   "skill": {
     "name": "beforesemicolon-router",
-    "path": "skills/beforesemicolon-router/SKILL.md"
+    "path": "skills/beforesemicolon-router/SKILL.md",
+    "manifest": "skills/beforesemicolon-router/manifest.json"
   },
   "records": [
     {

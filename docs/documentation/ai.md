@@ -174,3 +174,6 @@ the two-view hash-mode example linked by the `router/page-route` record.
 Install or open the [Build with Before Semicolon Router skill](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/skills/beforesemicolon-router/SKILL.md).
 The same `skills/beforesemicolon-router/SKILL.md` file ships in the npm tarball.
 Use it to choose the right record for the version in your project.
+
+Copy the full skill directory, including its manifest, local reference pages,
+and runnable examples. The complete versioned library works offline.
