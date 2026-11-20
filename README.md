@@ -845,6 +845,7 @@ onPageChange((pathname) => {
 
 ## AI and ecosystem context
 
+- [Build with Before Semicolon Router: agent skill](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/skills/beforesemicolon-router/SKILL.md). The canonical `skills/beforesemicolon-router/SKILL.md` also ships in the npm tarball.
 - [Versioned AI reference (1.5.0)](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/ai/index.json) provides small API records and examples for this release. Read `ai/index.json` from an installed package without network access.
 -   [`llms.txt`](https://router.beforesemicolon.com/llms.txt) is the concise,
     package-owned Router and ecosystem contract for AI tools.

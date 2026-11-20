@@ -445,7 +445,17 @@ for (const { record } of output)
     }
 
 function expectedFiles() {
+    const skill = {
+        name: 'beforesemicolon-router',
+        path: 'skills/beforesemicolon-router/SKILL.md',
+    }
+    const skillText = from(skill.path)
+    assert.match(
+        skillText,
+        new RegExp(`^---\\nname: ${skill.name}\\ndescription: [^\\n]+\\n---\\n`)
+    )
     const index = {
+        skill,
         schemaVersion: 1,
         package: pkg.name,
         version,

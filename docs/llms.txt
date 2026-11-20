@@ -7,6 +7,7 @@ Version: `{{project.version}}`
 Documentation: https://router.beforesemicolon.com/documentation/
 Complete context: https://router.beforesemicolon.com/llms-full.txt
 Versioned API records: https://cdn.jsdelivr.net/npm/@beforesemicolon/router@{{project.version}}/ai/index.json
+Package agent skill: https://cdn.jsdelivr.net/npm/@beforesemicolon/router@{{project.version}}/skills/beforesemicolon-router/SKILL.md
 
 Use this file as the authoritative compact contract when generating Router code. Do not substitute React Router, JSX routes, hooks, or framework-specific navigation APIs.
 

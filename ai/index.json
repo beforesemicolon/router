@@ -1,4 +1,8 @@
 {
+  "skill": {
+    "name": "beforesemicolon-router",
+    "path": "skills/beforesemicolon-router/SKILL.md"
+  },
   "schemaVersion": 1,
   "package": "@beforesemicolon/router",
   "version": "1.5.0",
