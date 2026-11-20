@@ -402,11 +402,10 @@ setRoutingMode('history')
 -   Backward compatibility with older browsers
 -   No server-side routing needed
 
-With hash routing, all navigation uses hash paths:
+In hash mode, use native anchors with hash paths. Use `page-link` and query-dependent views in history mode:
 
 ```html
-<page-link path="/team">Team</page-link>
-<!-- Renders as: <a href="#/team">Team</a> -->
+<a href="#/team">Team</a>
 
 <page-route path="/team">Team Content</page-route>
 <!-- Matches when location.hash is #/team -->

@@ -81,7 +81,7 @@
     }
   ],
   "guidance": [
-    "Use page-link instead of a JavaScript handler for normal navigation.",
+    "Use page-link in history mode. For hash mode, use an anchor with href=\"#/path\".",
     "Use goToPage to push a history entry; replacePage changes the current entry. Set mode before creating the UI."
   ]
 }

@@ -77,7 +77,7 @@
     }
   ],
   "guidance": [
-    "Choose hash mode before mounting routes in static apps; use history mode only when deep links have a server fallback.",
+    "Choose hash mode before mounting routes in static apps and use native anchors with href=\"#/path\". Use history mode with a server fallback for deep links.",
     "Add exact=\"false\" to a parent route to match descendant paths. Child paths extend the parent pattern.",
     "Use the component property for an imported view or function. Use src for a file URL or registered module key.",
     "Inactive route content is detached and may be cached and remounted on revisit. Test component lifecycle on Back."

@@ -10,8 +10,8 @@ ${scripts.map((url) => `    <script src="${url}"></script>`).join('\n')}
 </head>
 <body>
     <nav aria-label="Main">
-        <page-link path="/">Home</page-link>
-        <page-link path="/about">About</page-link>
+        <a href="#/">Home</a>
+        <a href="#/about">About</a>
     </nav>
     <main>
         <page-route path="/"><h1>Home</h1></page-route>
@@ -67,7 +67,7 @@ export const records = [
             slots: ['default', 'loading', 'fallback', 'hidden'],
             typeNames: ['PageRoute', 'PageRouteProps'],
             notes: [
-                'Choose hash mode before mounting routes in static apps; use history mode only when deep links have a server fallback.',
+                'Choose hash mode before mounting routes in static apps and use native anchors with href="#/path". Use history mode with a server fallback for deep links.',
                 'Add exact="false" to a parent route to match descendant paths. Child paths extend the parent pattern.',
                 'Use the component property for an imported view or function. Use src for a file URL or registered module key.',
                 'Inactive route content is detached and may be cached and remounted on revisit. Test component lifecycle on Back.',
@@ -98,6 +98,7 @@ export const records = [
                 'Use descriptive text for the anchor. The anchor is exposed as CSS part anchor.',
                 'Use $ for nearest route path and ~ for current path; omit path to change query on the current view.',
                 'The active marker is reflected by the component; do not set it to navigate.',
+                'Use page-link with history routing. In this release, use a native anchor with href="#/path" in hash mode to avoid a second hash prefix.',
             ],
             related: ['router/page-route', 'router/route-state'],
         }
@@ -112,7 +113,7 @@ export const records = [
             typeNames: ['PageRouteQuery', 'PageRouteQueryProps'],
             slots: ['default', 'loading', 'fallback', 'hidden'],
             notes: [
-                'Keep shareable tab and filter state in the URL. Pair key and value with the search string on page-link.',
+                'Use history mode for query-dependent views. Pair key and value with the search string on page-link.',
             ],
             related: ['router/page-link', 'router/route-state'],
         }
@@ -175,7 +176,7 @@ export const records = [
             `BFS.ROUTER.setRoutingMode('hash')\nawait BFS.ROUTER.goToPage('/about')`
         ),
         notes: [
-            'Use page-link instead of a JavaScript handler for normal navigation.',
+            'Use page-link in history mode. For hash mode, use an anchor with href="#/path".',
             'Use goToPage to push a history entry; replacePage changes the current entry. Set mode before creating the UI.',
         ],
         related: ['router/page-route', 'router/page-link'],
@@ -206,7 +207,7 @@ export const records = [
             `BFS.ROUTER.updateSearchQuery({ tab: 'profile' })`
         ),
         notes: [
-            'getSearchParams reads location.search. In hash mode, use onPage location.query where verified or parse getHashSearch in npm mode; do not read the HTML document search as route state.',
+            'getSearchParams reads location.search. Router query subscriptions also read location.search in this version. For hash query strings, use new URLSearchParams(getHashSearch()) with npm or choose history mode for built-in query handling.',
         ],
         related: [
             'router/page-data',

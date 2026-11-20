@@ -73,6 +73,6 @@
     }
   ],
   "guidance": [
-    "Keep shareable tab and filter state in the URL. Pair key and value with the search string on page-link."
+    "Use history mode for query-dependent views. Pair key and value with the search string on page-link."
   ]
 }

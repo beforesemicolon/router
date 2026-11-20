@@ -83,6 +83,7 @@
   "guidance": [
     "Use descriptive text for the anchor. The anchor is exposed as CSS part anchor.",
     "Use $ for nearest route path and ~ for current path; omit path to change query on the current view.",
-    "The active marker is reflected by the component; do not set it to navigate."
+    "The active marker is reflected by the component; do not set it to navigate.",
+    "Use page-link with history routing. In this release, use a native anchor with href=\"#/path\" in hash mode to avoid a second hash prefix."
   ]
 }

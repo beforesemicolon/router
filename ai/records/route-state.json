@@ -79,6 +79,6 @@
     }
   ],
   "guidance": [
-    "getSearchParams reads location.search. In hash mode, use onPage location.query where verified or parse getHashSearch in npm mode; do not read the HTML document search as route state."
+    "getSearchParams reads location.search. Router query subscriptions also read location.search in this version. For hash query strings, use new URLSearchParams(getHashSearch()) with npm or choose history mode for built-in query handling."
   ]
 }
