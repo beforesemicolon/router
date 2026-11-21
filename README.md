@@ -402,11 +402,10 @@ setRoutingMode('history')
 -   Backward compatibility with older browsers
 -   No server-side routing needed
 
-With hash routing, all navigation uses hash paths:
+In hash mode, use native anchors with hash paths. Use `page-link` and query-dependent views in history mode:
 
 ```html
-<page-link path="/team">Team</page-link>
-<!-- Renders as: <a href="#/team">Team</a> -->
+<a href="#/team">Team</a>
 
 <page-route path="/team">Team Content</page-route>
 <!-- Matches when location.hash is #/team -->
@@ -842,10 +841,12 @@ onPageChange((pathname) => {
 ## Browser Support
 
 -   Modern browsers (Chrome, Firefox, Safari, Edge)
--   IE11+ (with polyfills for Web Components)
+-   Use a modern browser with native Custom Elements.
 
 ## AI and ecosystem context
 
+- [Build with Before Semicolon Router: agent skill](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/skills/beforesemicolon-router/SKILL.md). The canonical `skills/beforesemicolon-router/SKILL.md` also ships in the npm tarball.
+- [Versioned AI reference (1.5.0)](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/ai/index.json) provides small API records and examples for this release. Read `ai/index.json` from an installed package without network access.
 -   [`llms.txt`](https://router.beforesemicolon.com/llms.txt) is the concise,
     package-owned Router and ecosystem contract for AI tools.
 -   [`llms-full.txt`](https://router.beforesemicolon.com/llms-full.txt) contains

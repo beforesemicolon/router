@@ -51,7 +51,8 @@ pnpm add @beforesemicolon/router
 {{t.pages.documentation.installation.content.it_is_highly_recommended_to_lock_the_version_in_production}}
 
 ```html
-<script src="https://unpkg.com/@beforesemicolon/router@1.4.0-next/dist/client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/web-component@1.22.0/dist/client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/dist/client.js"></script>
 ```
 
 ---

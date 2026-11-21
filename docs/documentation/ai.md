@@ -156,3 +156,24 @@ updateSearchQuery({ page: 2, tags: ['router', 'web'] })
 -   {{t.pages.documentation.ai.content.do_not_use_href_on_use_path_and_search}}
 -   {{t.pages.documentation.ai.content.do_not_use_component_as_a_string_in_html_component}}
 -   {{t.pages.documentation.ai.content.do_not_use_route_state_for_permanent_data_prefer_params}}
+
+## Versioned API reference
+
+Read `ai/index.json` in the installed package, or open the
+[Router versioned index](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/ai/index.json).
+Use the index to fetch one API record at a time. The index and records come from
+the same npm tarball.
+
+Choose a record for your installation mode. The classic client registers all
+routing elements and exposes a limited `BFS.ROUTER` API. It requires Web
+Component first; do not add a second Markup script. For a static server, check
+the two-view hash-mode example linked by the `router/page-route` record.
+
+## Package agent skill
+
+Install or open the [Build with Before Semicolon Router skill](https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/skills/beforesemicolon-router/SKILL.md).
+The same `skills/beforesemicolon-router/SKILL.md` file ships in the npm tarball.
+Use it to choose the right record for the version in your project.
+
+Copy the full skill directory, including its manifest, local reference pages,
+and runnable examples. The complete versioned library works offline.

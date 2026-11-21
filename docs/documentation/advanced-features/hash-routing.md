@@ -31,10 +31,14 @@ import { setRoutingMode } from '@beforesemicolon/router'
 setRoutingMode('hash')
 
 // URLs will now format as: domain.com/#/dashboard
-// <page-link path="/todos"> renders as: <a href="#/todos">
+// Use a native anchor: <a href="#/todos">Todos</a>
 ```
 
 ---
+
+Use `page-link` and query-dependent views in history mode. In hash mode,
+use `<a href="#/todos">Todos</a>` or call `goToPage("/todos")` with a path
+that does not include a hash prefix.
 
 ### `getRoutingMode`
 
