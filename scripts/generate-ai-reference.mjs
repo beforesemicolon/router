@@ -11,6 +11,7 @@ import {
 import path from 'node:path'
 import { createRequire } from 'node:module'
 import ts from 'typescript'
+import { build } from 'esbuild'
 import { JSDOM } from 'jsdom'
 import { records as guide } from './ai-guidance.mjs'
 import { buildSkillLibrary } from './generate-skill-library.mjs'
@@ -85,6 +86,8 @@ const program = ts.createProgram(definitions, {
 const checker = program.getTypeChecker()
 const surfaces = {}
 const tsSignatures = {}
+const enumMembers = {}
+const esmRegistries = []
 const runtimeDOM = new JSDOM('', { url: 'https://example.test/' })
 const require = createRequire(import.meta.url)
 {
@@ -106,6 +109,29 @@ const require = createRequire(import.meta.url)
             `Missing ESM target for ${specifier}`
         )
         const active = require(path.resolve(entry.require))
+        // Package ESM uses extensionless dependencies for bundlers. Execute
+        // its real emitted entry as a browser bundle in a separate registry.
+        const esmDom = new JSDOM('', {
+            url: 'https://example.test/',
+            runScripts: 'outside-only',
+        })
+        const esmBuild = await build({
+            entryPoints: [path.resolve(entry.import)],
+            bundle: true,
+            platform: 'browser',
+            format: 'iife',
+            globalName: 'routerESM',
+            write: false,
+        })
+        const esm = esmDom.window.eval(
+            esmBuild.outputFiles[0].text + '\nrouterESM'
+        )
+        assert.deepEqual(
+            Object.keys(esm).sort(),
+            Object.keys(active).sort(),
+            `CJS and ESM exports differ for ${specifier}`
+        )
+        esmRegistries.push(esmDom)
         const functions = {}
         const types = {}
         for (const symbol of exports) {
@@ -120,6 +146,40 @@ const require = createRequire(import.meta.url)
                     Object.hasOwn(active, symbol.name),
                     `${specifier}: ${symbol.name} missing from package output`
                 )
+                if (ts.isEnumDeclaration(decl)) {
+                    const entries = decl.members.map((member) => {
+                        assert.ok(
+                            ts.isIdentifier(member.name) ||
+                                ts.isStringLiteral(member.name),
+                            `Cannot read enum member ${member.name.getText()}`
+                        )
+                        const memberName = member.name.text
+                        const value = checker.getConstantValue(member)
+                        assert.notEqual(
+                            value,
+                            undefined,
+                            `Missing declared enum value ${symbol.name}.${memberName}`
+                        )
+                        return [memberName, value]
+                    })
+                    const values = Object.fromEntries(entries)
+                    for (const [mode, runtime] of [
+                        ['CJS', active],
+                        ['ESM', esm],
+                    ]) {
+                        const actual = Object.fromEntries(
+                            Object.entries(runtime[symbol.name]).filter(
+                                ([name]) => !/^-?\d+$/u.test(name)
+                            )
+                        )
+                        assert.deepEqual(
+                            actual,
+                            values,
+                            `${mode} enum differs from declarations: ${symbol.name}`
+                        )
+                    }
+                    enumMembers[symbol.name] = values
+                }
                 functions[symbol.name] = checker.typeToString(
                     checker.getTypeOfSymbolAtLocation(resolved, decl),
                     decl,
@@ -179,6 +239,15 @@ for (const file of readdirSync('src/components').filter(
             runtimeDOM.window.customElements.get(name),
             `${name} is missing from the npm artifact`
         )
+        for (const registry of esmRegistries) {
+            const element = registry.window.customElements.get(name)
+            assert.ok(element, `${name} is missing from npm ESM registration`)
+            assert.deepEqual(
+                [...element.observedAttributes],
+                [...dom.window.customElements.get(name).observedAttributes],
+                `${name} ESM attributes differ from classic script`
+            )
+        }
         tags.set(name, { file })
     })
 }
@@ -203,6 +272,15 @@ function validateSnippet(id, mode, snippet) {
                 `${id}: ${mode} example imports absent name ${key}`
             )
         }
+    }
+    for (const [, enumName, member] of snippet.matchAll(
+        /\b([A-Za-z_$][\w$]*)\.([A-Za-z_$][\w$]*)/g
+    )) {
+        if (!Object.hasOwn(enumMembers, enumName)) continue
+        assert.ok(
+            Object.hasOwn(enumMembers[enumName], member),
+            `${id}: ${mode} example uses absent enum member ${enumName}.${member}`
+        )
     }
     for (const [, globalName] of snippet.matchAll(
         new RegExp(`BFS\\.${namespace}\\.([a-zA-Z0-9]+)`, 'g')
@@ -364,6 +442,11 @@ for (const entry of guide) {
         specifier === pkg.name
             ? 'The npm root registers its custom elements automatically.'
             : 'No custom elements register when importing this subpath.'
+    const enums = Object.fromEntries(
+        names
+            .filter((key) => Object.hasOwn(enumMembers, key))
+            .map((key) => [key, enumMembers[key]])
+    )
     const record = {
         schemaVersion: 1,
         id,
@@ -387,6 +470,7 @@ for (const entry of guide) {
         },
         api: {
             ...componentDetails,
+            ...(Object.keys(enums).length ? { enumMembers: enums } : {}),
             ...(names.length
                 ? {
                       signatures: Object.fromEntries(
@@ -530,8 +614,9 @@ if (process.argv.includes('--check')) {
         writeFileSync(destination, value)
     }
 }
-console.log(
+console.error(
     `${pkg.name}@${version}: ${output.length} records; ${tags.size} browser registrations; ${Object.keys(surfaces).length} npm entries`
 )
 dom.window.close()
 runtimeDOM.window.close()
+for (const registry of esmRegistries) registry.window.close()

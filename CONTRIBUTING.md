@@ -38,26 +38,24 @@ contribution is licensed under this project's [BSD 3-Clause License](LICENSE).
 
 ## Versioned AI references
 
-Keep judgment and examples in `scripts/ai-guidance.mjs`. The generator reads
-the built declaration, package, and classic entry points. It checks public
-registrations, documented names, and local links. It does not change the
-runtime.
+Maintain version-specific judgments and compact examples in
+`scripts/ai-guidance.mjs`, the skill entry in
+`skills/beforesemicolon-router/SKILL.md`, and the rest of the hand-written
+guides and example sources in `scripts/skill-source/`. Update the version-pinned
+links in the README and AI docs when releasing a new version.
 
-After changing a public API or preparing a new version, refresh the checked-in
-records:
+The artifact build generates `ai/` and the skill's offline reference pages,
+examples, and manifest from those inputs plus the emitted declarations, npm
+entry point, and browser bundle. Do not edit or commit those generated outputs.
+Published npm tarballs contain their own version-specific output.
+
+From a checkout with dependencies installed:
 
 ```sh
-npx tsc --emitDeclarationOnly
-node build.js
-npm run ai:generate
 npm run build
-npm pack --dry-run
+npm pack
 ```
 
-Update the version-pinned reference link in the README and AI docs. Keep older
-versions available through their published npm tarballs; do not rewrite an
-older index with newer API names.
-
-Keep hand-written offline guidance and example sources in
-`scripts/skill-source`. `npm run ai:generate` rebuilds the local skill
-library and its manifest. Keep generated references separate from bundles.
+`npm run build:artifacts` builds only the distribution and generated AI
+references. A normal `npm pack` runs that step automatically; the full build also
+checks that npm packaging includes every generated reference and example.

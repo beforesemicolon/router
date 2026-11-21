@@ -15,6 +15,8 @@ to load this documentation.
   component, npm entry point, and classic browser global to its versioned page.
 - [Complete practical workflows](references/workflows.md) explains setup choices,
   composition, failure modes, and testing.
+- [Route ownership and guarded lazy views](references/route-ownership.md)
+  covers central routes, session readiness, scoped payloads, and stale requests.
 - [Runnable examples](examples/README.md) includes the full application files,
   exact dependency versions, and local run instructions.
 
@@ -63,6 +65,20 @@ from several releases.
   on teardown. Inactive route content may be detached and reused; route-scoped
   work must not assume one mount for the life of the app.
 
+## Work inside the existing route boundary
+
+Find the app's route patterns/builders, lazy module registry, and shared shell
+before adding a route. Add the new view through those owners. Keep sessions,
+permissions, and entity data in the app's stores/services, not history.
+Register guards and loaders before mounting routes. Keep module loading
+separate from data loading: each active view requests only what it needs,
+only after access is known. Release subscriptions and cancel or invalidate
+stale requests on route or access change. Use a scoped optional payload for
+handoff hints only, not for canonical data or access.
+
+Use the [guarded-projects example](examples/README.md#guarded-projects-with-lazy-modules)
+for a navigable demo with an actual lazy module and HTTP data requests.
+
 ## Working patterns
 
 **Bundled app with history URLs.** In the browser entry file, import the root
@@ -75,20 +91,26 @@ import '@beforesemicolon/router'
 
 ```html
 <nav aria-label="Main">
-  <page-link path="/">Home</page-link>
-  <page-link path="/projects/settings" search="tab=activity">Project settings</page-link>
+    <page-link path="/">Home</page-link>
+    <page-link path="/projects/settings" search="tab=activity"
+        >Project settings</page-link
+    >
 </nav>
 <main>
-  <page-route path="/"><h1>Home</h1></page-route>
-  <page-route path="/projects" exact="false">
-    <page-route path="/settings">
-      <h1>Project settings</h1>
-      <page-link search="tab=activity">Activity</page-link>
-      <page-link search="tab=members">Members</page-link>
-      <page-route-query key="tab" value="activity"><h2>Activity</h2></page-route-query>
-      <page-route-query key="tab" value="members"><h2>Members</h2></page-route-query>
+    <page-route path="/"><h1>Home</h1></page-route>
+    <page-route path="/projects" exact="false">
+        <page-route path="/settings">
+            <h1>Project settings</h1>
+            <page-link search="tab=activity">Activity</page-link>
+            <page-link search="tab=members">Members</page-link>
+            <page-route-query key="tab" value="activity"
+                ><h2>Activity</h2></page-route-query
+            >
+            <page-route-query key="tab" value="members"
+                ><h2>Members</h2></page-route-query
+            >
+        </page-route>
     </page-route>
-  </page-route>
 </main>
 ```
 
@@ -99,14 +121,16 @@ URL and creates a browser history entry.
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/web-component@1.22.0/dist/client.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/dist/client.js"></script>
-<script>BFS.ROUTER.setRoutingMode('hash')</script>
+<script>
+    BFS.ROUTER.setRoutingMode('hash')
+</script>
 <nav aria-label="Main">
-  <a href="#/">Home</a>
-  <a href="#/about">About</a>
+    <a href="#/">Home</a>
+    <a href="#/about">About</a>
 </nav>
 <main>
-  <page-route path="/"><h1>Home</h1></page-route>
-  <page-route path="/about"><h1>About</h1></page-route>
+    <page-route path="/"><h1>Home</h1></page-route>
+    <page-route path="/about"><h1>About</h1></page-route>
 </main>
 ```
 

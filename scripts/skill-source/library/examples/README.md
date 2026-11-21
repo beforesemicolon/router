@@ -34,3 +34,30 @@ tarballs and replace the two script URLs with local paths in the same order.
 Click About and use Back. Expect `#/about` and then the original URL and Home
 heading. If a request for `/about` leaves the shell, it is not running the
 expected hash configuration.
+
+## Guarded projects with lazy modules
+
+Copy the [example directory](guarded-projects/index.html) with
+[app.js](guarded-projects/app.js), [routes.js](guarded-projects/routes.js),
+[project-page.js](guarded-projects/project-page.js), and both data fixtures
+([Alpha](guarded-projects/data/alpha.json), [Beta](guarded-projects/data/beta.json)).
+No build is needed. Use a history-fallback server; a plain Python static
+server does not support direct reloads for this example. From the copied
+directory, with Node/npm available:
+
+```sh
+npx --yes esbuild@0.28.2 --servedir=. --serve=127.0.0.1:8000 --serve-fallback=index.html
+```
+
+Open `/projects/alpha` in a new session. Expect Sign in and no request for
+`/project-page.js` or a project record. Start the demo session, then click
+Alpha and Beta. Expect a project heading for the active URL. The Alpha link
+supplies an optional notice that Back can restore; a fresh tab does not need
+the notice to show Alpha. Slow the network and click Beta while Alpha is
+loading; the old Alpha response must not replace Beta. Sign out and navigate
+Back to a protected URL; expect Sign in again.
+
+The data files are public fixtures and the session flag is only for browser
+behavior. In an application, replace both with the existing session store and
+authorized API. For offline candidate testing, replace the two CDN scripts in
+HTML with the extracted browser files from the exact package tarballs.

@@ -226,7 +226,7 @@ export const descriptions = {
             "const href = pathnameToHash('/about')"
         ),
         Status: n(
-            'The npm enum has Idle, Loading, Loaded, and LoadingFailed. For user-facing behavior, expose loading and fallback slots rather than depending on internal component state.',
+            'The TypeScript declaration and the compiled npm exports supply the members below. For user-facing behavior, expose loading and fallback slots rather than depending on internal component state.',
             'console.log(Status.Loaded)'
         ),
     },

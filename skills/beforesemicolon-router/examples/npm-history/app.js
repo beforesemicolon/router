@@ -1,1 +1,0 @@
-import '@beforesemicolon/router'

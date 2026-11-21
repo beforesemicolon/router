@@ -230,6 +230,16 @@ export function buildSkillLibrary(
                           `### ${code(name)}`,
                           block('typescript', name + ': ' + signatures[name]),
                           info.description,
+                          record.api.enumMembers?.[name]
+                              ? block(
+                                    'json',
+                                    JSON.stringify(
+                                        record.api.enumMembers[name],
+                                        null,
+                                        2
+                                    )
+                                )
+                              : null,
                           block('js', info.example)
                       ).trim()
                   })
@@ -453,7 +463,7 @@ export function buildSkillLibrary(
             rmSync(path.join(folder, dir), { recursive: true, force: true })
         for (const [file, body] of files) write(folder, file, body)
     }
-    console.log(
+    console.error(
         `${index.skill.name}: ${inventory.length} offline files, ${members.size} public symbols with reference pages, ${tags.size} documented browser elements`
     )
 }

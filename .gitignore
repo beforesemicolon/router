@@ -142,3 +142,9 @@ public
 website
 .netlify/
 GEMINI.md
+
+# Package-owned AI artifacts. Their source is tracked under scripts/ and skills/.
+/ai/
+/skills/beforesemicolon-router/manifest.json
+/skills/beforesemicolon-router/examples/
+/skills/beforesemicolon-router/references/

@@ -1,6 +1,6 @@
 # Router workflows
 
-[Public API, types, and elements](index.md) · [Runnable examples](../examples/README.md) · [Skill entry](../SKILL.md)
+[Public API, types, and elements](index.md) · [Runnable examples](../examples/README.md) · [Skill entry](../SKILL.md) · [Route ownership](route-ownership.md)
 
 ## Installation and mode selection
 
@@ -68,17 +68,20 @@ reuse cached content; mounted components must still clean up observers and
 subscriptions when detached.
 
 ```js
-import { registerRouteModules, preloadRouteModule } from '@beforesemicolon/router'
+import {
+    registerRouteModules,
+    preloadRouteModule,
+} from '@beforesemicolon/router'
 registerRouteModules({
-  '/views/about.js': async () => ({ default: '<h1>About</h1>' }),
+    '/views/about.js': async () => ({ default: '<h1>About</h1>' }),
 })
 await preloadRouteModule('/views/about.js')
 ```
 
 ```html
 <page-route path="/about" src="/views/about.js">
-  <p slot="loading" role="status">Loading about…</p>
-  <p slot="fallback">Could not load the About page.</p>
+    <p slot="loading" role="status">Loading about…</p>
+    <p slot="fallback">Could not load the About page.</p>
 </page-route>
 ```
 
@@ -98,7 +101,7 @@ guard only controls browser behavior.
 import { registerRouteGuard, onPage } from '@beforesemicolon/router'
 registerRouteGuard('/retired', () => '/archive')
 const stop = onPage('/projects/:id', (active, { params }) => {
-  if (active) document.title = `Project ${params.id}`
+    if (active) document.title = `Project ${params.id}`
 })
 // Call stop() when the owner of this subscription disconnects.
 ```

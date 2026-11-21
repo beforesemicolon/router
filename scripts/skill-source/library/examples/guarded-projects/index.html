@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Guarded projects</title>
+        <script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/web-component@1.22.0/dist/client.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@beforesemicolon/router@1.5.0/dist/client.js"></script>
+        <script type="module" src="/app.js"></script>
+    </head>
+    <body>
+        <p id="boot" role="status">Starting…</p>
+        <template id="app">
+            <nav aria-label="Main">
+                <page-link path="/">Home</page-link>
+                <page-link id="alpha" path="/projects/alpha">Alpha</page-link>
+                <page-link path="/projects/beta">Beta</page-link>
+                <button type="button" id="sign-out">Sign out</button>
+            </nav>
+            <main>
+                <page-route path="/"><h1>Home</h1></page-route>
+                <page-route path="/sign-in">
+                    <h1>Sign in</h1>
+                    <p>
+                        This example uses a demo session, not production
+                        authentication.
+                    </p>
+                    <button type="button" id="sign-in">
+                        Start demo session
+                    </button>
+                </page-route>
+                <page-route path="/projects/:id" src="/project-page.js">
+                    <p slot="loading" role="status">Loading project view…</p>
+                    <p slot="fallback" role="alert">
+                        Could not load the project view. Reload to retry.
+                    </p>
+                </page-route>
+            </main>
+            <p id="action-status" role="status"></p>
+        </template>
+    </body>
+</html>
